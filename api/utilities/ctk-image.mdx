@@ -1,0 +1,137 @@
+---
+title: CTkImage
+description: Image class with support for light/dark mode and automatic scaling
+---
+
+The `CTkImage` class stores one or two PIL Image objects with automatic appearance mode switching and display size independent of UI scaling. It supports separate images for light and dark modes.
+
+## Usage
+
+```python
+import customtkinter as ctk
+from PIL import Image
+
+# Single image for both modes
+image = ctk.CTkImage(
+    light_image=Image.open("icon.png"),
+    size=(30, 30)
+)
+
+# Different images for light and dark modes
+image = ctk.CTkImage(
+    light_image=Image.open("icon_light.png"),
+    dark_image=Image.open("icon_dark.png"),
+    size=(30, 30)
+)
+
+# Use with a widget
+label = ctk.CTkLabel(root, image=image, text="")
+```
+
+## Constructor
+
+```python
+CTkImage(
+    light_image=None,
+    dark_image=None,
+    size=(20, 20)
+)
+```
+
+### Parameters
+
+<ParamField path="light_image" type="PIL.Image.Image" default={null}>
+  PIL Image object to display in light appearance mode. If `dark_image` is not provided, this image will be used for both light and dark modes.
+  
+  At least one of `light_image` or `dark_image` must be provided.
+</ParamField>
+
+<ParamField path="dark_image" type="PIL.Image.Image" default={null}>
+  PIL Image object to display in dark appearance mode. If not provided, `light_image` will be used for both modes.
+  
+  At least one of `light_image` or `dark_image` must be provided.
+</ParamField>
+
+<ParamField path="size" type="Tuple[int, int]" default="(20, 20)">
+  Display size as a tuple `(width, height)` in pixels. This is the size at which the image will be displayed, independent of UI scaling. The images will be automatically resized to match this dimension.
+  
+  If both `light_image` and `dark_image` are provided, they must have the same original size.
+</ParamField>
+
+## Methods
+
+### configure()
+
+Update image properties after creation.
+
+```python
+image = ctk.CTkImage(light_image=img1, size=(20, 20))
+
+# Update with new images or size
+image.configure(
+    dark_image=img2,
+    size=(30, 30)
+)
+```
+
+**Parameters:**
+- `light_image` (PIL.Image.Image, optional) - New light mode image
+- `dark_image` (PIL.Image.Image, optional) - New dark mode image
+- `size` (Tuple[int, int], optional) - New display size
+
+### cget()
+
+Retrieve current image property values.
+
+```python
+current_size = image.cget("size")
+light_img = image.cget("light_image")
+dark_img = image.cget("dark_image")
+```
+
+**Parameters:**
+- `attribute_name` (str) - Name of the attribute to retrieve ("light_image", "dark_image", or "size")
+
+**Returns:** The current value of the specified attribute
+
+## Requirements
+
+CTkImage requires the Pillow (PIL) library:
+
+```bash
+pip install Pillow
+```
+
+## Notes
+
+- Images automatically switch between light and dark versions when the appearance mode changes
+- If only one image is provided, it will be used for both light and dark modes
+- Images are cached at different scaled sizes for performance
+- The display size is independent of UI scaling - CustomTkinter handles scaling automatically
+- Both `light_image` and `dark_image` must be `PIL.Image.Image` instances, not file paths
+- If both images are provided, they must have the same original dimensions
+
+## Example: Loading from Files
+
+```python
+from PIL import Image
+import customtkinter as ctk
+
+# Load images from files
+light_img = Image.open("path/to/light_icon.png")
+dark_img = Image.open("path/to/dark_icon.png")
+
+# Create CTkImage
+my_image = ctk.CTkImage(
+    light_image=light_img,
+    dark_image=dark_img,
+    size=(40, 40)
+)
+
+# Use in button
+button = ctk.CTkButton(
+    root,
+    image=my_image,
+    text="Click Me"
+)
+```

@@ -1,0 +1,273 @@
+---
+title: Themes
+description: Customize colors and styles with built-in and custom themes
+---
+
+CustomTkinter includes a powerful theming system that controls the colors and visual styling of all widgets. Themes define separate color schemes for light and dark appearance modes.
+
+## Built-in Themes
+
+CustomTkinter comes with four built-in color themes:
+
+- **blue** (default): Professional blue accent colors
+- **green**: Fresh green accent colors
+- **dark-blue**: Deep blue accent colors
+- **sweetkind**: Custom theme with unique color palette
+
+## Setting a Theme
+
+Use `set_default_color_theme()` to change the active theme:
+
+```python
+import customtkinter as ctk
+
+# Use the green theme
+ctk.set_default_color_theme("green")
+
+# Use the dark-blue theme
+ctk.set_default_color_theme("dark-blue")
+```
+
+<Warning>
+You must call `set_default_color_theme()` **before** creating any widgets. Theme changes do not affect existing widgets.
+</Warning>
+
+## Complete Example
+
+```python
+import customtkinter as ctk
+
+# Set theme BEFORE creating the app
+ctk.set_default_color_theme("green")
+ctk.set_appearance_mode("dark")
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("Theme Demo")
+        self.geometry("500x400")
+        
+        # Frame
+        self.frame = ctk.CTkFrame(self)
+        self.frame.pack(pady=20, padx=20, fill="both", expand=True)
+        
+        # Label
+        self.label = ctk.CTkLabel(
+            self.frame,
+            text="Green Theme Example",
+            font=("Roboto", 24)
+        )
+        self.label.pack(pady=20)
+        
+        # Buttons showcase theme colors
+        self.button = ctk.CTkButton(
+            self.frame,
+            text="Primary Button"
+        )
+        self.button.pack(pady=10)
+        
+        # Progress bar
+        self.progress = ctk.CTkProgressBar(self.frame)
+        self.progress.pack(pady=10)
+        self.progress.set(0.7)
+        
+        # Slider
+        self.slider = ctk.CTkSlider(self.frame)
+        self.slider.pack(pady=10)
+        self.slider.set(0.5)
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Theme File Structure
+
+Themes are stored as JSON files in the `assets/themes/` directory. Here's what a theme file looks like:
+
+```json
+{
+  "CTkButton": {
+    "corner_radius": 6,
+    "border_width": 0,
+    "fg_color": ["#2CC985", "#2FA572"],
+    "hover_color": ["#0C955A", "#106A43"],
+    "text_color": ["gray98", "#DCE4EE"]
+  },
+  "CTkFrame": {
+    "corner_radius": 6,
+    "border_width": 0,
+    "fg_color": ["gray86", "gray17"]
+  }
+}
+```
+
+<Info>
+Color arrays like `["#2CC985", "#2FA572"]` contain two values: `[light_mode_color, dark_mode_color]`.
+</Info>
+
+## Creating Custom Themes
+
+You can create your own theme by providing a path to a custom JSON file:
+
+```python
+import customtkinter as ctk
+
+# Load custom theme from file
+ctk.set_default_color_theme("/path/to/my_theme.json")
+```
+
+### Custom Theme Example
+
+Create a file called `my_theme.json`:
+
+```json
+{
+  "CTk": {
+    "fg_color": ["#F5F5F5", "#1A1A1A"]
+  },
+  "CTkButton": {
+    "corner_radius": 8,
+    "border_width": 0,
+    "fg_color": ["#FF6B6B", "#EE5A52"],
+    "hover_color": ["#FF5252", "#D84A47"],
+    "border_color": ["#3E454A", "#949A9F"],
+    "text_color": ["#FFFFFF", "#FFFFFF"],
+    "text_color_disabled": ["gray74", "gray60"]
+  },
+  "CTkLabel": {
+    "corner_radius": 0,
+    "fg_color": "transparent",
+    "text_color": ["#2D2D2D", "#E0E0E0"]
+  },
+  "CTkEntry": {
+    "corner_radius": 8,
+    "border_width": 2,
+    "fg_color": ["#FFFFFF", "#2D2D2D"],
+    "border_color": ["#CCCCCC", "#4A4A4A"],
+    "text_color": ["#2D2D2D", "#E0E0E0"],
+    "placeholder_text_color": ["gray52", "gray62"]
+  }
+}
+```
+
+Then load it in your application:
+
+```python
+import customtkinter as ctk
+import os
+
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+theme_path = os.path.join(script_dir, "my_theme.json")
+
+ctk.set_default_color_theme(theme_path)
+
+app = ctk.CTk()
+app.mainloop()
+```
+
+## Themed Widget Properties
+
+Each widget type can have the following theme properties:
+
+<Accordion title="Common Properties">
+
+- `fg_color`: Foreground/background color (array for light/dark)
+- `text_color`: Text color
+- `border_color`: Border color
+- `corner_radius`: Corner radius in pixels
+- `border_width`: Border width in pixels
+- `hover_color`: Color when hovering (for interactive widgets)
+
+</Accordion>
+
+<Accordion title="Widget-Specific Properties">
+
+**CTkButton, CTkOptionMenu**
+- `text_color_disabled`: Text color when disabled
+
+**CTkEntry, CTkTextbox, CTkComboBox**
+- `placeholder_text_color`: Placeholder text color
+
+**CTkSwitch, CTkSlider, CTkProgressBar**
+- `progress_color`: Color of the progress/active portion
+- `button_color`: Color of the draggable button/knob
+- `button_hover_color`: Button color on hover
+
+**CTkCheckBox, CTkRadioButton**
+- `checkmark_color`: Color of the checkmark/indicator
+
+</Accordion>
+
+## Platform-Specific Themes
+
+Themes can specify different values for different operating systems:
+
+```json
+{
+  "CTkFont": {
+    "macOS": {
+      "family": "SF Display",
+      "size": 13,
+      "weight": "normal"
+    },
+    "Windows": {
+      "family": "Roboto",
+      "size": 13,
+      "weight": "normal"
+    },
+    "Linux": {
+      "family": "Roboto",
+      "size": 13,
+      "weight": "normal"
+    }
+  }
+}
+```
+
+<Note>
+CustomTkinter automatically selects the appropriate platform-specific values when loading the theme.
+</Note>
+
+## Theme Manager Internals
+
+<Accordion title="How Theme Loading Works">
+
+The `ThemeManager` class handles theme loading:
+
+1. **Built-in Detection**: Checks if the theme name matches a built-in theme (`blue`, `green`, `dark-blue`, `sweetkind`)
+2. **File Loading**: Loads the JSON file from the built-in directory or custom path
+3. **Platform Filtering**: Extracts platform-specific values for the current OS
+4. **Name Normalization**: Fixes inconsistencies (e.g., `CTkCheckbox` → `CTkCheckBox`)
+5. **Storage**: Stores the theme data in `ThemeManager.theme` dictionary
+
+All widgets read their default values from this dictionary when they are created.
+
+</Accordion>
+
+<Tabs>
+  <Tab title="Blue Theme">
+    Professional blue accent colors (`#3B8ED0` in light, `#1F6AA5` in dark). Great for business and productivity applications.
+  </Tab>
+  <Tab title="Green Theme">
+    Fresh green accent colors (`#2CC985` in light, `#2FA572` in dark). Perfect for health, nature, or environmental applications.
+  </Tab>
+  <Tab title="Dark Blue Theme">
+    Deep blue accent colors for a more subdued, professional look.
+  </Tab>
+</Tabs>
+
+## Best Practices
+
+1. **Set theme early**: Always call `set_default_color_theme()` before creating any windows or widgets
+2. **Test both modes**: Verify your theme looks good in both light and dark appearance modes
+3. **Use semantic colors**: Name your colors based on purpose (primary, secondary, accent) rather than specific hues
+4. **Provide defaults**: Include all widget types in your custom theme to ensure consistency
+5. **Consider accessibility**: Ensure sufficient contrast between text and background colors
+
+## Related Functions
+
+- `set_default_color_theme(color_string)` - Set the color theme
+- `set_appearance_mode()` - Set light/dark mode (see [Appearance Modes](/concepts/appearance-modes))

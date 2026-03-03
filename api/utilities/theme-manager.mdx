@@ -1,0 +1,141 @@
+---
+title: Theme Manager
+description: Functions to manage color themes in CustomTkinter
+---
+
+CustomTkinter provides a theme system that controls the color scheme of widgets. You can use built-in themes or load custom theme files.
+
+## set_default_color_theme()
+
+Set the default color theme for CustomTkinter widgets.
+
+```python
+import customtkinter as ctk
+
+# Use built-in theme
+ctk.set_default_color_theme("blue")  # Default theme
+
+# Load custom theme
+ctk.set_default_color_theme("/path/to/custom_theme.json")
+```
+
+### Parameters
+
+<ParamField path="color_string" type="str" required>
+  Either the name of a built-in theme or the path to a custom theme JSON file.
+  
+  **Built-in themes:**
+  - `"blue"` - Default blue theme
+  - `"green"` - Green color scheme
+  - `"dark-blue"` - Dark blue variant
+  - `"sweetkind"` - Custom sweetkind color scheme
+  
+  **Custom themes:**
+  Pass the absolute or relative path to a JSON theme file to load a custom color scheme.
+</ParamField>
+
+### Behavior
+
+- This function should be called **before** creating any widgets
+- The theme affects widget colors in both light and dark appearance modes
+- Built-in themes are loaded from CustomTkinter's assets directory
+- Custom theme files must follow CustomTkinter's theme JSON structure
+
+## Theme File Structure
+
+Custom theme files are JSON files that define colors for different widget types and states. Here's a basic structure:
+
+```json
+{
+  "CTkButton": {
+    "fg_color": ["#3B8ED0", "#1F6AA5"],
+    "hover_color": ["#36719F", "#144870"],
+    "border_color": ["#3E454A", "#949A9F"],
+    "text_color": ["#DCE4EE", "#DCE4EE"]
+  },
+  "CTkLabel": {
+    "fg_color": "transparent",
+    "text_color": ["gray10", "gray90"]
+  },
+  "CTkFont": {
+    "family": "Arial",
+    "size": 13,
+    "weight": "normal"
+  }
+}
+```
+
+Color values in arrays represent `[light_mode_color, dark_mode_color]`.
+
+### Platform-Specific Values
+
+Themes can specify platform-specific values:
+
+```json
+{
+  "CTkButton": {
+    "corner_radius": {
+      "macOS": 8,
+      "Windows": 6,
+      "Linux": 6
+    }
+  }
+}
+```
+
+## Example
+
+```python
+import customtkinter as ctk
+
+# Set theme before creating widgets
+ctk.set_default_color_theme("green")
+
+root = ctk.CTk()
+
+# These widgets will use the green theme
+button = ctk.CTkButton(root, text="Green Button")
+button.pack(pady=20)
+
+label = ctk.CTkLabel(root, text="Green Theme Label")
+label.pack(pady=20)
+
+root.mainloop()
+```
+
+## Example: Custom Theme
+
+```python
+import customtkinter as ctk
+import json
+
+# Create a custom theme file
+custom_theme = {
+    "CTkButton": {
+        "fg_color": ["#FF6B6B", "#C92A2A"],
+        "hover_color": ["#FF5252", "#A61E1E"],
+        "text_color": ["white", "white"]
+    },
+    "CTkFrame": {
+        "fg_color": ["#F8F9FA", "#212529"]
+    }
+}
+
+# Save to file
+with open("my_theme.json", "w") as f:
+    json.dump(custom_theme, f, indent=2)
+
+# Load the custom theme
+ctk.set_default_color_theme("my_theme.json")
+
+root = ctk.CTk()
+root.mainloop()
+```
+
+## Notes
+
+- The theme defines the default colors; individual widgets can still override colors using their parameters
+- Built-in themes are located in `customtkinter/assets/themes/`
+- Theme changes only affect widgets created after `set_default_color_theme()` is called
+- The theme is separate from the appearance mode (light/dark)
+- For a complete theme structure, examine the built-in theme files in the CustomTkinter source code

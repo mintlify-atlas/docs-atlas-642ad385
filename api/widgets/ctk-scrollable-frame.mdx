@@ -1,0 +1,344 @@
+---
+title: CTkScrollableFrame
+description: Scrollable frame widget with automatic scrollbar management
+---
+
+A frame widget that automatically provides scrolling capabilities with integrated CTkScrollbar. Children widgets can be added directly to the scrollable area using standard geometry managers.
+
+## Constructor
+
+```python
+CTkScrollableFrame(master, width, height, corner_radius, border_width,
+                   bg_color, fg_color, border_color, scrollbar_fg_color,
+                   scrollbar_button_color, scrollbar_button_hover_color,
+                   label_fg_color, label_text_color, label_text, label_font,
+                   label_anchor, orientation)
+```
+
+<ParamField path="master" type="widget" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="200">
+  Width of the frame in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="200">
+  Height of the frame in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="int" default="theme">
+  Corner radius in pixels
+</ParamField>
+
+<ParamField path="border_width" type="int" default="theme">
+  Border width in pixels
+</ParamField>
+
+<ParamField path="bg_color" type="str | tuple[str, str]" default="transparent">
+  Background color
+</ParamField>
+
+<ParamField path="fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the frame
+</ParamField>
+
+<ParamField path="border_color" type="str | tuple[str, str]" default="theme">
+  Border color
+</ParamField>
+
+<ParamField path="scrollbar_fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the scrollbar track
+</ParamField>
+
+<ParamField path="scrollbar_button_color" type="str | tuple[str, str]" default="theme">
+  Color of the scrollbar button
+</ParamField>
+
+<ParamField path="scrollbar_button_hover_color" type="str | tuple[str, str]" default="theme">
+  Hover color of the scrollbar button
+</ParamField>
+
+<ParamField path="label_fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the optional label
+</ParamField>
+
+<ParamField path="label_text_color" type="str | tuple[str, str]" default="theme">
+  Text color of the optional label
+</ParamField>
+
+<ParamField path="label_text" type="str" default="">
+  Text for optional label displayed at the top/bottom of the frame. If empty, no label is shown
+</ParamField>
+
+<ParamField path="label_font" type="tuple | CTkFont" default="default font">
+  Font of the label text
+</ParamField>
+
+<ParamField path="label_anchor" type="str" default="center">
+  Anchor position for label text: "center", "w", "e", etc.
+</ParamField>
+
+<ParamField path="orientation" type="Literal['vertical', 'horizontal']" default="vertical">
+  Scrolling orientation: "vertical" or "horizontal"
+</ParamField>
+
+## Methods
+
+### configure
+
+```python
+.configure(**kwargs)
+```
+
+Configure widget parameters. Accepts all constructor parameters.
+
+### cget
+
+```python
+.cget(attribute_name) -> any
+```
+
+Get the value of a widget attribute.
+
+### Geometry Methods
+
+The scrollable frame supports all standard tkinter geometry managers:
+
+- `.pack(**kwargs)` - Pack the frame
+- `.grid(**kwargs)` - Grid the frame
+- `.place(**kwargs)` - Place the frame
+- `.pack_forget()` - Remove from pack
+- `.grid_forget()` - Remove from grid
+- `.place_forget()` - Remove from place
+
+## Scrolling Behavior
+
+### Automatic Scrollbar Management
+
+The scrollbar automatically appears and is configured based on the orientation:
+
+- **Vertical orientation**: Scrollbar appears on the right side
+- **Horizontal orientation**: Scrollbar appears at the bottom
+
+The scroll region automatically updates when widgets are added or removed from the frame.
+
+### Mouse Wheel Scrolling
+
+Mouse wheel scrolling is automatically enabled:
+
+- **Normal scrolling**: Scroll in the primary orientation
+- **Shift + scroll**: Scroll in the opposite direction (e.g., horizontal when orientation is vertical)
+
+Scrolling only works when the mouse is over the scrollable frame or its children.
+
+### Keyboard Shortcuts
+
+The widget automatically detects Shift key presses to enable cross-directional scrolling with the mouse wheel.
+
+## Usage Examples
+
+### Basic Vertical Scrollable Frame
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=300,
+    height=400
+)
+scrollable_frame.pack(pady=20, padx=20)
+
+# Add widgets to the scrollable frame
+for i in range(50):
+    label = ctk.CTkLabel(scrollable_frame, text=f"Item {i+1}")
+    label.pack(pady=5)
+
+app.mainloop()
+```
+
+### With Label Header
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=300,
+    height=400,
+    label_text="My Scrollable List"
+)
+scrollable_frame.pack(pady=20, padx=20)
+
+for i in range(30):
+    button = ctk.CTkButton(scrollable_frame, text=f"Button {i+1}")
+    button.pack(pady=5, padx=10)
+
+app.mainloop()
+```
+
+### Horizontal Scrollable Frame
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=400,
+    height=150,
+    orientation="horizontal"
+)
+scrollable_frame.pack(pady=20, padx=20)
+
+# Add widgets horizontally
+for i in range(20):
+    label = ctk.CTkLabel(scrollable_frame, text=f"Col {i+1}")
+    label.pack(side="left", padx=10)
+
+app.mainloop()
+```
+
+### Scrollable Checkbox List
+
+```python
+import customtkinter as ctk
+
+class ScrollableCheckBoxFrame(ctk.CTkScrollableFrame):
+    def __init__(self, master, item_list, **kwargs):
+        super().__init__(master, **kwargs)
+        
+        self.checkbox_list = []
+        for item in item_list:
+            checkbox = ctk.CTkCheckBox(self, text=item)
+            checkbox.pack(pady=5, padx=10, anchor="w")
+            self.checkbox_list.append(checkbox)
+    
+    def get_checked_items(self):
+        return [cb.cget("text") for cb in self.checkbox_list if cb.get() == 1]
+
+app = ctk.CTk()
+
+scrollable_checkbox = ScrollableCheckBoxFrame(
+    app,
+    width=300,
+    height=400,
+    item_list=[f"Item {i}" for i in range(50)],
+    label_text="Select Items"
+)
+scrollable_checkbox.pack(pady=20, padx=20)
+
+def show_selected():
+    print("Selected:", scrollable_checkbox.get_checked_items())
+
+button = ctk.CTkButton(app, text="Show Selected", command=show_selected)
+button.pack(pady=10)
+
+app.mainloop()
+```
+
+### Scrollable Radio Button List
+
+```python
+import customtkinter as ctk
+
+class ScrollableRadioButtonFrame(ctk.CTkScrollableFrame):
+    def __init__(self, master, item_list, **kwargs):
+        super().__init__(master, **kwargs)
+        
+        self.variable = ctk.StringVar()
+        self.radiobutton_list = []
+        
+        for item in item_list:
+            radiobutton = ctk.CTkRadioButton(
+                self,
+                text=item,
+                value=item,
+                variable=self.variable
+            )
+            radiobutton.pack(pady=5, padx=10, anchor="w")
+            self.radiobutton_list.append(radiobutton)
+    
+    def get_selected(self):
+        return self.variable.get()
+
+app = ctk.CTk()
+
+scrollable_radio = ScrollableRadioButtonFrame(
+    app,
+    width=300,
+    height=400,
+    item_list=[f"Option {i}" for i in range(100)],
+    label_text="Choose One"
+)
+scrollable_radio.pack(pady=20, padx=20)
+
+app.mainloop()
+```
+
+### Custom Scrollbar Colors
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=300,
+    height=400,
+    scrollbar_button_color="#0066cc",
+    scrollbar_button_hover_color="#0052a3",
+    label_text="Custom Scrollbar"
+)
+scrollable_frame.pack(pady=20, padx=20)
+
+for i in range(50):
+    label = ctk.CTkLabel(scrollable_frame, text=f"Item {i+1}")
+    label.pack(pady=5)
+
+app.mainloop()
+```
+
+### Grid Layout Inside Scrollable Frame
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=400,
+    height=400
+)
+scrollable_frame.pack(pady=20, padx=20)
+
+# Use grid layout inside
+for row in range(20):
+    for col in range(3):
+        button = ctk.CTkButton(
+            scrollable_frame,
+            text=f"R{row}C{col}",
+            width=100
+        )
+        button.grid(row=row, column=col, padx=5, pady=5)
+
+app.mainloop()
+```
+
+## Platform-Specific Behavior
+
+The scrolling increments are automatically adjusted based on the platform:
+
+- **Windows**: Scroll increment of 1 pixel for both x and y
+- **macOS**: Scroll increment of 4 pixels (x) and 8 pixels (y)
+- **Linux**: Uses default tkinter behavior
+
+Mouse wheel scroll speeds are also platform-dependent and automatically handled.

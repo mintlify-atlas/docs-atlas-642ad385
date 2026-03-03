@@ -1,0 +1,325 @@
+---
+title: CTkButton
+description: Button widget with rounded corners, border, hover effects, image support, and click command functionality.
+---
+
+# CTkButton
+
+Button with rounded corners, border, hover effect, image support, click command and textvariable.
+
+## Constructor
+
+```python
+CTkButton(
+    master: Any,
+    width: int = 140,
+    height: int = 28,
+    corner_radius: Optional[int] = None,
+    border_width: Optional[int] = None,
+    border_spacing: int = 2,
+    bg_color: Union[str, Tuple[str, str]] = "transparent",
+    fg_color: Optional[Union[str, Tuple[str, str]]] = None,
+    hover_color: Optional[Union[str, Tuple[str, str]]] = None,
+    border_color: Optional[Union[str, Tuple[str, str]]] = None,
+    text_color: Optional[Union[str, Tuple[str, str]]] = None,
+    text_color_disabled: Optional[Union[str, Tuple[str, str]]] = None,
+    background_corner_colors: Union[Tuple[Union[str, Tuple[str, str]]], None] = None,
+    round_width_to_even_numbers: bool = True,
+    round_height_to_even_numbers: bool = True,
+    text: str = "CTkButton",
+    font: Optional[Union[tuple, CTkFont]] = None,
+    textvariable: Union[tkinter.Variable, None] = None,
+    image: Union[CTkImage, ImageTk.PhotoImage, None] = None,
+    state: str = "normal",
+    hover: bool = True,
+    command: Union[Callable[[], Any], None] = None,
+    compound: str = "left",
+    anchor: str = "center"
+)
+```
+
+### Parameters
+
+<ParamField path="master" type="Any" required>
+  The parent widget where the button will be placed.
+</ParamField>
+
+<ParamField path="width" type="int" default="140">
+  Width of the button in pixels.
+</ParamField>
+
+<ParamField path="height" type="int" default="28">
+  Height of the button in pixels.
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Radius of the rounded corners. If None, uses theme default. The actual corner radius is limited to half of the current height.
+</ParamField>
+
+<ParamField path="border_width" type="Optional[int]" default="None">
+  Width of the button border. If None, uses theme default.
+</ParamField>
+
+<ParamField path="border_spacing" type="int" default="2">
+  Spacing between the border and the button content.
+</ParamField>
+
+#### Color Parameters
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the button. Can be a single color string or a tuple of (light_mode_color, dark_mode_color).
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the button (main button color). If None, uses theme default. Set to "transparent" for a transparent button.
+</ParamField>
+
+<ParamField path="hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color when the mouse hovers over the button. If None, uses theme default.
+</ParamField>
+
+<ParamField path="border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the button border. If None, uses theme default.
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the button text. If None, uses theme default.
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the text when the button is disabled. If None, uses theme default.
+</ParamField>
+
+#### Rendering Options
+
+<ParamField path="background_corner_colors" type="Union[Tuple[Union[str, Tuple[str, str]]], None]" default="None">
+  Tuple of 4 colors for drawing background corners: (top_left, top_right, bottom_right, bottom_left). Used for special rendering cases.
+</ParamField>
+
+<ParamField path="round_width_to_even_numbers" type="bool" default="True">
+  Whether to round the widget width to even numbers for better rendering.
+</ParamField>
+
+<ParamField path="round_height_to_even_numbers" type="bool" default="True">
+  Whether to round the widget height to even numbers for better rendering.
+</ParamField>
+
+#### Text and Content Parameters
+
+<ParamField path="text" type="str" default="'CTkButton'">
+  The text displayed on the button.
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the button text. Can be a CTkFont object or a tuple like ("Arial", 12). If None, uses default font.
+</ParamField>
+
+<ParamField path="textvariable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable to bind to the button text for dynamic updates.
+</ParamField>
+
+<ParamField path="image" type="Union[CTkImage, ImageTk.PhotoImage, None]" default="None">
+  Image to display on the button. Can be a CTkImage or PhotoImage object.
+</ParamField>
+
+<ParamField path="compound" type="str" default="'left'">
+  Position of the image relative to text. Options: "left", "right", "top", "bottom".
+</ParamField>
+
+<ParamField path="anchor" type="str" default="'center'">
+  Anchor position for the button content. Options: "center", "n", "s", "e", "w", "ne", "nw", "se", "sw".
+</ParamField>
+
+#### Behavior Parameters
+
+<ParamField path="state" type="str" default="'normal'">
+  State of the button. Options: "normal" or "disabled".
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Whether to enable hover effects.
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[], Any], None]" default="None">
+  Function to call when the button is clicked.
+</ParamField>
+
+## Methods
+
+### configure()
+
+Update button attributes after creation.
+
+```python
+button.configure(
+    corner_radius=10,
+    border_width=2,
+    fg_color="blue",
+    text="Click Me",
+    state="normal"
+)
+```
+
+**Configurable attributes:**
+- All constructor parameters
+- `require_redraw` (bool): Force a redraw of the widget
+
+### cget()
+
+Get the current value of a button attribute.
+
+```python
+value = button.cget("text")
+```
+
+**Parameters:**
+- `attribute_name` (str): Name of the attribute to retrieve
+
+**Returns:** The current value of the specified attribute
+
+**Available attributes:**
+- `corner_radius`, `border_width`, `border_spacing`
+- `fg_color`, `hover_color`, `border_color`, `text_color`, `text_color_disabled`, `background_corner_colors`
+- `text`, `font`, `textvariable`, `image`, `state`, `hover`, `command`, `compound`, `anchor`
+
+### invoke()
+
+Programmatically trigger the button's command function.
+
+```python
+result = button.invoke()
+```
+
+**Returns:** The return value of the command function, or None if button is disabled or no command is set
+
+### bind()
+
+Bind an event to the button.
+
+```python
+button.bind("<Button-3>", right_click_handler, add=True)
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence (e.g., `"<Button-1>"`, `"<Enter>"`)
+- `command` (Callable): Function to call when event occurs
+- `add` (Union[str, bool]): Must be "+" or True to preserve internal callbacks
+
+### unbind()
+
+Remove an event binding from the button.
+
+```python
+button.unbind("<Button-3>")
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence to unbind
+- `funcid` (str): Must be None (parameter included for compatibility)
+
+### focus(), focus_set(), focus_force()
+
+Control keyboard focus on the button.
+
+```python
+button.focus()
+button.focus_set()
+button.focus_force()
+```
+
+## Usage Examples
+
+### Basic Button
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+def button_clicked():
+    print("Button clicked!")
+
+button = ctk.CTkButton(
+    root,
+    text="Click Me",
+    command=button_clicked
+)
+button.pack(pady=20)
+
+root.mainloop()
+```
+
+### Button with Custom Colors
+
+```python
+button = ctk.CTkButton(
+    root,
+    text="Custom Button",
+    fg_color="#1f538d",
+    hover_color="#14375e",
+    text_color="white",
+    border_color="#14375e",
+    border_width=2,
+    corner_radius=10
+)
+button.pack(pady=10)
+```
+
+### Button with Image
+
+```python
+from PIL import Image
+
+my_image = ctk.CTkImage(
+    light_image=Image.open("icon_light.png"),
+    dark_image=Image.open("icon_dark.png"),
+    size=(20, 20)
+)
+
+button = ctk.CTkButton(
+    root,
+    text="Download",
+    image=my_image,
+    compound="left"
+)
+button.pack(pady=10)
+```
+
+### Button with Dynamic Text
+
+```python
+import tkinter as tk
+
+text_var = tk.StringVar(value="Initial Text")
+
+button = ctk.CTkButton(
+    root,
+    textvariable=text_var,
+    command=lambda: text_var.set("Text Changed!")
+)
+button.pack(pady=10)
+```
+
+### Disabled Button
+
+```python
+button = ctk.CTkButton(
+    root,
+    text="Disabled Button",
+    state="disabled",
+    text_color_disabled="gray"
+)
+button.pack(pady=10)
+```
+
+### Button with Different Anchor
+
+```python
+button = ctk.CTkButton(
+    root,
+    text="Left Aligned",
+    width=200,
+    anchor="w"
+)
+button.pack(pady=10)
+```

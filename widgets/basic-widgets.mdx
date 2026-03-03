@@ -1,0 +1,137 @@
+---
+title: Basic Widgets
+description: Fundamental UI components including buttons, labels, and frames
+---
+
+Basic widgets are the building blocks of your CustomTkinter interface. They provide essential functionality for displaying content and handling user interactions.
+
+## Available Widgets
+
+<CardGroup cols={2}>
+  <Card title="CTkButton" icon="hand-pointer" href="/api/widgets/ctk-button">
+    Clickable button for user actions and commands
+  </Card>
+  
+  <Card title="CTkLabel" icon="tag" href="/api/widgets/ctk-label">
+    Text and image display component
+  </Card>
+  
+  <Card title="CTkFrame" icon="square" href="/api/widgets/ctk-frame">
+    Container widget for grouping other widgets
+  </Card>
+</CardGroup>
+
+## CTkButton
+
+A modern button widget for triggering actions and commands.
+
+```python
+def button_callback():
+    print("Button clicked!")
+
+button = ctk.CTkButton(
+    app,
+    text="Click Me",
+    command=button_callback,
+    width=200,
+    height=40
+)
+button.pack(pady=20)
+```
+
+**Key Features:**
+- Customizable colors, fonts, and borders
+- Support for icons and images
+- Hover effects and state management
+- Corner radius customization
+- Multiple text alignments
+
+[View Full API Reference →](/api/widgets/ctk-button)
+
+## CTkLabel
+
+Displays text and images with modern styling.
+
+```python
+label = ctk.CTkLabel(
+    app,
+    text="Welcome to CustomTkinter",
+    font=("Arial", 24),
+    text_color="#3B8ED0"
+)
+label.pack(pady=10)
+
+# Label with image
+image = ctk.CTkImage(light_image=Image.open("icon.png"), size=(30, 30))
+icon_label = ctk.CTkLabel(app, image=image, text="")
+icon_label.pack()
+```
+
+**Key Features:**
+- Text and image display
+- Custom fonts and colors
+- Text wrapping support
+- Anchor and justify options
+- Compound layouts (text + image)
+
+[View Full API Reference →](/api/widgets/ctk-label)
+
+## CTkFrame
+
+A container widget for organizing and grouping other widgets.
+
+```python
+frame = ctk.CTkFrame(
+    app,
+    width=300,
+    height=200,
+    corner_radius=10,
+    fg_color="transparent"
+)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Add widgets to the frame
+label = ctk.CTkLabel(frame, text="Inside Frame")
+label.pack(pady=10)
+
+button = ctk.CTkButton(frame, text="Frame Button")
+button.pack(pady=10)
+```
+
+**Key Features:**
+- Groups related widgets together
+- Customizable background colors
+- Border and corner radius options
+- Works with all geometry managers (pack, grid, place)
+- Supports nesting for complex layouts
+
+[View Full API Reference →](/api/widgets/ctk-frame)
+
+## Common Patterns
+
+### Creating a Button Row
+
+```python
+button_frame = ctk.CTkFrame(app)
+button_frame.pack(pady=20)
+
+ctk.CTkButton(button_frame, text="Save").pack(side="left", padx=5)
+ctk.CTkButton(button_frame, text="Cancel").pack(side="left", padx=5)
+ctk.CTkButton(button_frame, text="Apply").pack(side="left", padx=5)
+```
+
+### Card-Style Layout
+
+```python
+card = ctk.CTkFrame(app, corner_radius=15)
+card.pack(pady=10, padx=10, fill="x")
+
+title = ctk.CTkLabel(card, text="Card Title", font=("Arial", 18, "bold"))
+title.pack(pady=(10, 5), padx=10, anchor="w")
+
+description = ctk.CTkLabel(card, text="Card description goes here")
+description.pack(pady=(0, 10), padx=10, anchor="w")
+
+action_button = ctk.CTkButton(card, text="Action")
+action_button.pack(pady=(0, 10), padx=10)
+```

@@ -1,0 +1,68 @@
+---
+title: Widget Overview
+description: A comprehensive guide to all CustomTkinter widgets organized by category
+---
+
+CustomTkinter provides a rich set of modern UI widgets built on top of Tkinter. All widgets support appearance modes (light/dark) and custom theming.
+
+## Widget Categories
+
+<CardGroup cols={2}>
+  <Card title="Windows" icon="window-maximize" href="/widgets/windows">
+    Main application windows and dialogs
+  </Card>
+  
+  <Card title="Basic Widgets" icon="cube" href="/widgets/basic-widgets">
+    Fundamental UI components like buttons, labels, and frames
+  </Card>
+  
+  <Card title="Input Widgets" icon="keyboard" href="/widgets/input-widgets">
+    Interactive controls for user input and selections
+  </Card>
+  
+  <Card title="Display Widgets" icon="display" href="/widgets/display-widgets">
+    Components for displaying information and progress
+  </Card>
+  
+  <Card title="Layout Widgets" icon="table-cells" href="/widgets/layout-widgets">
+    Advanced containers for organizing complex layouts
+  </Card>
+</CardGroup>
+
+## Common Features
+
+All CustomTkinter widgets share these features:
+
+- **Appearance Mode Support**: Automatic light/dark mode switching
+- **Custom Theming**: Built-in themes with customization options
+- **DPI Scaling**: Automatic high-DPI display support
+- **Modern Design**: Clean, contemporary look and feel
+- **Tkinter Compatible**: Works seamlessly with existing Tkinter code
+
+## Quick Start
+
+Every CustomTkinter widget follows a consistent API pattern:
+
+```python
+import customtkinter as ctk
+
+# Create main window
+app = ctk.CTk()
+app.title("My App")
+
+# Add widgets
+button = ctk.CTkButton(app, text="Click Me")
+button.pack(pady=20)
+
+app.mainloop()
+```
+
+## Next Steps
+
+Explore each widget category to learn about specific components and their usage:
+
+- Start with [Windows](/widgets/windows) to create your application structure
+- Add [Basic Widgets](/widgets/basic-widgets) for core UI elements
+- Use [Input Widgets](/widgets/input-widgets) to collect user input
+- Include [Display Widgets](/widgets/display-widgets) to show information
+- Organize with [Layout Widgets](/widgets/layout-widgets) for complex interfaces

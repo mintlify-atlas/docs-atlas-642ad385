@@ -1,0 +1,302 @@
+---
+title: CTkLabel
+description: Label widget with rounded corners and support for text, images, and custom styling.
+---
+
+# CTkLabel
+
+Label with rounded corners. Default is fg_color=None (transparent fg_color).
+
+## Constructor
+
+```python
+CTkLabel(
+    master: Any,
+    width: int = 0,
+    height: int = 28,
+    corner_radius: Optional[int] = None,
+    bg_color: Union[str, Tuple[str, str]] = "transparent",
+    fg_color: Optional[Union[str, Tuple[str, str]]] = None,
+    text_color: Optional[Union[str, Tuple[str, str]]] = None,
+    text_color_disabled: Optional[Union[str, Tuple[str, str]]] = None,
+    text: str = "CTkLabel",
+    font: Optional[Union[tuple, CTkFont]] = None,
+    image: Union[CTkImage, None] = None,
+    compound: str = "center",
+    anchor: str = "center",
+    wraplength: int = 0,
+    **kwargs
+)
+```
+
+### Parameters
+
+<ParamField path="master" type="Any" required>
+  The parent widget where the label will be placed.
+</ParamField>
+
+<ParamField path="width" type="int" default="0">
+  Width of the label in pixels. A value of 0 means the width adjusts to content.
+</ParamField>
+
+<ParamField path="height" type="int" default="28">
+  Height of the label in pixels.
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Radius of the rounded corners. If None, uses theme default.
+</ParamField>
+
+#### Color Parameters
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the label. Can be a single color string or a tuple of (light_mode_color, dark_mode_color).
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the label (background of the label itself). If None, uses theme default. Set to None for a transparent label background.
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the label text. If None, uses theme default.
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the text when the label is disabled. If None, uses theme default.
+</ParamField>
+
+#### Text and Content Parameters
+
+<ParamField path="text" type="str" default="'CTkLabel'">
+  The text displayed on the label.
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the label text. Can be a CTkFont object or a tuple like ("Arial", 12). If None, uses default font.
+</ParamField>
+
+<ParamField path="image" type="Union[CTkImage, None]" default="None">
+  Image to display on the label. Should be a CTkImage object.
+</ParamField>
+
+<ParamField path="compound" type="str" default="'center'">
+  Position of the image relative to text. Options: "center", "left", "right", "top", "bottom".
+</ParamField>
+
+<ParamField path="anchor" type="str" default="'center'">
+  Anchor position for the label content. Options: "center", "n", "s", "e", "w", "ne", "nw", "se", "sw".
+</ParamField>
+
+<ParamField path="wraplength" type="int" default="0">
+  Maximum line length in pixels before text wraps to the next line. 0 means no wrapping.
+</ParamField>
+
+#### Additional Tkinter Label Attributes
+
+The following standard tkinter.Label attributes can be passed as kwargs:
+- `cursor`: Cursor type when hovering over the label
+- `justify`: Text justification ("left", "center", "right")
+- `padx`: Horizontal padding
+- `pady`: Vertical padding
+- `textvariable`: Tkinter variable for dynamic text
+- `state`: Widget state ("normal", "disabled")
+- `takefocus`: Whether the widget can take keyboard focus
+- `underline`: Index of character to underline
+
+## Methods
+
+### configure()
+
+Update label attributes after creation.
+
+```python
+label.configure(
+    text="New Text",
+    fg_color="lightblue",
+    text_color="darkblue",
+    font=("Arial", 14)
+)
+```
+
+**Configurable attributes:**
+- All constructor parameters including tkinter.Label attributes
+- `require_redraw` (bool): Force a redraw of the widget
+
+### cget()
+
+Get the current value of a label attribute.
+
+```python
+value = label.cget("text")
+```
+
+**Parameters:**
+- `attribute_name` (str): Name of the attribute to retrieve
+
+**Returns:** The current value of the specified attribute
+
+**Available attributes:**
+- `corner_radius`
+- `fg_color`, `text_color`, `text_color_disabled`
+- `text`, `font`, `image`, `compound`, `anchor`, `wraplength`
+- All valid tkinter.Label attributes (cursor, justify, padx, pady, textvariable, state, takefocus, underline)
+
+### bind()
+
+Bind an event to the label.
+
+```python
+label.bind("<Button-1>", click_handler, add=True)
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence (e.g., `"<Button-1>"`, `"<Enter>"`)
+- `command` (Callable): Function to call when event occurs
+- `add` (str): Must be "+" or True to preserve internal callbacks
+
+### unbind()
+
+Remove an event binding from the label.
+
+```python
+label.unbind("<Button-1>")
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence to unbind
+- `funcid` (Optional[str]): Must be None (parameter included for compatibility)
+
+### focus(), focus_set(), focus_force()
+
+Control keyboard focus on the label.
+
+```python
+label.focus()
+label.focus_set()
+label.focus_force()
+```
+
+## Usage Examples
+
+### Basic Label
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+label = ctk.CTkLabel(
+    root,
+    text="Hello, World!"
+)
+label.pack(pady=20)
+
+root.mainloop()
+```
+
+### Label with Custom Styling
+
+```python
+label = ctk.CTkLabel(
+    root,
+    text="Styled Label",
+    fg_color="#3b8ed0",
+    text_color="white",
+    corner_radius=10,
+    width=200,
+    height=40,
+    font=("Arial", 16, "bold")
+)
+label.pack(pady=10)
+```
+
+### Label with Image
+
+```python
+from PIL import Image
+
+my_image = ctk.CTkImage(
+    light_image=Image.open("logo_light.png"),
+    dark_image=Image.open("logo_dark.png"),
+    size=(40, 40)
+)
+
+label = ctk.CTkLabel(
+    root,
+    text="Company Name",
+    image=my_image,
+    compound="left"
+)
+label.pack(pady=10)
+```
+
+### Label with Dynamic Text
+
+```python
+import tkinter as tk
+
+text_var = tk.StringVar(value="Initial Value")
+
+label = ctk.CTkLabel(
+    root,
+    textvariable=text_var
+)
+label.pack(pady=10)
+
+# Update the text
+text_var.set("Updated Value")
+```
+
+### Label with Text Wrapping
+
+```python
+label = ctk.CTkLabel(
+    root,
+    text="This is a very long text that will wrap to multiple lines when it exceeds the specified wrap length.",
+    wraplength=200,
+    justify="left"
+)
+label.pack(pady=10)
+```
+
+### Transparent Label
+
+```python
+label = ctk.CTkLabel(
+    root,
+    text="Transparent Background",
+    fg_color="transparent",
+    text_color=("black", "white")
+)
+label.pack(pady=10)
+```
+
+### Label with Different Anchor
+
+```python
+label = ctk.CTkLabel(
+    root,
+    text="Left Aligned",
+    width=200,
+    anchor="w"
+)
+label.pack(pady=10)
+```
+
+### Image-Only Label
+
+```python
+from PIL import Image
+
+icon = ctk.CTkImage(
+    Image.open("icon.png"),
+    size=(50, 50)
+)
+
+label = ctk.CTkLabel(
+    root,
+    text="",
+    image=icon
+)
+label.pack(pady=10)
+```

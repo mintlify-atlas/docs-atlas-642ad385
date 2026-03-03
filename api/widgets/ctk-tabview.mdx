@@ -1,0 +1,477 @@
+---
+title: CTkTabview
+description: Tabbed interface widget with segmented button navigation
+---
+
+Tabview widget that provides a tabbed interface using a segmented button for tab navigation. Each tab is a CTkFrame where you can add widgets.
+
+## Constructor
+
+```python
+CTkTabview(master, width, height, corner_radius, border_width, bg_color,
+           fg_color, border_color, segmented_button_fg_color,
+           segmented_button_selected_color, segmented_button_selected_hover_color,
+           segmented_button_unselected_color, segmented_button_unselected_hover_color,
+           text_color, text_color_disabled, command, anchor, state)
+```
+
+<ParamField path="master" type="widget" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="300">
+  Width of the tabview in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="250">
+  Height of the tabview in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="int" default="theme">
+  Corner radius in pixels
+</ParamField>
+
+<ParamField path="border_width" type="int" default="theme">
+  Border width in pixels
+</ParamField>
+
+<ParamField path="bg_color" type="str | tuple[str, str]" default="transparent">
+  Background color
+</ParamField>
+
+<ParamField path="fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the tab content area
+</ParamField>
+
+<ParamField path="border_color" type="str | tuple[str, str]" default="theme">
+  Border color
+</ParamField>
+
+<ParamField path="segmented_button_fg_color" type="str | tuple[str, str]" default="theme">
+  Background color of the segmented button
+</ParamField>
+
+<ParamField path="segmented_button_selected_color" type="str | tuple[str, str]" default="theme">
+  Color of the selected tab button
+</ParamField>
+
+<ParamField path="segmented_button_selected_hover_color" type="str | tuple[str, str]" default="theme">
+  Hover color of the selected tab button
+</ParamField>
+
+<ParamField path="segmented_button_unselected_color" type="str | tuple[str, str]" default="theme">
+  Color of unselected tab buttons
+</ParamField>
+
+<ParamField path="segmented_button_unselected_hover_color" type="str | tuple[str, str]" default="theme">
+  Hover color of unselected tab buttons
+</ParamField>
+
+<ParamField path="text_color" type="str | tuple[str, str]" default="theme">
+  Text color of tab buttons
+</ParamField>
+
+<ParamField path="text_color_disabled" type="str | tuple[str, str]" default="theme">
+  Text color when tab buttons are disabled
+</ParamField>
+
+<ParamField path="command" type="callable" default="None">
+  Callback function called when tab is changed
+</ParamField>
+
+<ParamField path="anchor" type="str" default="center">
+  Position of the tab buttons: "n" (top), "s" (bottom), "w", "e", "nw", "ne", "sw", "se", "center"
+</ParamField>
+
+<ParamField path="state" type="str" default="normal">
+  State of the tab buttons: "normal" or "disabled"
+</ParamField>
+
+## Methods
+
+### add
+
+```python
+.add(name) -> CTkFrame
+```
+
+Add a new tab at the end of the tab list.
+
+<ParamField path="name" type="str" required>
+  Unique name for the tab. Raises ValueError if name already exists
+</ParamField>
+
+Returns a CTkFrame reference where you can add widgets for this tab.
+
+### insert
+
+```python
+.insert(index, name) -> CTkFrame
+```
+
+Insert a new tab at a specific position.
+
+<ParamField path="index" type="int" required>
+  Position to insert the tab (0-based)
+</ParamField>
+
+<ParamField path="name" type="str" required>
+  Unique name for the tab
+</ParamField>
+
+Returns a CTkFrame reference for the new tab.
+
+### delete
+
+```python
+.delete(name)
+```
+
+Delete a tab by name.
+
+<ParamField path="name" type="str" required>
+  Name of the tab to delete. Raises ValueError if tab doesn't exist
+</ParamField>
+
+### set
+
+```python
+.set(name)
+```
+
+Programmatically select a tab by name.
+
+<ParamField path="name" type="str" required>
+  Name of the tab to select. Raises ValueError if tab doesn't exist
+</ParamField>
+
+### get
+
+```python
+.get() -> str
+```
+
+Get the name of the currently selected tab. Returns empty string if no tab is selected.
+
+### tab
+
+```python
+.tab(name) -> CTkFrame
+```
+
+Get a reference to a specific tab's frame.
+
+<ParamField path="name" type="str" required>
+  Name of the tab. Raises ValueError if tab doesn't exist
+</ParamField>
+
+### index
+
+```python
+.index(name) -> int
+```
+
+Get the index position of a tab.
+
+<ParamField path="name" type="str" required>
+  Name of the tab
+</ParamField>
+
+### move
+
+```python
+.move(new_index, name)
+```
+
+Move a tab to a new position.
+
+<ParamField path="new_index" type="int" required>
+  New position for the tab
+</ParamField>
+
+<ParamField path="name" type="str" required>
+  Name of the tab to move
+</ParamField>
+
+### rename
+
+```python
+.rename(old_name, new_name)
+```
+
+Rename a tab.
+
+<ParamField path="old_name" type="str" required>
+  Current name of the tab
+</ParamField>
+
+<ParamField path="new_name" type="str" required>
+  New name for the tab. Raises ValueError if new_name already exists
+</ParamField>
+
+### configure
+
+```python
+.configure(**kwargs)
+```
+
+Configure widget parameters. Accepts all constructor parameters.
+
+### cget
+
+```python
+.cget(attribute_name) -> any
+```
+
+Get the value of a widget attribute.
+
+## Usage Examples
+
+### Basic Tabview
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=400, height=300)
+tabview.pack(pady=20, padx=20)
+
+# Add tabs
+tab1 = tabview.add("Tab 1")
+tab2 = tabview.add("Tab 2")
+tab3 = tabview.add("Tab 3")
+
+# Add widgets to tabs
+label1 = ctk.CTkLabel(tab1, text="Content of Tab 1")
+label1.pack(pady=20)
+
+label2 = ctk.CTkLabel(tab2, text="Content of Tab 2")
+label2.pack(pady=20)
+
+label3 = ctk.CTkLabel(tab3, text="Content of Tab 3")
+label3.pack(pady=20)
+
+app.mainloop()
+```
+
+### Adding Widgets to Tabs
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=500, height=400)
+tabview.pack(pady=20, padx=20)
+
+# Create tabs
+settings_tab = tabview.add("Settings")
+about_tab = tabview.add("About")
+
+# Add content to Settings tab
+ctk.CTkLabel(settings_tab, text="Application Settings", font=("Arial", 16, "bold")).pack(pady=10)
+ctk.CTkLabel(settings_tab, text="Theme:").pack(pady=5)
+ctk.CTkOptionMenu(settings_tab, values=["Dark", "Light"]).pack(pady=5)
+
+# Add content to About tab
+ctk.CTkLabel(about_tab, text="About This App", font=("Arial", 16, "bold")).pack(pady=10)
+ctk.CTkLabel(about_tab, text="Version 1.0.0").pack(pady=5)
+ctk.CTkButton(about_tab, text="Visit Website").pack(pady=10)
+
+app.mainloop()
+```
+
+### Programmatic Tab Selection
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=400, height=300)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("Home")
+tabview.add("Profile")
+tabview.add("Settings")
+
+# Set default tab
+tabview.set("Profile")
+
+# Add button to switch tabs
+def go_to_settings():
+    tabview.set("Settings")
+
+button = ctk.CTkButton(app, text="Go to Settings", command=go_to_settings)
+button.pack(pady=10)
+
+app.mainloop()
+```
+
+### Tab Change Callback
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+def on_tab_change():
+    current = tabview.get()
+    print(f"Switched to: {current}")
+    status_label.configure(text=f"Current tab: {current}")
+
+tabview = ctk.CTkTabview(
+    app,
+    width=400,
+    height=300,
+    command=on_tab_change
+)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("Tab 1")
+tabview.add("Tab 2")
+tabview.add("Tab 3")
+
+status_label = ctk.CTkLabel(app, text="Current tab: Tab 1")
+status_label.pack(pady=10)
+
+app.mainloop()
+```
+
+### Dynamic Tab Management
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=500, height=350)
+tabview.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Initial tabs
+tabview.add("Tab 1")
+tabview.add("Tab 2")
+
+# Control frame
+control_frame = ctk.CTkFrame(app)
+control_frame.pack(pady=10, padx=20, fill="x")
+
+tab_counter = [3]  # Using list to allow modification in nested function
+
+def add_tab():
+    tabview.add(f"Tab {tab_counter[0]}")
+    tab_counter[0] += 1
+
+def delete_current_tab():
+    current = tabview.get()
+    if current:
+        tabview.delete(current)
+
+ctk.CTkButton(control_frame, text="Add Tab", command=add_tab).pack(side="left", padx=5)
+ctk.CTkButton(control_frame, text="Delete Current", command=delete_current_tab).pack(side="left", padx=5)
+
+app.mainloop()
+```
+
+### Tabs at Bottom
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+# Place tab buttons at the bottom
+tabview = ctk.CTkTabview(
+    app,
+    width=400,
+    height=300,
+    anchor="s"  # South = bottom
+)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("Home")
+tabview.add("Search")
+tabview.add("Profile")
+
+app.mainloop()
+```
+
+### Custom Tab Colors
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(
+    app,
+    width=400,
+    height=300,
+    segmented_button_selected_color="#0066cc",
+    segmented_button_selected_hover_color="#0052a3",
+    segmented_button_unselected_color="#333333",
+    segmented_button_unselected_hover_color="#444444",
+    text_color="white"
+)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("Tab 1")
+tabview.add("Tab 2")
+tabview.add("Tab 3")
+
+app.mainloop()
+```
+
+### Accessing Tab Frames Later
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=400, height=300)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("Dashboard")
+tabview.add("Reports")
+tabview.add("Settings")
+
+# Access tab frame later to add widgets
+dashboard_frame = tabview.tab("Dashboard")
+ctk.CTkLabel(dashboard_frame, text="Welcome to Dashboard").pack(pady=20)
+
+reports_frame = tabview.tab("Reports")
+ctk.CTkButton(reports_frame, text="Generate Report").pack(pady=20)
+
+app.mainloop()
+```
+
+### Insert Tab at Specific Position
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+tabview = ctk.CTkTabview(app, width=400, height=300)
+tabview.pack(pady=20, padx=20)
+
+tabview.add("First")
+tabview.add("Third")
+
+# Insert tab at index 1 (between First and Third)
+middle_tab = tabview.insert(1, "Second")
+ctk.CTkLabel(middle_tab, text="This is the second tab").pack(pady=20)
+
+app.mainloop()
+```
+
+## Tab Management Notes
+
+- Tab names must be unique within a tabview
+- When the last tab is deleted, the segmented button is hidden
+- When only one tab exists, it is automatically selected
+- The first tab added is automatically selected
+- Deleting the current tab automatically selects the first remaining tab
+- All tab frames have `border_width=0` and `corner_radius=0` by default

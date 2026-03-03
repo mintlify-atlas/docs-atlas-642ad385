@@ -1,0 +1,100 @@
+---
+title: Appearance Mode
+description: Functions to control light/dark appearance mode
+---
+
+CustomTkinter provides functions to control the appearance mode (light/dark theme) of your application. The appearance mode affects the color scheme of all CustomTkinter widgets.
+
+## set_appearance_mode()
+
+Set the appearance mode for the entire application.
+
+```python
+import customtkinter as ctk
+
+# Set to dark mode
+ctk.set_appearance_mode("dark")
+
+# Set to light mode
+ctk.set_appearance_mode("light")
+
+# Follow system theme
+ctk.set_appearance_mode("system")
+```
+
+### Parameters
+
+<ParamField path="mode_string" type="str" required>
+  The appearance mode to set. Available options:
+  
+  - `"light"` - Force light mode for all widgets
+  - `"dark"` - Force dark mode for all widgets
+  - `"system"` - Automatically follow the system's appearance mode (default)
+  
+  The value is case-insensitive.
+</ParamField>
+
+### Behavior
+
+- When set to `"system"`, CustomTkinter automatically detects and follows your operating system's appearance mode
+- Changes apply immediately to all existing CustomTkinter widgets
+- The setting persists for the lifetime of the application
+- System mode is monitored continuously and updates automatically when the OS theme changes
+
+## get_appearance_mode()
+
+Get the current appearance mode state.
+
+```python
+import customtkinter as ctk
+
+mode = ctk.get_appearance_mode()
+print(mode)  # Returns "Light" or "Dark"
+```
+
+### Returns
+
+**Type:** `str`
+
+Returns the current active appearance mode:
+- `"Light"` - Application is currently in light mode
+- `"Dark"` - Application is currently in dark mode
+
+Note: Even if the mode is set to `"system"`, this function returns the actual resolved mode ("Light" or "Dark"), not "system".
+
+## Example
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+# Set dark mode
+ctk.set_appearance_mode("dark")
+
+# Create a toggle function
+def toggle_mode():
+    current = ctk.get_appearance_mode()
+    if current == "Dark":
+        ctk.set_appearance_mode("light")
+    else:
+        ctk.set_appearance_mode("dark")
+
+# Button to toggle appearance mode
+button = ctk.CTkButton(
+    root,
+    text="Toggle Theme",
+    command=toggle_mode
+)
+button.pack(pady=20)
+
+root.mainloop()
+```
+
+## Notes
+
+- System appearance mode detection requires the `darkdetect` package, which is installed automatically with CustomTkinter
+- On macOS and Windows, system mode detection works automatically
+- On Linux, system mode detection may have limited support depending on the desktop environment
+- The appearance mode is separate from the color theme (set via `set_default_color_theme()`)
+- Appearance mode affects whether widgets use their light or dark color variants from the active theme

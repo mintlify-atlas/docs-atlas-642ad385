@@ -1,0 +1,220 @@
+---
+title: Input Widgets
+description: Interactive controls for collecting user input and selections
+---
+
+Input widgets enable user interaction through various control types including text entry, checkboxes, sliders, and selection menus.
+
+## Available Widgets
+
+<CardGroup cols={2}>
+  <Card title="CTkEntry" icon="input-text" href="/api/widgets/ctk-entry">
+    Single-line text input field
+  </Card>
+  
+  <Card title="CTkCheckBox" icon="square-check" href="/api/widgets/ctk-checkbox">
+    Toggle checkbox for binary choices
+  </Card>
+  
+  <Card title="CTkRadioButton" icon="circle-dot" href="/api/widgets/ctk-radiobutton">
+    Radio button for mutually exclusive selections
+  </Card>
+  
+  <Card title="CTkSwitch" icon="toggle-on" href="/api/widgets/ctk-switch">
+    Toggle switch for on/off states
+  </Card>
+  
+  <Card title="CTkSlider" icon="sliders" href="/api/widgets/ctk-slider">
+    Slider for selecting values from a range
+  </Card>
+  
+  <Card title="CTkOptionMenu" icon="caret-down" href="/api/widgets/ctk-optionmenu">
+    Dropdown menu for selecting from options
+  </Card>
+  
+  <Card title="CTkComboBox" icon="list-dropdown" href="/api/widgets/ctk-combobox">
+    Editable dropdown with autocomplete
+  </Card>
+  
+  <Card title="CTkSegmentedButton" icon="table-cells" href="/api/widgets/ctk-segmented-button">
+    Multi-option segmented control
+  </Card>
+</CardGroup>
+
+## CTkEntry
+
+Single-line text input field for collecting user text.
+
+```python
+entry = ctk.CTkEntry(
+    app,
+    placeholder_text="Enter your name",
+    width=200
+)
+entry.pack(pady=10)
+
+# Get the value
+value = entry.get()
+```
+
+[View Full API Reference →](/api/widgets/ctk-entry)
+
+## CTkCheckBox
+
+Checkbox for binary choices or multiple selections.
+
+```python
+checkbox_var = ctk.BooleanVar(value=True)
+
+checkbox = ctk.CTkCheckBox(
+    app,
+    text="Accept Terms",
+    variable=checkbox_var
+)
+checkbox.pack(pady=10)
+```
+
+[View Full API Reference →](/api/widgets/ctk-checkbox)
+
+## CTkRadioButton
+
+Radio button for selecting one option from a group.
+
+```python
+radio_var = ctk.StringVar(value="option1")
+
+radio1 = ctk.CTkRadioButton(app, text="Option 1", variable=radio_var, value="option1")
+radio1.pack(pady=5)
+
+radio2 = ctk.CTkRadioButton(app, text="Option 2", variable=radio_var, value="option2")
+radio2.pack(pady=5)
+```
+
+[View Full API Reference →](/api/widgets/ctk-radiobutton)
+
+## CTkSwitch
+
+Toggle switch for on/off states with a modern appearance.
+
+```python
+switch_var = ctk.BooleanVar()
+
+switch = ctk.CTkSwitch(
+    app,
+    text="Enable Notifications",
+    variable=switch_var
+)
+switch.pack(pady=10)
+```
+
+[View Full API Reference →](/api/widgets/ctk-switch)
+
+## CTkSlider
+
+Slider for selecting numeric values from a continuous range.
+
+```python
+def slider_callback(value):
+    label.configure(text=f"Value: {int(value)}")
+
+slider = ctk.CTkSlider(
+    app,
+    from_=0,
+    to=100,
+    command=slider_callback
+)
+slider.pack(pady=10)
+
+label = ctk.CTkLabel(app, text="Value: 50")
+label.pack()
+```
+
+[View Full API Reference →](/api/widgets/ctk-slider)
+
+## CTkOptionMenu
+
+Dropdown menu for selecting one option from a list.
+
+```python
+def optionmenu_callback(choice):
+    print(f"Selected: {choice}")
+
+optionmenu = ctk.CTkOptionMenu(
+    app,
+    values=["Option 1", "Option 2", "Option 3"],
+    command=optionmenu_callback
+)
+optionmenu.pack(pady=10)
+```
+
+[View Full API Reference →](/api/widgets/ctk-optionmenu)
+
+## CTkComboBox
+
+Editable dropdown with autocomplete functionality.
+
+```python
+combobox = ctk.CTkComboBox(
+    app,
+    values=["Python", "JavaScript", "Java", "C++"],
+    state="readonly"  # or "normal" for editable
+)
+combobox.pack(pady=10)
+
+# Get selected value
+value = combobox.get()
+```
+
+[View Full API Reference →](/api/widgets/ctk-combobox)
+
+## CTkSegmentedButton
+
+Segmented control for selecting one option from multiple choices.
+
+```python
+def segmented_callback(value):
+    print(f"Selected segment: {value}")
+
+segmented = ctk.CTkSegmentedButton(
+    app,
+    values=["Day", "Week", "Month", "Year"],
+    command=segmented_callback
+)
+segmented.pack(pady=10)
+segmented.set("Week")  # Set default selection
+```
+
+[View Full API Reference →](/api/widgets/ctk-segmented-button)
+
+## Form Example
+
+Combining input widgets to create a complete form:
+
+```python
+form_frame = ctk.CTkFrame(app)
+form_frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Name
+ctk.CTkLabel(form_frame, text="Name:").grid(row=0, column=0, pady=5, padx=10, sticky="w")
+name_entry = ctk.CTkEntry(form_frame, width=200)
+name_entry.grid(row=0, column=1, pady=5, padx=10)
+
+# Email
+ctk.CTkLabel(form_frame, text="Email:").grid(row=1, column=0, pady=5, padx=10, sticky="w")
+email_entry = ctk.CTkEntry(form_frame, width=200)
+email_entry.grid(row=1, column=1, pady=5, padx=10)
+
+# Country
+ctk.CTkLabel(form_frame, text="Country:").grid(row=2, column=0, pady=5, padx=10, sticky="w")
+country_menu = ctk.CTkOptionMenu(form_frame, values=["USA", "UK", "Canada"])
+country_menu.grid(row=2, column=1, pady=5, padx=10)
+
+# Subscribe
+subscribe_var = ctk.BooleanVar()
+subscribe = ctk.CTkCheckBox(form_frame, text="Subscribe to newsletter", variable=subscribe_var)
+subscribe.grid(row=3, column=1, pady=10, padx=10, sticky="w")
+
+# Submit
+submit_btn = ctk.CTkButton(form_frame, text="Submit")
+submit_btn.grid(row=4, column=1, pady=10, padx=10)
+```

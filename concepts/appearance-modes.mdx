@@ -1,0 +1,154 @@
+---
+title: Appearance Modes
+description: Control light and dark mode in CustomTkinter applications
+---
+
+CustomTkinter provides built-in support for appearance modes, allowing your application to switch between light and dark themes. The appearance mode system automatically updates all widgets when the mode changes.
+
+## Available Modes
+
+CustomTkinter supports three appearance modes:
+
+- **Light**: Light color scheme for all widgets
+- **Dark**: Dark color scheme for all widgets
+- **System**: Automatically follows the system's appearance settings (macOS/Windows)
+
+<Note>
+The system mode uses the `darkdetect` library to detect the operating system's theme and updates automatically when it changes.
+</Note>
+
+## Setting Appearance Mode
+
+Use the `set_appearance_mode()` function to change the appearance mode:
+
+```python
+import customtkinter as ctk
+
+# Set to dark mode
+ctk.set_appearance_mode("dark")
+
+# Set to light mode
+ctk.set_appearance_mode("light")
+
+# Follow system settings (default)
+ctk.set_appearance_mode("system")
+```
+
+<Tip>
+The mode string is case-insensitive, so `"Dark"`, `"dark"`, and `"DARK"` all work the same way.
+</Tip>
+
+## Getting Current Mode
+
+Retrieve the current appearance mode with `get_appearance_mode()`:
+
+```python
+import customtkinter as ctk
+
+current_mode = ctk.get_appearance_mode()
+print(current_mode)  # Returns "Light" or "Dark"
+```
+
+<Info>
+The `get_appearance_mode()` function always returns the actual current mode ("Light" or "Dark"), even if you set it to "system".
+</Info>
+
+## Complete Example
+
+Here's a complete example with a toggle button:
+
+```python
+import customtkinter as ctk
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("Appearance Mode Demo")
+        self.geometry("400x300")
+        
+        # Start with dark mode
+        ctk.set_appearance_mode("dark")
+        
+        # Create UI
+        self.label = ctk.CTkLabel(self, text="Appearance Mode Demo", 
+                                   font=("Roboto", 24))
+        self.label.pack(pady=40)
+        
+        # Mode selector
+        self.mode_menu = ctk.CTkOptionMenu(
+            self,
+            values=["Light", "Dark", "System"],
+            command=self.change_mode
+        )
+        self.mode_menu.set("Dark")
+        self.mode_menu.pack(pady=20)
+        
+        # Display current mode
+        self.mode_label = ctk.CTkLabel(self, text="")
+        self.mode_label.pack(pady=10)
+        self.update_mode_label()
+        
+    def change_mode(self, new_mode: str):
+        ctk.set_appearance_mode(new_mode.lower())
+        self.after(100, self.update_mode_label)
+        
+    def update_mode_label(self):
+        current = ctk.get_appearance_mode()
+        self.mode_label.configure(
+            text=f"Current mode: {current}"
+        )
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## How It Works
+
+<Accordion title="Internal Implementation Details">
+
+CustomTkinter uses an `AppearanceModeTracker` class that:
+
+1. **Tracks Mode State**: Maintains the current appearance mode (0 for Light, 1 for Dark)
+2. **System Detection**: Uses the `darkdetect` library to detect system theme changes
+3. **Callback System**: Registers callbacks for all widgets that update when the mode changes
+4. **Auto-Update Loop**: Runs every 30ms to check for system theme changes when in "system" mode
+
+When you call `set_appearance_mode()`:
+- The mode is stored internally
+- All registered widget callbacks are triggered
+- Widgets redraw themselves with the new color scheme
+
+</Accordion>
+
+## System Mode Behavior
+
+<Tabs>
+  <Tab title="macOS">
+    Automatically detects light/dark mode from System Preferences. Updates in real-time when you toggle "Dark Mode" in settings.
+  </Tab>
+  <Tab title="Windows">
+    Detects the system theme from Windows Settings. Responds to changes in the "Choose your color" setting (Light/Dark mode).
+  </Tab>
+  <Tab title="Linux">
+    System detection may vary depending on the desktop environment. Falls back to Light mode if detection fails.
+  </Tab>
+</Tabs>
+
+<Warning>
+If the `darkdetect` library is not installed or fails to detect the system theme, CustomTkinter defaults to Light mode.
+</Warning>
+
+## Best Practices
+
+1. **Set mode early**: Call `set_appearance_mode()` before creating your main window for consistent initial rendering
+2. **Provide user control**: Give users an option to override system settings if they prefer a specific mode
+3. **Test both modes**: Always test your UI in both light and dark modes to ensure good contrast and readability
+4. **Consider custom colors**: Some custom colors may not look good in both modes - use theme-aware colors when possible
+
+## Related Functions
+
+- `set_appearance_mode(mode_string)` - Set the appearance mode
+- `get_appearance_mode()` - Get the current active mode
+- `set_default_color_theme()` - Set color theme (see [Themes](/concepts/themes))

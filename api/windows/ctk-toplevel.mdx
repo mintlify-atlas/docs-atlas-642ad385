@@ -1,0 +1,315 @@
+---
+title: CTkToplevel
+description: Toplevel window class with dark titlebar support on Windows and macOS
+---
+
+## Overview
+
+`CTkToplevel` is a toplevel window class in CustomTkinter. It extends `tkinter.Toplevel` and provides automatic dark titlebar support on Windows and macOS, along with appearance mode and scaling capabilities. Use this class to create additional windows in your application.
+
+## Inheritance
+
+```python
+CTkToplevel(tkinter.Toplevel, CTkAppearanceModeBaseClass, CTkScalingBaseClass)
+```
+
+Inherits from:
+- `tkinter.Toplevel` - Base Tkinter toplevel window class
+- `CTkAppearanceModeBaseClass` - Provides appearance mode functionality
+- `CTkScalingBaseClass` - Provides scaling functionality
+
+## Constructor
+
+```python
+CTkToplevel(*args, fg_color=None, **kwargs)
+```
+
+<ParamField path="*args" type="tuple">
+  Positional arguments passed to `tkinter.Toplevel` constructor.
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the window. Can be a single color string or a tuple of (light_mode_color, dark_mode_color). If None, uses the theme default.
+</ParamField>
+
+<ParamField path="**kwargs" type="dict">
+  Additional arguments passed to `tkinter.Toplevel` constructor. Valid arguments include: `master`, `bd`, `borderwidth`, `class`, `container`, `cursor`, `height`, `highlightbackground`, `highlightthickness`, `menu`, `relief`, `screen`, `takefocus`, `use`, `visual`, `width`.
+</ParamField>
+
+## Methods
+
+### configure
+
+```python
+configure(**kwargs)
+```
+
+Configure the toplevel window properties.
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]">
+  Background color of the window.
+</ParamField>
+
+<ParamField path="**kwargs" type="dict">
+  Additional tkinter.Toplevel configuration options including: `master`, `bd`, `borderwidth`, `class`, `container`, `cursor`, `height`, `highlightbackground`, `highlightthickness`, `menu`, `relief`, `screen`, `takefocus`, `use`, `visual`, `width`.
+</ParamField>
+
+### cget
+
+```python
+cget(attribute_name: str) -> any
+```
+
+Get the value of a configuration attribute.
+
+<ParamField path="attribute_name" type="str" required>
+  Name of the attribute to retrieve. Can be "fg_color" or any valid tkinter.Toplevel attribute.
+</ParamField>
+
+**Returns:** The value of the specified attribute.
+
+### geometry
+
+```python
+geometry(geometry_string: str = None)
+```
+
+Set or get the window geometry. Automatically applies window scaling.
+
+<ParamField path="geometry_string" type="str">
+  Geometry string in format "widthxheight+x+y" or "widthxheight". If None, returns current geometry.
+</ParamField>
+
+**Returns:** Current geometry string if `geometry_string` is None.
+
+### minsize
+
+```python
+minsize(width=None, height=None)
+```
+
+Set the minimum window size.
+
+<ParamField path="width" type="int">
+  Minimum width in pixels.
+</ParamField>
+
+<ParamField path="height" type="int">
+  Minimum height in pixels.
+</ParamField>
+
+### maxsize
+
+```python
+maxsize(width=None, height=None)
+```
+
+Set the maximum window size.
+
+<ParamField path="width" type="int">
+  Maximum width in pixels.
+</ParamField>
+
+<ParamField path="height" type="int">
+  Maximum height in pixels.
+</ParamField>
+
+### resizable
+
+```python
+resizable(width: bool = None, height: bool = None)
+```
+
+Set whether the window can be resized.
+
+<ParamField path="width" type="bool">
+  Whether the window can be resized horizontally.
+</ParamField>
+
+<ParamField path="height" type="bool">
+  Whether the window can be resized vertically.
+</ParamField>
+
+**Returns:** Current resizable values as tuple.
+
+### withdraw
+
+```python
+withdraw()
+```
+
+Hide the window.
+
+### iconify
+
+```python
+iconify()
+```
+
+Minimize the window to an icon.
+
+### deiconify
+
+```python
+deiconify()
+```
+
+Restore a minimized or hidden window.
+
+### destroy
+
+```python
+destroy()
+```
+
+Destroy the window and all its children.
+
+### wm_iconbitmap
+
+```python
+wm_iconbitmap(bitmap=None, default=None)
+```
+
+Set the window icon.
+
+<ParamField path="bitmap" type="str">
+  Path to the icon file (.ico on Windows).
+</ParamField>
+
+<ParamField path="default" type="str">
+  Default icon path.
+</ParamField>
+
+## Usage Example
+
+```python
+import customtkinter as ctk
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Main Window")
+        self.geometry("600x400")
+        
+        # Button to open toplevel window
+        self.button = ctk.CTkButton(
+            self,
+            text="Open Toplevel Window",
+            command=self.open_toplevel
+        )
+        self.button.pack(pady=20)
+        
+        self.toplevel_window = None
+    
+    def open_toplevel(self):
+        if self.toplevel_window is None or not self.toplevel_window.winfo_exists():
+            self.toplevel_window = ctk.CTkToplevel(self)
+            self.toplevel_window.title("Toplevel Window")
+            self.toplevel_window.geometry("400x300")
+            
+            label = ctk.CTkLabel(
+                self.toplevel_window,
+                text="This is a toplevel window"
+            )
+            label.pack(pady=20)
+        else:
+            self.toplevel_window.focus()
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Advanced Example with Custom Styling
+
+```python
+import customtkinter as ctk
+
+class SettingsWindow(ctk.CTkToplevel):
+    def __init__(self, parent):
+        super().__init__(parent)
+        
+        # Configure window
+        self.title("Settings")
+        self.geometry("500x400")
+        self.minsize(400, 300)
+        self.resizable(True, True)
+        
+        # Set custom colors
+        self.configure(fg_color=("#f0f0f0", "#2b2b2b"))
+        
+        # Make window modal
+        self.grab_set()
+        self.attributes("-topmost", True)
+        
+        # Configure grid
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        
+        # Title label
+        title = ctk.CTkLabel(
+            self,
+            text="Application Settings",
+            font=ctk.CTkFont(size=20, weight="bold")
+        )
+        title.grid(row=0, column=0, pady=20, padx=20, sticky="w")
+        
+        # Settings frame
+        settings_frame = ctk.CTkFrame(self)
+        settings_frame.grid(row=1, column=0, sticky="nsew", padx=20, pady=(0, 20))
+        
+        # Add settings widgets here
+        appearance_label = ctk.CTkLabel(settings_frame, text="Appearance Mode:")
+        appearance_label.pack(pady=10, padx=20, anchor="w")
+        
+        appearance_menu = ctk.CTkOptionMenu(
+            settings_frame,
+            values=["Light", "Dark", "System"],
+            command=self.change_appearance
+        )
+        appearance_menu.pack(pady=5, padx=20, anchor="w")
+        
+        # Close button
+        close_button = ctk.CTkButton(
+            self,
+            text="Close",
+            command=self.destroy
+        )
+        close_button.grid(row=2, column=0, pady=(0, 20))
+    
+    def change_appearance(self, mode):
+        ctk.set_appearance_mode(mode.lower())
+
+class MainApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Main Application")
+        self.geometry("700x500")
+        
+        button = ctk.CTkButton(
+            self,
+            text="Open Settings",
+            command=self.open_settings
+        )
+        button.pack(pady=20)
+    
+    def open_settings(self):
+        settings = SettingsWindow(self)
+        settings.focus()
+
+if __name__ == "__main__":
+    app = MainApp()
+    app.mainloop()
+```
+
+## Notes
+
+- The window automatically applies dark titlebar styling on Windows and macOS
+- Initial window size is 200x200 pixels (before any scaling)
+- Default title is "CTkToplevel"
+- On Windows, a default CustomTkinter icon is set automatically after 200ms
+- The window is automatically lifted on top when focused on macOS
+- Use `grab_set()` to make the window modal (blocks interaction with parent window)
+- Use `attributes("-topmost", True)` to keep the window always on top
+- All size-related methods automatically handle scaling
+- The window inherits all standard `tkinter.Toplevel` methods and properties

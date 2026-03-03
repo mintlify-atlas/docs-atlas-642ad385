@@ -1,0 +1,139 @@
+---
+title: "Installation"
+description: "Install CustomTkinter with pip and get started building modern Python desktop applications"
+---
+
+# Installing CustomTkinter
+
+CustomTkinter is available on PyPI and can be installed using pip. The library works on Windows, macOS, and Linux.
+
+## Requirements
+
+CustomTkinter requires:
+- Python 3.7 or higher
+- Tkinter (usually included with Python)
+
+<Note>
+On macOS, Python 3.10 or higher (or Anaconda Python) is recommended for proper dark window headers. This requires Tcl/Tk >= 8.6.9.
+</Note>
+
+## Install with pip
+
+Install CustomTkinter using pip:
+
+<CodeGroup>
+```bash pip3
+pip3 install customtkinter
+```
+
+```bash pip
+pip install customtkinter
+```
+</CodeGroup>
+
+## Updating CustomTkinter
+
+CustomTkinter is under active development with frequent updates and improvements. It's recommended to update regularly:
+
+<CodeGroup>
+```bash pip3
+pip3 install customtkinter --upgrade
+```
+
+```bash pip
+pip install customtkinter --upgrade
+```
+</CodeGroup>
+
+<Tip>
+Update CustomTkinter as often as possible to get the latest features, bug fixes, and improvements. New versions are released regularly.
+</Tip>
+
+## Verify Installation
+
+After installation, verify that CustomTkinter is installed correctly by checking the version:
+
+```python
+import customtkinter
+print(customtkinter.__version__)
+```
+
+The current stable version is **5.2.2**.
+
+## Platform-Specific Notes
+
+### Windows
+
+On Windows, CustomTkinter works out of the box with Python installations from python.org. The library automatically handles:
+- HighDPI scaling
+- System appearance mode detection
+- Dark/light theme switching
+
+### macOS
+
+For the best experience on macOS:
+
+<Steps>
+  <Step title="Use Python 3.10+">
+    Install Python 3.10 or higher to get proper dark window headers and title bars.
+  </Step>
+  
+  <Step title="Or Use Anaconda">
+    Alternatively, use Anaconda Python which includes the required Tcl/Tk version (>= 8.6.9).
+  </Step>
+</Steps>
+
+<Info>
+With older Python versions on macOS, CustomTkinter will still work, but window title bars may not adapt to dark mode.
+</Info>
+
+### Linux
+
+On Linux, ensure Tkinter is installed:
+
+```bash
+# Ubuntu/Debian
+sudo apt-get install python3-tk
+
+# Fedora
+sudo dnf install python3-tkinter
+
+# Arch Linux
+sudo pacman -S tk
+```
+
+## Troubleshooting
+
+### Tkinter Not Found
+
+If you get an error that Tkinter is not installed:
+
+1. **Windows/macOS**: Tkinter should be included with Python. Reinstall Python from python.org.
+2. **Linux**: Install the python3-tk package (see Linux section above).
+
+### Import Error
+
+If you get an import error after installation:
+
+```python
+ImportError: No module named 'customtkinter'
+```
+
+Make sure you're using the correct Python environment:
+
+```bash
+# Check which Python you're using
+python --version
+python3 --version
+
+# Install to the correct Python version
+python3 -m pip install customtkinter
+```
+
+## Next Steps
+
+Now that CustomTkinter is installed, you're ready to build your first application:
+
+<Card title="Quick Start Guide" icon="rocket" href="/quickstart">
+  Create your first CustomTkinter window with a button in just a few lines of code
+</Card>

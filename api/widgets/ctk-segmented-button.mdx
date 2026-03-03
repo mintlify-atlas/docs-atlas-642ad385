@@ -1,0 +1,399 @@
+---
+title: CTkSegmentedButton
+description: Segmented button widget for mutually exclusive selections with modern styling
+---
+
+## Overview
+
+CTkSegmentedButton displays multiple button segments in a row where only one can be selected at a time. It provides a modern alternative to radio buttons with a compact, unified appearance.
+
+## Constructor
+
+```python
+CTkSegmentedButton(
+    master,
+    width=140,
+    height=28,
+    corner_radius=None,
+    border_width=3,
+    bg_color="transparent",
+    fg_color=None,
+    selected_color=None,
+    selected_hover_color=None,
+    unselected_color=None,
+    unselected_hover_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    background_corner_colors=None,
+    font=None,
+    values=None,
+    variable=None,
+    dynamic_resizing=True,
+    command=None,
+    state="normal"
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="140">
+  Minimum width of the entire segmented button widget
+</ParamField>
+
+<ParamField path="height" type="int" default="28">
+  Height of the segmented button
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius for outer edges. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width" type="int" default="3">
+  Border width around selected segment
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground/border color of the widget. If None, uses theme default
+</ParamField>
+
+<ParamField path="selected_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the selected segment. If None, uses theme default
+</ParamField>
+
+<ParamField path="selected_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color when hovering over selected segment. If None, uses theme default
+</ParamField>
+
+<ParamField path="unselected_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of unselected segments. If None, uses theme default
+</ParamField>
+
+<ParamField path="unselected_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color when hovering over unselected segments. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the segment text. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="background_corner_colors" type="Union[Tuple[Union[str, Tuple[str, str]]], None]" default="None">
+  Advanced: Custom corner colors for rendering
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the segment labels
+</ParamField>
+
+<ParamField path="values" type="Optional[list]" default="None">
+  List of string values for each segment. If None, defaults to ["CTkSegmentedButton"]
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable (StringVar) to track selected value
+</ParamField>
+
+<ParamField path="dynamic_resizing" type="bool" default="True">
+  If True, widget resizes to fit segments. If False, uses fixed width
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[str], Any], None]" default="None">
+  Callback function called when a segment is selected. Receives the selected value as argument
+</ParamField>
+
+<ParamField path="state" type="str" default="'normal'">
+  State of all segments: "normal" or "disabled"
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the currently selected value.
+
+```python
+selected = segmented_button.get()
+```
+
+**Returns:** `str` - The currently selected value
+
+### set()
+
+Sets the selected segment.
+
+```python
+segmented_button.set("Option 2")
+```
+
+**Parameters:**
+- `value` (str): Value to select
+
+### insert()
+
+Inserts a new segment at the specified index.
+
+```python
+segmented_button.insert(1, "New Option")
+```
+
+**Parameters:**
+- `index` (int): Position to insert (0-based)
+- `value` (str): Value for the new segment
+
+### delete()
+
+Removes a segment.
+
+```python
+segmented_button.delete("Option 1")
+```
+
+**Parameters:**
+- `value` (str): Value of the segment to remove
+
+### configure()
+
+Configures widget parameters.
+
+```python
+segmented_button.configure(values=["New1", "New2"], selected_color="blue")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+values = segmented_button.cget("values")
+```
+
+## Usage Examples
+
+### Basic Segmented Button
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Option 1", "Option 2", "Option 3"]
+)
+segmented_button.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### Segmented Button with Command
+
+```python
+def on_segment_click(value):
+    print(f"Selected: {value}")
+    label.configure(text=f"Current selection: {value}")
+
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["View 1", "View 2", "View 3"],
+    command=on_segment_click
+)
+segmented_button.pack(pady=20)
+segmented_button.set("View 1")  # Set initial selection
+
+label = ctk.CTkLabel(root, text="Current selection: View 1")
+label.pack()
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+view_var = tk.StringVar(value="Day")
+
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Day", "Week", "Month", "Year"],
+    variable=view_var
+)
+segmented_button.pack(pady=20)
+
+# Access through variable
+def get_view():
+    print(f"Current view: {view_var.get()}")
+
+btn = ctk.CTkButton(root, text="Get View", command=get_view)
+btn.pack()
+```
+
+### Getting and Setting Values
+
+```python
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Small", "Medium", "Large"]
+)
+segmented_button.pack(pady=20, padx=20)
+
+# Set to specific value
+segmented_button.set("Medium")
+
+# Get current value
+def show_current():
+    current = segmented_button.get()
+    print(f"Current selection: {current}")
+
+show_btn = ctk.CTkButton(root, text="Show Current", command=show_current)
+show_btn.pack()
+```
+
+### Custom Styled Segmented Button
+
+```python
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Option 1", "Option 2", "Option 3"],
+    height=40,
+    corner_radius=10,
+    border_width=4,
+    fg_color="#34495e",
+    selected_color="#3498db",
+    selected_hover_color="#2980b9",
+    unselected_color="#2c3e50",
+    unselected_hover_color="#34495e",
+    text_color="white",
+    font=("Helvetica", 14, "bold")
+)
+segmented_button.pack(pady=20, padx=20)
+```
+
+### View Mode Switcher
+
+```python
+def switch_view(view):
+    print(f"Switching to {view} view")
+    # Update your UI based on the view
+
+view_switcher = ctk.CTkSegmentedButton(
+    root,
+    values=["List", "Grid", "Timeline"],
+    command=switch_view
+)
+view_switcher.pack(pady=20)
+view_switcher.set("List")
+```
+
+### Time Period Selector
+
+```python
+import tkinter as tk
+
+period_var = tk.StringVar(value="Week")
+
+def update_data(period):
+    print(f"Loading data for: {period}")
+
+period_selector = ctk.CTkSegmentedButton(
+    root,
+    values=["Day", "Week", "Month", "Year"],
+    variable=period_var,
+    command=update_data
+)
+period_selector.pack(pady=20, padx=40)
+```
+
+### Dynamically Add/Remove Segments
+
+```python
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Tab 1", "Tab 2"]
+)
+segmented_button.pack(pady=20)
+
+def add_tab():
+    current_values = segmented_button.cget("values")
+    new_tab = f"Tab {len(current_values) + 1}"
+    segmented_button.insert(len(current_values), new_tab)
+
+def remove_tab():
+    current_values = segmented_button.cget("values")
+    if len(current_values) > 1:
+        segmented_button.delete(current_values[-1])
+
+add_btn = ctk.CTkButton(root, text="Add Tab", command=add_tab)
+add_btn.pack(pady=5)
+
+remove_btn = ctk.CTkButton(root, text="Remove Tab", command=remove_tab)
+remove_btn.pack(pady=5)
+```
+
+### Appearance Mode Toggle
+
+```python
+def change_appearance(mode):
+    if mode == "Light":
+        ctk.set_appearance_mode("light")
+    elif mode == "Dark":
+        ctk.set_appearance_mode("dark")
+    else:
+        ctk.set_appearance_mode("system")
+
+appearance_toggle = ctk.CTkSegmentedButton(
+    root,
+    values=["System", "Light", "Dark"],
+    command=change_appearance
+)
+appearance_toggle.pack(pady=20)
+appearance_toggle.set("System")
+```
+
+### Sorting Options
+
+```python
+def sort_by(criterion):
+    print(f"Sorting by: {criterion}")
+
+sort_selector = ctk.CTkSegmentedButton(
+    root,
+    values=["Name", "Date", "Size", "Type"],
+    command=sort_by
+)
+sort_selector.pack(pady=20, padx=40)
+sort_selector.set("Name")
+```
+
+### Fixed Width Segmented Button
+
+```python
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Short", "Medium", "Very Long Name"],
+    width=400,
+    dynamic_resizing=False
+)
+segmented_button.pack(pady=20, padx=20)
+```
+
+### Disabled Segmented Button
+
+```python
+segmented_button = ctk.CTkSegmentedButton(
+    root,
+    values=["Option 1", "Option 2", "Option 3"],
+    state="disabled"
+)
+segmented_button.set("Option 1")
+segmented_button.pack(pady=20)
+```

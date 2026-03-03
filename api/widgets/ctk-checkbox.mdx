@@ -1,0 +1,325 @@
+---
+title: CTkCheckBox
+description: Checkbox widget with rounded corners, variable support, and custom styling
+---
+
+## Overview
+
+CTkCheckBox is a checkbox widget with modern styling, featuring rounded corners, customizable colors, hover effects, and variable support for tracking checked state.
+
+## Constructor
+
+```python
+CTkCheckBox(
+    master,
+    width=100,
+    height=24,
+    checkbox_width=24,
+    checkbox_height=24,
+    corner_radius=None,
+    border_width=None,
+    bg_color="transparent",
+    fg_color=None,
+    hover_color=None,
+    border_color=None,
+    checkmark_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    text="CTkCheckBox",
+    font=None,
+    textvariable=None,
+    state=tkinter.NORMAL,
+    hover=True,
+    command=None,
+    onvalue=1,
+    offvalue=0,
+    variable=None,
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="100">
+  Total width of the checkbox widget including label
+</ParamField>
+
+<ParamField path="height" type="int" default="24">
+  Height of the checkbox widget
+</ParamField>
+
+<ParamField path="checkbox_width" type="int" default="24">
+  Width of the checkbox box itself (without label)
+</ParamField>
+
+<ParamField path="checkbox_height" type="int" default="24">
+  Height of the checkbox box itself (without label)
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius of the checkbox box. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width" type="Optional[int]" default="None">
+  Border width when unchecked. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the checkbox when checked. If None, uses theme default
+</ParamField>
+
+<ParamField path="hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color when hovering over the checkbox. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Border color when unchecked. If None, uses theme default
+</ParamField>
+
+<ParamField path="checkmark_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the checkmark symbol. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the label text. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="text" type="str" default="'CTkCheckBox'">
+  Label text displayed next to the checkbox
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the label text
+</ParamField>
+
+<ParamField path="textvariable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable to link with the label text
+</ParamField>
+
+<ParamField path="state" type="str" default="tkinter.NORMAL">
+  State of the widget: tkinter.NORMAL or tkinter.DISABLED
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[], Any], None]" default="None">
+  Callback function called when checkbox is toggled. Takes no arguments
+</ParamField>
+
+<ParamField path="onvalue" type="Union[int, str]" default="1">
+  Value when checkbox is checked
+</ParamField>
+
+<ParamField path="offvalue" type="Union[int, str]" default="0">
+  Value when checkbox is unchecked
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable (IntVar, StringVar, etc.) to track checkbox state
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the current value (onvalue if checked, offvalue if unchecked).
+
+```python
+value = checkbox.get()
+```
+
+**Returns:** `Union[int, str]` - The onvalue or offvalue
+
+### select()
+
+Selects (checks) the checkbox.
+
+```python
+checkbox.select()
+```
+
+### deselect()
+
+Deselects (unchecks) the checkbox.
+
+```python
+checkbox.deselect()
+```
+
+### toggle()
+
+Toggles the checkbox state and calls the command if configured.
+
+```python
+checkbox.toggle()
+```
+
+### configure()
+
+Configures widget parameters.
+
+```python
+checkbox.configure(text="New label", fg_color="blue")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+current_text = checkbox.cget("text")
+```
+
+## Usage Examples
+
+### Basic Checkbox
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+checkbox = ctk.CTkCheckBox(root, text="Accept terms and conditions")
+checkbox.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### Checkbox with Command
+
+```python
+def on_checkbox_change():
+    if checkbox.get() == 1:
+        print("Checkbox checked")
+    else:
+        print("Checkbox unchecked")
+
+checkbox = ctk.CTkCheckBox(
+    root,
+    text="Enable notifications",
+    command=on_checkbox_change
+)
+checkbox.pack(pady=20)
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+# Create a variable to track state
+agree_var = tk.IntVar(value=0)
+
+checkbox = ctk.CTkCheckBox(
+    root,
+    text="I agree",
+    variable=agree_var,
+    onvalue=1,
+    offvalue=0
+)
+checkbox.pack(pady=20)
+
+# Access state through variable
+def submit():
+    if agree_var.get() == 1:
+        print("User agreed")
+    else:
+        print("User did not agree")
+
+submit_btn = ctk.CTkButton(root, text="Submit", command=submit)
+submit_btn.pack()
+```
+
+### Programmatically Control Checkbox
+
+```python
+checkbox = ctk.CTkCheckBox(root, text="Feature enabled")
+checkbox.pack(pady=20)
+
+# Check the checkbox
+checkbox.select()
+
+# Uncheck the checkbox
+checkbox.deselect()
+
+# Toggle the checkbox
+checkbox.toggle()
+
+# Get current state
+if checkbox.get() == 1:
+    print("Checked")
+```
+
+### Custom Styled Checkbox
+
+```python
+checkbox = ctk.CTkCheckBox(
+    root,
+    text="Custom checkbox",
+    checkbox_width=28,
+    checkbox_height=28,
+    corner_radius=8,
+    border_width=3,
+    fg_color="#2ecc71",
+    hover_color="#27ae60",
+    border_color="#3498db",
+    checkmark_color="white",
+    text_color="#2c3e50",
+    font=("Helvetica", 14, "bold")
+)
+checkbox.pack(pady=20, padx=20)
+```
+
+### Multiple Checkboxes with Variables
+
+```python
+import tkinter as tk
+
+options = {
+    "Python": tk.IntVar(),
+    "JavaScript": tk.IntVar(),
+    "Java": tk.IntVar(),
+    "C++": tk.IntVar()
+}
+
+for lang, var in options.items():
+    checkbox = ctk.CTkCheckBox(
+        root,
+        text=lang,
+        variable=var
+    )
+    checkbox.pack(pady=5, padx=20, anchor="w")
+
+def get_selected():
+    selected = [lang for lang, var in options.items() if var.get() == 1]
+    print(f"Selected languages: {selected}")
+
+btn = ctk.CTkButton(root, text="Get Selection", command=get_selected)
+btn.pack(pady=20)
+```
+
+### Disabled Checkbox
+
+```python
+checkbox = ctk.CTkCheckBox(
+    root,
+    text="This is disabled",
+    state=ctk.DISABLED
+)
+checkbox.select()  # Pre-check it
+checkbox.pack(pady=20)
+```

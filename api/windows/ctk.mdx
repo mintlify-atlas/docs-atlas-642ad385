@@ -1,0 +1,283 @@
+---
+title: CTk
+description: Main application window class with dark titlebar support on Windows and macOS
+---
+
+## Overview
+
+`CTk` is the main application window class in CustomTkinter. It extends `tkinter.Tk` and provides automatic dark titlebar support on Windows and macOS, along with appearance mode and scaling capabilities.
+
+## Inheritance
+
+```python
+CTk(tkinter.Tk, CTkAppearanceModeBaseClass, CTkScalingBaseClass)
+```
+
+Inherits from:
+- `tkinter.Tk` - Base Tkinter window class
+- `CTkAppearanceModeBaseClass` - Provides appearance mode functionality
+- `CTkScalingBaseClass` - Provides scaling functionality
+
+## Constructor
+
+```python
+CTk(fg_color=None, **kwargs)
+```
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the window. Can be a single color string or a tuple of (light_mode_color, dark_mode_color). If None, uses the theme default.
+</ParamField>
+
+<ParamField path="**kwargs" type="dict">
+  Additional arguments passed to `tkinter.Tk` constructor. Valid arguments include: `screenName`, `baseName`, `className`, `useTk`, `sync`, `use`.
+</ParamField>
+
+## Methods
+
+### configure
+
+```python
+configure(**kwargs)
+```
+
+Configure the window properties.
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]">
+  Background color of the window.
+</ParamField>
+
+<ParamField path="**kwargs" type="dict">
+  Additional tkinter.Tk configuration options including: `bd`, `borderwidth`, `class`, `menu`, `relief`, `screen`, `use`, `container`, `cursor`, `height`, `highlightthickness`, `padx`, `pady`, `takefocus`, `visual`, `width`.
+</ParamField>
+
+### cget
+
+```python
+cget(attribute_name: str) -> any
+```
+
+Get the value of a configuration attribute.
+
+<ParamField path="attribute_name" type="str" required>
+  Name of the attribute to retrieve. Can be "fg_color" or any valid tkinter.Tk attribute.
+</ParamField>
+
+**Returns:** The value of the specified attribute.
+
+### geometry
+
+```python
+geometry(geometry_string: str = None)
+```
+
+Set or get the window geometry. Automatically applies window scaling.
+
+<ParamField path="geometry_string" type="str">
+  Geometry string in format "widthxheight+x+y" or "widthxheight". If None, returns current geometry.
+</ParamField>
+
+**Returns:** Current geometry string if `geometry_string` is None.
+
+### minsize
+
+```python
+minsize(width: int = None, height: int = None)
+```
+
+Set the minimum window size.
+
+<ParamField path="width" type="int">
+  Minimum width in pixels.
+</ParamField>
+
+<ParamField path="height" type="int">
+  Minimum height in pixels.
+</ParamField>
+
+### maxsize
+
+```python
+maxsize(width: int = None, height: int = None)
+```
+
+Set the maximum window size.
+
+<ParamField path="width" type="int">
+  Maximum width in pixels.
+</ParamField>
+
+<ParamField path="height" type="int">
+  Maximum height in pixels.
+</ParamField>
+
+### resizable
+
+```python
+resizable(width: bool = None, height: bool = None)
+```
+
+Set whether the window can be resized.
+
+<ParamField path="width" type="bool">
+  Whether the window can be resized horizontally.
+</ParamField>
+
+<ParamField path="height" type="bool">
+  Whether the window can be resized vertically.
+</ParamField>
+
+**Returns:** Current resizable values as tuple.
+
+### withdraw
+
+```python
+withdraw()
+```
+
+Hide the window.
+
+### iconify
+
+```python
+iconify()
+```
+
+Minimize the window to an icon.
+
+### deiconify
+
+```python
+deiconify()
+```
+
+Restore a minimized or hidden window.
+
+### mainloop
+
+```python
+mainloop(*args, **kwargs)
+```
+
+Start the Tkinter event loop.
+
+<ParamField path="*args" type="tuple">
+  Arguments passed to tkinter.Tk.mainloop().
+</ParamField>
+
+<ParamField path="**kwargs" type="dict">
+  Keyword arguments passed to tkinter.Tk.mainloop().
+</ParamField>
+
+### update
+
+```python
+update()
+```
+
+Process all pending events and update the window.
+
+### destroy
+
+```python
+destroy()
+```
+
+Destroy the window and all its children.
+
+### iconbitmap
+
+```python
+iconbitmap(bitmap=None, default=None)
+```
+
+Set the window icon.
+
+<ParamField path="bitmap" type="str">
+  Path to the icon file (.ico on Windows).
+</ParamField>
+
+<ParamField path="default" type="str">
+  Default icon path.
+</ParamField>
+
+### wm_iconbitmap
+
+```python
+wm_iconbitmap(bitmap=None, default=None)
+```
+
+Alias for `iconbitmap()` method.
+
+<ParamField path="bitmap" type="str">
+  Path to the icon file (.ico on Windows).
+</ParamField>
+
+<ParamField path="default" type="str">
+  Default icon path.
+</ParamField>
+
+## Usage Example
+
+```python
+import customtkinter as ctk
+
+# Create the main window
+app = ctk.CTk()
+app.title("My Application")
+app.geometry("800x600")
+
+# Configure window properties
+app.configure(fg_color=("white", "#1a1a1a"))
+app.minsize(400, 300)
+app.resizable(True, True)
+
+# Add widgets
+label = ctk.CTkLabel(app, text="Hello, CustomTkinter!")
+label.pack(pady=20)
+
+button = ctk.CTkButton(app, text="Click Me")
+button.pack(pady=10)
+
+# Start the event loop
+app.mainloop()
+```
+
+## Advanced Example
+
+```python
+import customtkinter as ctk
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        # Configure window
+        self.title("Advanced CTk Window")
+        self.geometry("900x650")
+        self.minsize(600, 400)
+        
+        # Set appearance mode and color theme
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
+        
+        # Configure grid
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        
+        # Create main frame
+        self.main_frame = ctk.CTkFrame(self)
+        self.main_frame.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
+        
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Notes
+
+- The window automatically applies dark titlebar styling on Windows and macOS
+- Initial window size is 600x500 pixels (before any scaling)
+- Default title is "CTk"
+- On Windows, a default CustomTkinter icon is set automatically
+- All size-related methods (`geometry`, `minsize`, `maxsize`) automatically handle scaling
+- The window inherits all standard `tkinter.Tk` methods and properties

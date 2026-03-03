@@ -1,0 +1,195 @@
+---
+title: Display Widgets
+description: Components for displaying information, progress, and scrollable content
+---
+
+Display widgets are designed to show information to users, including progress indicators, text content, and scrollable areas.
+
+## Available Widgets
+
+<CardGroup cols={2}>
+  <Card title="CTkProgressBar" icon="bars-progress" href="/api/widgets/ctk-progressbar">
+    Progress indicator for ongoing operations
+  </Card>
+  
+  <Card title="CTkTextbox" icon="text" href="/api/widgets/ctk-textbox">
+    Multi-line text display and editing area
+  </Card>
+  
+  <Card title="CTkScrollbar" icon="up-down" href="/api/widgets/ctk-scrollbar">
+    Scrollbar for navigating scrollable content
+  </Card>
+</CardGroup>
+
+## CTkProgressBar
+
+Progress bar for displaying operation progress or loading states.
+
+```python
+# Determinate progress
+progress = ctk.CTkProgressBar(app, width=300)
+progress.pack(pady=20)
+progress.set(0.5)  # Set to 50%
+
+# Indeterminate progress (animated)
+progress_indeterminate = ctk.CTkProgressBar(app, mode="indeterminate")
+progress_indeterminate.pack(pady=20)
+progress_indeterminate.start()
+```
+
+**Key Features:**
+- Determinate and indeterminate modes
+- Customizable colors and dimensions
+- Smooth animations
+- Value range from 0.0 to 1.0
+
+**Example: File Upload Progress**
+
+```python
+def upload_file():
+    progress.set(0)
+    for i in range(101):
+        progress.set(i / 100)
+        app.update_idletasks()
+        time.sleep(0.02)
+
+progress = ctk.CTkProgressBar(app, width=400)
+progress.pack(pady=10)
+
+upload_btn = ctk.CTkButton(app, text="Upload File", command=upload_file)
+upload_btn.pack(pady=10)
+```
+
+[View Full API Reference →](/api/widgets/ctk-progressbar)
+
+## CTkTextbox
+
+Multi-line text widget for displaying and editing large amounts of text.
+
+```python
+textbox = ctk.CTkTextbox(
+    app,
+    width=400,
+    height=300,
+    corner_radius=10
+)
+textbox.pack(pady=20, padx=20)
+
+# Insert text
+textbox.insert("1.0", "Hello, World!\n")
+textbox.insert("end", "This is a textbox.")
+
+# Get text
+text_content = textbox.get("1.0", "end")
+
+# Make read-only
+textbox.configure(state="disabled")
+```
+
+**Key Features:**
+- Multi-line text input and display
+- Scrollable content
+- Rich text manipulation
+- Read-only mode
+- Customizable appearance
+
+**Example: Log Viewer**
+
+```python
+log_textbox = ctk.CTkTextbox(app, width=600, height=400)
+log_textbox.pack(pady=10, padx=10)
+
+def add_log(message):
+    log_textbox.insert("end", f"[{time.strftime('%H:%M:%S')}] {message}\n")
+    log_textbox.see("end")  # Auto-scroll to bottom
+
+add_log("Application started")
+add_log("Loading configuration...")
+add_log("Ready!")
+```
+
+[View Full API Reference →](/api/widgets/ctk-textbox)
+
+## CTkScrollbar
+
+Custom scrollbar for use with scrollable widgets.
+
+```python
+# Create frame with scrollbar
+frame = ctk.CTkFrame(app)
+frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+# Scrollbar
+scrollbar = ctk.CTkScrollbar(frame)
+scrollbar.pack(side="right", fill="y")
+
+# Textbox with scrollbar
+textbox = ctk.CTkTextbox(
+    frame,
+    width=400,
+    height=300,
+    yscrollcommand=scrollbar.set
+)
+textbox.pack(side="left", fill="both", expand=True)
+
+scrollbar.configure(command=textbox.yview)
+
+# Add content
+for i in range(50):
+    textbox.insert("end", f"Line {i + 1}\n")
+```
+
+**Key Features:**
+- Vertical and horizontal scrolling
+- Smooth scrolling animations
+- Customizable appearance
+- Works with textbox and canvas widgets
+
+**Note:** For most use cases, consider using `CTkScrollableFrame` which includes built-in scrolling functionality.
+
+[View Full API Reference →](/api/widgets/ctk-scrollbar)
+
+## Common Patterns
+
+### Loading Indicator
+
+```python
+def show_loading():
+    progress = ctk.CTkProgressBar(app, mode="indeterminate")
+    progress.pack(pady=20)
+    progress.start()
+    
+    # Simulate loading
+    app.after(3000, lambda: progress.pack_forget())
+```
+
+### Status Display
+
+```python
+status_frame = ctk.CTkFrame(app)
+status_frame.pack(fill="x", padx=10, pady=5)
+
+status_label = ctk.CTkLabel(status_frame, text="Processing...")
+status_label.pack(side="left", padx=10)
+
+status_progress = ctk.CTkProgressBar(status_frame, width=200)
+status_progress.pack(side="right", padx=10)
+status_progress.set(0.75)
+```
+
+### Console Output
+
+```python
+console = ctk.CTkTextbox(app, width=700, height=200, font=("Courier", 12))
+console.pack(pady=10, padx=10)
+console.configure(state="disabled")  # Read-only
+
+def print_to_console(message):
+    console.configure(state="normal")
+    console.insert("end", message + "\n")
+    console.see("end")
+    console.configure(state="disabled")
+
+print_to_console(">>> Application initialized")
+print_to_console(">>> Waiting for user input...")
+```

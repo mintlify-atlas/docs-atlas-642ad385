@@ -1,0 +1,589 @@
+---
+title: Migration Guide
+description: Guide for migrating from older versions of CustomTkinter to v5.0.0 and later
+---
+
+This guide helps you migrate your CustomTkinter applications to version 5.0.0, which introduced significant breaking changes and new features.
+
+## Overview
+
+Version 5.0.0 was a major release that introduced new widgets, improved the API, and standardized naming conventions. While it requires code changes, the improvements significantly enhance the library's capabilities and consistency.
+
+## Breaking Changes
+
+### Transparent Color Values
+
+<Warning>
+  The value for transparent colors changed from `None` to the string `"transparent"`.
+</Warning>
+
+**Before (v4.x):**
+```python
+button = customtkinter.CTkButton(master=app, fg_color=None)
+```
+
+**After (v5.0.0+):**
+```python
+button = customtkinter.CTkButton(master=app, fg_color="transparent")
+```
+
+### Font Attribute Renaming
+
+All `text_font` attributes were renamed to `font` for consistency.
+
+**Before (v4.x):**
+```python
+label = customtkinter.CTkLabel(
+    master=app, 
+    text="Hello", 
+    text_font=("Arial", 14)
+)
+
+optionmenu = customtkinter.CTkOptionMenu(
+    master=app,
+    dropdown_text_font=("Arial", 12)
+)
+```
+
+**After (v5.0.0+):**
+```python
+label = customtkinter.CTkLabel(
+    master=app, 
+    text="Hello", 
+    font=("Arial", 14)
+)
+
+optionmenu = customtkinter.CTkOptionMenu(
+    master=app,
+    dropdown_font=("Arial", 12)
+)
+```
+
+<Info>
+  Fonts can now be tuples or `CTkFont` objects for better control.
+</Info>
+
+### Font Sizes in Pixels
+
+<Warning>
+  All size values are now measured in **pixels** instead of points. You may need to adjust your font sizes.
+</Warning>
+
+**Before (v4.x):**
+```python
+label = customtkinter.CTkLabel(master=app, text_font=("Arial", 12))  # 12 points
+```
+
+**After (v5.0.0+):**
+```python
+label = customtkinter.CTkLabel(master=app, font=("Arial", 16))  # 16 pixels (approximately 12 points)
+```
+
+### Dropdown Color Attributes
+
+Dropdown color attributes were renamed for clarity.
+
+**Before (v4.x):**
+```python
+combobox = customtkinter.CTkComboBox(master=app, dropdown_color="#333333")
+optionmenu = customtkinter.CTkOptionMenu(master=app, dropdown_color="#333333")
+```
+
+**After (v5.0.0+):**
+```python
+combobox = customtkinter.CTkComboBox(master=app, dropdown_fg_color="#333333")
+optionmenu = customtkinter.CTkOptionMenu(master=app, dropdown_fg_color="#333333")
+```
+
+### Orientation Attribute
+
+The `orient` attribute for `CTkProgressBar` and `CTkSlider` was renamed to `orientation`.
+
+**Before (v4.x):**
+```python
+slider = customtkinter.CTkSlider(master=app, orient="vertical")
+progressbar = customtkinter.CTkProgressBar(master=app, orient="horizontal")
+```
+
+**After (v5.0.0+):**
+```python
+slider = customtkinter.CTkSlider(master=app, orientation="vertical")
+progressbar = customtkinter.CTkProgressBar(master=app, orientation="horizontal")
+```
+
+### CheckBox, RadioButton, and Switch Dimensions
+
+<Warning>
+  Width and height now describe the **outer dimensions** of the entire widget, not just the button element.
+</Warning>
+
+**Before (v4.x):**
+```python
+# width/height controlled the checkbox/radiobutton/switch element itself
+checkbox = customtkinter.CTkCheckBox(master=app, width=20, height=20)
+```
+
+**After (v5.0.0+):**
+```python
+# width/height control the entire widget; use specific attributes for the element
+checkbox = customtkinter.CTkCheckBox(
+    master=app, 
+    checkbox_width=20, 
+    checkbox_height=20
+)
+
+radiobutton = customtkinter.CTkRadioButton(
+    master=app,
+    radiobutton_width=20,
+    radiobutton_height=20
+)
+
+switch = customtkinter.CTkSwitch(
+    master=app,
+    switch_width=40,
+    switch_height=20
+)
+```
+
+### Background Attribute Removal
+
+<Warning>
+  The `bg` and `background` attributes were removed from `CTk` and `CTkToplevel`. Always use `fg_color` instead.
+</Warning>
+
+**Before (v4.x):**
+```python
+app = customtkinter.CTk()
+app.configure(bg="#1e1e1e")
+# or
+app.configure(background="#1e1e1e")
+```
+
+**After (v5.0.0+):**
+```python
+app = customtkinter.CTk()
+app.configure(fg_color="#1e1e1e")
+```
+
+### Theme File Changes
+
+The dictionary key in theme files changed from `'window_bg_color'` to `'window'`.
+
+**Before (v4.x):**
+```json
+{
+  "window_bg_color": ["#f0f0f0", "#1e1e1e"]
+}
+```
+
+**After (v5.0.0+):**
+```json
+{
+  "window": ["#f0f0f0", "#1e1e1e"]
+}
+```
+
+### CTkScrollbar Attributes
+
+Scrollbar color attributes were renamed for clarity.
+
+**Before (v4.x):**
+```python
+scrollbar = customtkinter.CTkScrollbar(
+    master=app,
+    scrollbar_color="#444444",
+    scrollbar_hover_color="#666666"
+)
+```
+
+**After (v5.0.0+):**
+```python
+scrollbar = customtkinter.CTkScrollbar(
+    master=app,
+    button_color="#444444",
+    button_hover_color="#666666"
+)
+```
+
+### CTkInputDialog Changes
+
+<Warning>
+  `CTkInputDialog` attributes were completely restructured. Review the documentation for the new API.
+</Warning>
+
+**After (v5.0.0+):**
+```python
+dialog = customtkinter.CTkInputDialog(
+    text="Type in a number:", 
+    title="CTkInputDialog"
+)
+result = dialog.get_input()
+```
+
+## Removed Features
+
+### Setter and Getter Methods
+
+<Warning>
+  Methods like `set_text()`, `get_text()`, etc. were removed. Use `.configure()` and `.cget()` instead.
+</Warning>
+
+**Before (v4.x):**
+```python
+button = customtkinter.CTkButton(master=app)
+button.set_text("New Text")
+text = button.get_text()
+```
+
+**After (v5.0.0+):**
+```python
+button = customtkinter.CTkButton(master=app)
+button.configure(text="New Text")
+text = button.cget("text")
+```
+
+### Settings Class
+
+The `Settings` class was removed. Settings were moved to widget and window classes.
+
+**Before (v4.x):**
+```python
+customtkinter.Settings.some_setting = value
+```
+
+**After (v5.0.0+):**
+```python
+# Settings are now per-widget or global functions
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+customtkinter.set_widget_scaling(1.0)
+```
+
+### Widget Scaling Functions
+
+<Warning>
+  `customtkinter.set_spacing_scaling()` was removed. Use `set_widget_scaling()` for both widgets and spacing.
+</Warning>
+
+**Before (v4.x):**
+```python
+customtkinter.set_widget_scaling(1.2)
+customtkinter.set_spacing_scaling(1.2)
+```
+
+**After (v5.0.0+):**
+```python
+customtkinter.set_widget_scaling(1.2)  # Applies to both widgets and spacing
+```
+
+## New Features in v5.0.0
+
+Take advantage of these powerful new features when migrating:
+
+### CTkTextbox
+
+A new textbox widget with automatic scrollbars, corner radius, border width, and border spacing.
+
+```python
+textbox = customtkinter.CTkTextbox(
+    master=app, 
+    width=250,
+    corner_radius=10,
+    border_width=2,
+    border_spacing=5
+)
+textbox.grid(row=0, column=0, sticky="nsew")
+textbox.insert("0.0", "Sample text")
+```
+
+### CTkSegmentedButton
+
+Create segmented button controls where only one option can be selected.
+
+```python
+segmented_button = customtkinter.CTkSegmentedButton(
+    master=app,
+    values=["Option 1", "Option 2", "Option 3"]
+)
+segmented_button.set("Option 1")
+```
+
+### CTkTabview
+
+Built-in tabbed interface widget.
+
+```python
+tabview = customtkinter.CTkTabview(master=app, width=250)
+tabview.add("Tab 1")
+tabview.add("Tab 2")
+tabview.add("Tab 3")
+
+# Add widgets to specific tabs
+label = customtkinter.CTkLabel(tabview.tab("Tab 1"), text="Content")
+label.pack()
+```
+
+### CTkFont Class
+
+New font class for better font management.
+
+```python
+title_font = customtkinter.CTkFont(size=20, weight="bold")
+body_font = customtkinter.CTkFont(family="Arial", size=14)
+
+label = customtkinter.CTkLabel(master=app, text="Title", font=title_font)
+```
+
+### CTkImage Class
+
+<Info>
+  Replaces `PIL.ImageTk.PhotoImage` with appearance mode support, dynamic scaling, and configurability.
+</Info>
+
+```python
+from PIL import Image
+
+# Simple image
+logo = customtkinter.CTkImage(
+    Image.open("logo.png"), 
+    size=(26, 26)
+)
+
+# Appearance mode-aware image
+icon = customtkinter.CTkImage(
+    light_image=Image.open("icon_dark.png"),
+    dark_image=Image.open("icon_light.png"), 
+    size=(20, 20)
+)
+
+label = customtkinter.CTkLabel(master=app, image=logo, text="")
+```
+
+### Universal .cget() Method
+
+All widgets and windows now support the `.cget()` method for retrieving configuration values.
+
+```python
+button = customtkinter.CTkButton(master=app, text="Click Me")
+text = button.cget("text")  # Returns "Click Me"
+fg_color = button.cget("fg_color")
+```
+
+### .bind() and .focus() Methods
+
+Almost all widgets now support `.bind()` for event handling and `.focus()` for focus management.
+
+```python
+entry = customtkinter.CTkEntry(master=app)
+entry.bind("<Return>", lambda e: print("Enter pressed"))
+entry.focus()
+```
+
+### Anchor Option for Buttons
+
+Position image and text inside buttons using the `anchor` option.
+
+```python
+button = customtkinter.CTkButton(
+    master=app,
+    text="Click Me",
+    image=icon,
+    compound="left",
+    anchor="w"  # Align to west (left)
+)
+```
+
+### Additional Widget Options
+
+- `anchor` option for `CTkOptionMenu`
+- `justify` option for `CTkComboBox`
+- Many missing configure options added across multiple widgets
+
+## Migration Checklist
+
+<Steps>
+  <Step title="Update transparent color values">
+    Replace all instances of `fg_color=None` with `fg_color="transparent"`.
+  </Step>
+  
+  <Step title="Rename font attributes">
+    - Change `text_font` to `font`
+    - Change `dropdown_text_font` to `dropdown_font`
+  </Step>
+  
+  <Step title="Adjust font sizes">
+    Convert point sizes to pixel sizes (multiply by approximately 1.33).
+  </Step>
+  
+  <Step title="Update dropdown colors">
+    Change `dropdown_color` to `dropdown_fg_color`.
+  </Step>
+  
+  <Step title="Rename orientation">
+    Change `orient` to `orientation` for sliders and progress bars.
+  </Step>
+  
+  <Step title="Update CheckBox/RadioButton/Switch dimensions">
+    Replace `width` and `height` with specific attributes like `checkbox_width`, `checkbox_height`, `radiobutton_width`, `radiobutton_height`, `switch_width`, `switch_height`.
+  </Step>
+  
+  <Step title="Replace bg/background with fg_color">
+    For `CTk` and `CTkToplevel`, change `bg` or `background` to `fg_color`.
+  </Step>
+  
+  <Step title="Update theme files">
+    Change `'window_bg_color'` to `'window'` in custom theme JSON files.
+  </Step>
+  
+  <Step title="Update scrollbar attributes">
+    Change `scrollbar_color` to `button_color` and `scrollbar_hover_color` to `button_hover_color`.
+  </Step>
+  
+  <Step title="Replace setter/getter methods">
+    Replace methods like `set_text()` and `get_text()` with `.configure()` and `.cget()`.
+  </Step>
+  
+  <Step title="Remove spacing scaling calls">
+    Remove `customtkinter.set_spacing_scaling()` calls (now handled by `set_widget_scaling()`).
+  </Step>
+  
+  <Step title="Review CTkInputDialog usage">
+    Update to the new API if you use `CTkInputDialog`.
+  </Step>
+  
+  <Step title="Test your application">
+    Thoroughly test all functionality, especially:
+    - Appearance mode switching
+    - Widget scaling
+    - Font rendering
+    - Color themes
+  </Step>
+</Steps>
+
+## Example Migration
+
+Here's a complete example showing before and after:
+
+<Accordion title="Before (v4.x)">
+```python
+import customtkinter
+
+customtkinter.set_appearance_mode("Dark")
+customtkinter.set_default_color_theme("blue")
+
+app = customtkinter.CTk()
+app.geometry("400x300")
+app.configure(bg="#1e1e1e")
+
+frame = customtkinter.CTkFrame(master=app)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+label = customtkinter.CTkLabel(
+    master=frame, 
+    text="Hello World",
+    text_font=("Arial", 18)
+)
+label.pack(pady=10)
+
+button = customtkinter.CTkButton(
+    master=frame,
+    fg_color=None,
+    text_font=("Arial", 14)
+)
+button.pack(pady=10)
+button.set_text("Click Me")
+
+slider = customtkinter.CTkSlider(
+    master=frame,
+    orient="horizontal"
+)
+slider.pack(pady=10)
+
+checkbox = customtkinter.CTkCheckBox(
+    master=frame,
+    width=20,
+    height=20
+)
+checkbox.pack(pady=10)
+
+optionmenu = customtkinter.CTkOptionMenu(
+    master=frame,
+    dropdown_color="#333333",
+    dropdown_text_font=("Arial", 12)
+)
+optionmenu.pack(pady=10)
+
+app.mainloop()
+```
+</Accordion>
+
+<Accordion title="After (v5.0.0+)">
+```python
+import customtkinter
+
+customtkinter.set_appearance_mode("Dark")
+customtkinter.set_default_color_theme("blue")
+
+app = customtkinter.CTk()
+app.geometry("400x300")
+app.configure(fg_color="#1e1e1e")
+
+frame = customtkinter.CTkFrame(master=app)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Create custom font
+title_font = customtkinter.CTkFont(family="Arial", size=24, weight="bold")
+button_font = customtkinter.CTkFont(family="Arial", size=18)
+
+label = customtkinter.CTkLabel(
+    master=frame, 
+    text="Hello World",
+    font=title_font
+)
+label.pack(pady=10)
+
+button = customtkinter.CTkButton(
+    master=frame,
+    fg_color="transparent",
+    font=button_font,
+    text="Click Me"
+)
+button.pack(pady=10)
+
+slider = customtkinter.CTkSlider(
+    master=frame,
+    orientation="horizontal"
+)
+slider.pack(pady=10)
+
+checkbox = customtkinter.CTkCheckBox(
+    master=frame,
+    checkbox_width=20,
+    checkbox_height=20
+)
+checkbox.pack(pady=10)
+
+optionmenu = customtkinter.CTkOptionMenu(
+    master=frame,
+    dropdown_fg_color="#333333",
+    dropdown_font=("Arial", 16),  # 12pt ≈ 16px
+    values=["Option 1", "Option 2"]
+)
+optionmenu.pack(pady=10)
+
+app.mainloop()
+```
+</Accordion>
+
+## Getting Help
+
+If you encounter issues during migration:
+
+1. Check the [changelog](https://github.com/TomSchimansky/CustomTkinter/blob/master/CHANGELOG.md) for complete details
+2. Review the examples in the repository
+3. Search existing GitHub issues
+4. Create a new issue with your specific problem
+
+<Info>
+  Most migration issues can be resolved by following this guide systematically. Test each change incrementally.
+</Info>

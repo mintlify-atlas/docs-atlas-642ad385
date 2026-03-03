@@ -1,80 +1,223 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: "Quick Start"
+description: "Create your first CustomTkinter application in minutes with this step-by-step guide"
 ---
 
-## Get started in three steps
+# Quick Start Guide
 
-Get your documentation site running locally and make your first customization.
+This guide will help you create your first CustomTkinter application with a working window and interactive button.
 
-### Step 1: Set up your local environment
+## Basic Window with Button
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+Let's create a simple application with a window and a button:
 
-### Step 2: Deploy your changes
+```python
+import customtkinter
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+customtkinter.set_appearance_mode("System")  # Modes: "System" (default), "Dark", "Light"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (default), "dark-blue", "green"
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+app = customtkinter.CTk()  # create CTk window like you do with the Tk window
+app.geometry("400x240")
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+def button_function():
+    print("button pressed")
 
-### Step 3: Go live
+# Use CTkButton instead of tkinter Button
+button = customtkinter.CTkButton(master=app, text="CTkButton", command=button_function)
+button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+app.mainloop()
+```
 
-## Next steps
+<Info>
+This example is from the official CustomTkinter README and demonstrates the simplest possible CustomTkinter application.
+</Info>
 
-Now that you have your docs running, explore these key features:
+## Understanding the Code
+
+<Steps>
+  <Step title="Import CustomTkinter">
+    ```python
+    import customtkinter
+    ```
+    Import the CustomTkinter library. No need to import tkinter separately.
+  </Step>
+  
+  <Step title="Configure Appearance">
+    ```python
+    customtkinter.set_appearance_mode("System")  # Modes: "System", "Dark", "Light"
+    customtkinter.set_default_color_theme("blue")  # Themes: "blue", "dark-blue", "green"
+    ```
+    Set the appearance mode and color theme. System mode automatically adapts to your OS theme.
+  </Step>
+  
+  <Step title="Create Main Window">
+    ```python
+    app = customtkinter.CTk()
+    app.geometry("400x240")
+    ```
+    Create the main application window using `CTk()` instead of `tkinter.Tk()`.
+  </Step>
+  
+  <Step title="Add Widgets">
+    ```python
+    button = customtkinter.CTkButton(master=app, text="CTkButton", command=button_function)
+    button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+    ```
+    Create and place widgets just like in Tkinter, using the CTk prefix.
+  </Step>
+  
+  <Step title="Start Event Loop">
+    ```python
+    app.mainloop()
+    ```
+    Start the application event loop to display the window and handle events.
+  </Step>
+</Steps>
+
+## Multiple Widgets Example
+
+Here's a more comprehensive example with multiple widgets in a frame:
+
+```python
+import customtkinter
+
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("blue")
+
+app = customtkinter.CTk()
+app.geometry("400x300")
+app.title("CustomTkinter Example")
+
+def button_callback():
+    print("Button clicked:", entry_1.get())
+
+def slider_callback(value):
+    progressbar_1.set(value)
+
+# Create a frame to hold widgets
+frame_1 = customtkinter.CTkFrame(master=app)
+frame_1.pack(pady=20, padx=60, fill="both", expand=True)
+
+# Add various widgets
+label_1 = customtkinter.CTkLabel(master=frame_1, text="CustomTkinter App")
+label_1.pack(pady=10, padx=10)
+
+entry_1 = customtkinter.CTkEntry(master=frame_1, placeholder_text="Enter text here")
+entry_1.pack(pady=10, padx=10)
+
+button_1 = customtkinter.CTkButton(master=frame_1, text="Click Me", command=button_callback)
+button_1.pack(pady=10, padx=10)
+
+progressbar_1 = customtkinter.CTkProgressBar(master=frame_1)
+progressbar_1.pack(pady=10, padx=10)
+progressbar_1.set(0.5)
+
+slider_1 = customtkinter.CTkSlider(master=frame_1, command=slider_callback, from_=0, to=1)
+slider_1.pack(pady=10, padx=10)
+slider_1.set(0.5)
+
+app.mainloop()
+```
+
+<Tip>
+This example is adapted from the official `simple_example.py` in the CustomTkinter repository. It demonstrates how to use frames, labels, entries, buttons, progress bars, and sliders together.
+</Tip>
+
+## Appearance Modes
+
+CustomTkinter supports three appearance modes:
+
+<CodeGroup>
+```python System Mode (Default)
+customtkinter.set_appearance_mode("System")
+# Automatically adapts to your OS dark/light mode
+```
+
+```python Dark Mode
+customtkinter.set_appearance_mode("Dark")
+# Always use dark mode
+```
+
+```python Light Mode
+customtkinter.set_appearance_mode("Light")
+# Always use light mode
+```
+</CodeGroup>
+
+## Color Themes
+
+Choose from built-in color themes or create your own:
+
+<CodeGroup>
+```python Blue (Default)
+customtkinter.set_default_color_theme("blue")
+```
+
+```python Dark Blue
+customtkinter.set_default_color_theme("dark-blue")
+```
+
+```python Green
+customtkinter.set_default_color_theme("green")
+```
+
+```python Custom Theme
+customtkinter.set_default_color_theme("/path/to/custom_theme.json")
+```
+</CodeGroup>
+
+## Layout Management
+
+CustomTkinter supports all standard Tkinter layout managers:
+
+### Pack
+```python
+button.pack(pady=10, padx=10)
+```
+
+### Grid
+```python
+button.grid(row=0, column=0, padx=20, pady=10)
+```
+
+### Place
+```python
+button.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+```
+
+## Common Widget Parameters
+
+All CustomTkinter widgets support common parameters:
+
+- `master` - Parent widget or window
+- `width` - Widget width in pixels
+- `height` - Widget height in pixels
+- `corner_radius` - Corner radius for rounded edges
+- `fg_color` - Foreground/background color
+- `text_color` - Text color
+- `font` - Font (string or CTkFont object)
+
+## Next Steps
+
+Now that you've created your first CustomTkinter application, explore more features:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Widget Gallery" icon="grid-2">
+    Explore all available widgets and their properties
+  </Card>
+  <Card title="Scaling & DPI" icon="expand">
+    Learn about HighDPI scaling and widget/window scaling
+  </Card>
+  <Card title="Custom Themes" icon="palette">
+    Create custom color themes for your applications
+  </Card>
+  <Card title="Complex Examples" icon="code">
+    Study advanced examples with multiple widgets and layouts
+  </Card>
 </CardGroup>
 
 <Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
+All CustomTkinter widgets can be mixed with standard Tkinter widgets in the same application. You can gradually migrate existing Tkinter apps to CustomTkinter.
 </Note>

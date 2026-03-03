@@ -1,0 +1,488 @@
+---
+title: Fonts and Images
+description: Use scalable fonts and images that adapt to appearance modes
+---
+
+CustomTkinter provides `CTkFont` and `CTkImage` classes that handle scaling and appearance mode changes automatically, ensuring your text and images look sharp on any display.
+
+## CTkFont
+
+The `CTkFont` class creates fonts with pixel-based sizes that scale automatically with the widget scaling factor.
+
+### Creating Fonts
+
+```python
+import customtkinter as ctk
+
+# Create a custom font
+my_font = ctk.CTkFont(
+    family="Roboto",
+    size=16,
+    weight="bold"
+)
+
+# Use in a widget
+label = ctk.CTkLabel(
+    app,
+    text="Hello World",
+    font=my_font
+)
+```
+
+### Font Parameters
+
+<Accordion title="All CTkFont Parameters">
+
+- **family** (str, optional): Font family name (e.g., "Roboto", "Arial", "Helvetica")
+  - Default: Platform-specific (SF Display on macOS, Roboto on Windows/Linux)
+- **size** (int, optional): Font size in pixels
+  - Default: 13
+- **weight** ("normal" | "bold", optional): Font weight
+  - Default: "normal"
+- **slant** ("roman" | "italic", optional): Font slant
+  - Default: "roman"
+- **underline** (bool, optional): Underline the text
+  - Default: False
+- **overstrike** (bool, optional): Strike through the text
+  - Default: False
+
+</Accordion>
+
+### Font Examples
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+app.geometry("400x300")
+
+# Regular font
+regular_font = ctk.CTkFont(size=14)
+
+# Large bold font
+title_font = ctk.CTkFont(size=24, weight="bold")
+
+# Italic font
+italic_font = ctk.CTkFont(size=12, slant="italic")
+
+# Small underlined font
+small_font = ctk.CTkFont(size=10, underline=True)
+
+# Custom family
+custom_font = ctk.CTkFont(family="Courier", size=14, weight="bold")
+
+ctk.CTkLabel(app, text="Regular Text", font=regular_font).pack(pady=5)
+ctk.CTkLabel(app, text="Title Text", font=title_font).pack(pady=5)
+ctk.CTkLabel(app, text="Italic Text", font=italic_font).pack(pady=5)
+ctk.CTkLabel(app, text="Small Underlined", font=small_font).pack(pady=5)
+ctk.CTkLabel(app, text="Custom Family", font=custom_font).pack(pady=5)
+
+app.mainloop()
+```
+
+### Modifying Fonts
+
+Fonts can be modified after creation using `configure()`:
+
+```python
+import customtkinter as ctk
+
+# Create font
+my_font = ctk.CTkFont(size=14)
+
+# Create widgets using this font
+label1 = ctk.CTkLabel(app, text="Label 1", font=my_font)
+label2 = ctk.CTkLabel(app, text="Label 2", font=my_font)
+
+# Change the font - updates ALL widgets using it
+my_font.configure(size=20, weight="bold")
+
+# Get current font properties
+print(my_font.cget("size"))    # 20
+print(my_font.cget("family"))  # Current family
+print(my_font.cget("weight"))  # "bold"
+```
+
+<Info>
+When you modify a `CTkFont` object, all widgets using that font automatically update to reflect the changes.
+</Info>
+
+### Copying Fonts
+
+```python
+import customtkinter as ctk
+
+original_font = ctk.CTkFont(size=14, weight="bold")
+
+# Create an independent copy
+copied_font = original_font.copy()
+copied_font.configure(size=18)
+
+# original_font remains size 14
+# copied_font is now size 18
+```
+
+## CTkImage
+
+The `CTkImage` class handles images with automatic scaling and appearance mode support. It requires PIL (Pillow).
+
+### Installing PIL
+
+```bash
+pip install Pillow
+```
+
+### Creating Images
+
+```python
+import customtkinter as ctk
+from PIL import Image
+
+# Load image file
+my_image = ctk.CTkImage(
+    light_image=Image.open("icon_light.png"),
+    dark_image=Image.open("icon_dark.png"),
+    size=(30, 30)
+)
+
+# Use in a widget
+button = ctk.CTkButton(
+    app,
+    text="Click Me",
+    image=my_image
+)
+```
+
+### Image Parameters
+
+<Accordion title="All CTkImage Parameters">
+
+- **light_image** (PIL.Image.Image, optional): Image to display in light mode
+- **dark_image** (PIL.Image.Image, optional): Image to display in dark mode
+- **size** (tuple[int, int], optional): Display size as `(width, height)` in pixels
+  - Default: `(20, 20)`
+
+**Important:**
+- At least one of `light_image` or `dark_image` must be provided
+- If only one image is provided, it's used for both modes
+- Images are automatically resized to match the specified size
+- Actual display size is multiplied by widget scaling factor
+
+</Accordion>
+
+### Single Image for Both Modes
+
+```python
+import customtkinter as ctk
+from PIL import Image
+
+# Same image for light and dark mode
+icon = ctk.CTkImage(
+    light_image=Image.open("icon.png"),
+    size=(40, 40)
+)
+
+label = ctk.CTkLabel(app, image=icon, text="")
+```
+
+<Note>
+If you only specify `light_image`, it will be used in both light and dark modes. The same applies to `dark_image`.
+</Note>
+
+### Complete Image Example
+
+```python
+import customtkinter as ctk
+from PIL import Image
+import os
+
+class ImageDemo(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("Image Demo")
+        self.geometry("400x500")
+        
+        # Load images
+        image_path = os.path.dirname(os.path.abspath(__file__))
+        
+        # Logo with different versions for light/dark mode
+        self.logo_image = ctk.CTkImage(
+            light_image=Image.open(os.path.join(image_path, "logo_light.png")),
+            dark_image=Image.open(os.path.join(image_path, "logo_dark.png")),
+            size=(100, 100)
+        )
+        
+        # Icons for buttons
+        self.add_icon = ctk.CTkImage(
+            light_image=Image.open(os.path.join(image_path, "add.png")),
+            size=(20, 20)
+        )
+        
+        self.delete_icon = ctk.CTkImage(
+            light_image=Image.open(os.path.join(image_path, "delete.png")),
+            size=(20, 20)
+        )
+        
+        # Logo display
+        self.logo_label = ctk.CTkLabel(
+            self,
+            image=self.logo_image,
+            text=""  # Empty text to show only image
+        )
+        self.logo_label.pack(pady=20)
+        
+        # Buttons with icons
+        self.add_button = ctk.CTkButton(
+            self,
+            text="Add Item",
+            image=self.add_icon,
+            compound="left"  # Icon on the left of text
+        )
+        self.add_button.pack(pady=10)
+        
+        self.delete_button = ctk.CTkButton(
+            self,
+            text="Delete Item",
+            image=self.delete_icon,
+            compound="left"
+        )
+        self.delete_button.pack(pady=10)
+        
+        # Icon-only button
+        self.icon_button = ctk.CTkButton(
+            self,
+            text="",
+            image=self.add_icon,
+            width=40
+        )
+        self.icon_button.pack(pady=10)
+
+if __name__ == "__main__":
+    app = ImageDemo()
+    app.mainloop()
+```
+
+### Modifying Images
+
+Images can be reconfigured after creation:
+
+```python
+import customtkinter as ctk
+from PIL import Image
+
+# Create image
+my_image = ctk.CTkImage(
+    light_image=Image.open("old_icon.png"),
+    size=(30, 30)
+)
+
+button = ctk.CTkButton(app, image=my_image)
+
+# Change the image later
+my_image.configure(
+    light_image=Image.open("new_icon.png"),
+    size=(40, 40)
+)
+
+# Button automatically updates
+
+# Get current properties
+print(my_image.cget("size"))  # (40, 40)
+```
+
+<Info>
+When you modify a `CTkImage` object, all widgets using that image automatically update.
+</Info>
+
+## Image Placement in Buttons
+
+Buttons and labels support the `compound` parameter to control image placement:
+
+```python
+import customtkinter as ctk
+from PIL import Image
+
+icon = ctk.CTkImage(Image.open("icon.png"), size=(20, 20))
+
+# Image on the left (default)
+btn1 = ctk.CTkButton(app, text="Left", image=icon, compound="left")
+
+# Image on the right
+btn2 = ctk.CTkButton(app, text="Right", image=icon, compound="right")
+
+# Image on top
+btn3 = ctk.CTkButton(app, text="Top", image=icon, compound="top")
+
+# Image on bottom
+btn4 = ctk.CTkButton(app, text="Bottom", image=icon, compound="bottom")
+
+# Image only (no text)
+btn5 = ctk.CTkButton(app, text="", image=icon)
+```
+
+## Automatic Scaling Behavior
+
+<Accordion title="How Font Scaling Works">
+
+`CTkFont` automatically scales with widget scaling:
+
+1. Font size is stored in pixels (not points)
+2. When widget scaling changes, fonts are re-rendered
+3. Final size = `base_size × widget_scaling × dpi_scaling`
+4. All widgets using the font are notified and redrawn
+
+**Example:**
+- Base font size: 14 pixels
+- Widget scaling: 1.5
+- DPI scaling: 1.25
+- Final rendered size: 14 × 1.5 × 1.25 = 26.25 pixels
+
+</Accordion>
+
+<Accordion title="How Image Scaling Works">
+
+`CTkImage` automatically scales and switches based on appearance mode:
+
+1. Original PIL images are stored at full resolution
+2. Display size is specified in the `size` parameter
+3. When scaling changes, images are resized on-demand
+4. Scaled versions are cached for performance
+5. Appearance mode determines which image (light/dark) is displayed
+
+**Example:**
+- Display size: (30, 30) pixels
+- Widget scaling: 1.5
+- DPI scaling: 1.0
+- Actual rendered size: (45, 45) pixels
+
+</Accordion>
+
+## Best Practices
+
+### Fonts
+
+1. **Reuse font objects**: Create one `CTkFont` object and reuse it across multiple widgets
+2. **Use pixel sizes**: CTkFont uses pixels, not points - typical sizes are 12-16 for body text, 20-32 for titles
+3. **System fonts**: Stick to system fonts (Roboto, Arial, Helvetica) for better cross-platform compatibility
+4. **Semantic naming**: Name fonts based on purpose (`title_font`, `body_font`) rather than size
+
+### Images
+
+1. **Provide both modes**: Always provide both `light_image` and `dark_image` for better appearance mode support
+2. **Use PNG with transparency**: PNG format with alpha channel works best for icons
+3. **High resolution sources**: Use high-resolution source images - they're scaled down for display but remain crisp
+4. **Consistent sizes**: Use consistent icon sizes throughout your app (e.g., 20×20 for buttons, 40×40 for headers)
+5. **Lazy loading**: Load images only when needed to reduce memory usage
+
+<Warning>
+If PIL (Pillow) is not installed, `CTkImage` will raise an `ImportError`. Make sure to include `Pillow` in your requirements.
+</Warning>
+
+## Complete Example: Fonts and Images Together
+
+```python
+import customtkinter as ctk
+from PIL import Image
+import os
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("Fonts and Images Demo")
+        self.geometry("500x600")
+        
+        # Create custom fonts
+        self.title_font = ctk.CTkFont(size=28, weight="bold")
+        self.subtitle_font = ctk.CTkFont(size=16)
+        self.body_font = ctk.CTkFont(size=13)
+        
+        # Load images
+        img_path = os.path.dirname(os.path.abspath(__file__))
+        
+        self.header_image = ctk.CTkImage(
+            light_image=Image.open(os.path.join(img_path, "header_light.png")),
+            dark_image=Image.open(os.path.join(img_path, "header_dark.png")),
+            size=(200, 100)
+        )
+        
+        self.icon_settings = ctk.CTkImage(
+            light_image=Image.open(os.path.join(img_path, "settings.png")),
+            size=(24, 24)
+        )
+        
+        # Header with image
+        self.header_label = ctk.CTkLabel(
+            self,
+            image=self.header_image,
+            text=""
+        )
+        self.header_label.pack(pady=20)
+        
+        # Title with custom font
+        self.title_label = ctk.CTkLabel(
+            self,
+            text="Welcome to CustomTkinter",
+            font=self.title_font
+        )
+        self.title_label.pack(pady=10)
+        
+        # Subtitle
+        self.subtitle_label = ctk.CTkLabel(
+            self,
+            text="Modern UI with scalable fonts and images",
+            font=self.subtitle_font
+        )
+        self.subtitle_label.pack(pady=5)
+        
+        # Body text
+        self.body_label = ctk.CTkLabel(
+            self,
+            text="This demo shows how fonts and images\nwork together in CustomTkinter.",
+            font=self.body_font
+        )
+        self.body_label.pack(pady=20)
+        
+        # Button with icon
+        self.settings_button = ctk.CTkButton(
+            self,
+            text="Settings",
+            image=self.icon_settings,
+            font=self.body_font,
+            compound="left"
+        )
+        self.settings_button.pack(pady=10)
+        
+        # Font size controls
+        self.control_frame = ctk.CTkFrame(self)
+        self.control_frame.pack(pady=20, padx=20, fill="x")
+        
+        ctk.CTkLabel(
+            self.control_frame,
+            text="Adjust Title Font Size:",
+            font=self.body_font
+        ).pack(pady=5)
+        
+        self.font_slider = ctk.CTkSlider(
+            self.control_frame,
+            from_=16,
+            to=48,
+            command=self.change_title_size
+        )
+        self.font_slider.set(28)
+        self.font_slider.pack(pady=5, padx=10, fill="x")
+        
+    def change_title_size(self, value):
+        self.title_font.configure(size=int(value))
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Related Functions
+
+- `set_widget_scaling()` - Affects font and image rendering sizes (see [Scaling](/concepts/scaling))
+- `set_appearance_mode()` - Switches between light/dark images (see [Appearance Modes](/concepts/appearance-modes))
+- `set_default_color_theme()` - Sets default font family and size (see [Themes](/concepts/themes))

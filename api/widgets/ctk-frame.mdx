@@ -1,0 +1,294 @@
+---
+title: CTkFrame
+description: Frame container widget with rounded corners and border for organizing other widgets.
+---
+
+# CTkFrame
+
+Frame with rounded corners and border. Default foreground colors are set according to theme. To make the frame transparent set fg_color=None.
+
+## Constructor
+
+```python
+CTkFrame(
+    master: Any,
+    width: int = 200,
+    height: int = 200,
+    corner_radius: Optional[Union[int, str]] = None,
+    border_width: Optional[Union[int, str]] = None,
+    bg_color: Union[str, Tuple[str, str]] = "transparent",
+    fg_color: Optional[Union[str, Tuple[str, str]]] = None,
+    border_color: Optional[Union[str, Tuple[str, str]]] = None,
+    background_corner_colors: Union[Tuple[Union[str, Tuple[str, str]]], None] = None,
+    overwrite_preferred_drawing_method: Union[str, None] = None,
+    **kwargs
+)
+```
+
+### Parameters
+
+<ParamField path="master" type="Any" required>
+  The parent widget where the frame will be placed.
+</ParamField>
+
+<ParamField path="width" type="int" default="200">
+  Width of the frame in pixels.
+</ParamField>
+
+<ParamField path="height" type="int" default="200">
+  Height of the frame in pixels.
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[Union[int, str]]" default="None">
+  Radius of the rounded corners. If None, uses theme default.
+</ParamField>
+
+<ParamField path="border_width" type="Optional[Union[int, str]]" default="None">
+  Width of the frame border. If None, uses theme default.
+</ParamField>
+
+#### Color Parameters
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the frame. Can be a single color string or a tuple of (light_mode_color, dark_mode_color).
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the frame (main frame color). If None, uses theme default with automatic color adjustment for nested frames. Set to None for a transparent frame.
+  
+  **Automatic nesting behavior:** When a CTkFrame is placed inside another CTkFrame, the inner frame automatically uses a slightly different shade ("top_fg_color") to create visual distinction.
+</ParamField>
+
+<ParamField path="border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the frame border. If None, uses theme default.
+</ParamField>
+
+#### Advanced Rendering Options
+
+<ParamField path="background_corner_colors" type="Union[Tuple[Union[str, Tuple[str, str]]], None]" default="None">
+  Tuple of 4 colors for drawing background corners: (top_left, top_right, bottom_right, bottom_left). Used for special rendering cases.
+</ParamField>
+
+<ParamField path="overwrite_preferred_drawing_method" type="Union[str, None]" default="None">
+  Override the default drawing method used by the DrawEngine. Advanced option for specific rendering requirements.
+</ParamField>
+
+## Methods
+
+### configure()
+
+Update frame attributes after creation.
+
+```python
+frame.configure(
+    fg_color="lightblue",
+    border_color="darkblue",
+    border_width=2,
+    corner_radius=15
+)
+```
+
+**Configurable attributes:**
+- All constructor parameters
+- `require_redraw` (bool): Force a redraw of the widget
+
+**Important:** When changing `fg_color`, all child CTkBaseClass widgets automatically update their `bg_color` to match the new frame color. Similarly, when `bg_color` changes and `fg_color` is "transparent", child widgets update accordingly.
+
+### cget()
+
+Get the current value of a frame attribute.
+
+```python
+value = frame.cget("fg_color")
+```
+
+**Parameters:**
+- `attribute_name` (str): Name of the attribute to retrieve
+
+**Returns:** The current value of the specified attribute
+
+**Available attributes:**
+- `corner_radius`, `border_width`
+- `fg_color`, `border_color`, `background_corner_colors`
+
+### winfo_children()
+
+Get a list of all child widgets in the frame.
+
+```python
+children = frame.winfo_children()
+```
+
+**Returns:** List of child widgets (excludes the internal canvas)
+
+### bind()
+
+Bind an event to the frame.
+
+```python
+frame.bind("<Button-1>", click_handler, add=True)
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence (e.g., `"<Button-1>"`, `"<Enter>"`)
+- `command` (Callable): Function to call when event occurs
+- `add` (bool): Must be True or "+" to preserve internal callbacks
+
+### unbind()
+
+Remove an event binding from the frame.
+
+```python
+frame.unbind("<Button-1>")
+```
+
+**Parameters:**
+- `sequence` (str): Event sequence to unbind
+- `funcid` (str): Must be None (parameter included for compatibility)
+
+## Usage Examples
+
+### Basic Frame
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+frame = ctk.CTkFrame(root)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Add widgets to the frame
+label = ctk.CTkLabel(frame, text="Inside Frame")
+label.pack(pady=10)
+
+root.mainloop()
+```
+
+### Frame with Custom Styling
+
+```python
+frame = ctk.CTkFrame(
+    root,
+    width=300,
+    height=200,
+    fg_color="#2b2b2b",
+    border_color="#1f538d",
+    border_width=3,
+    corner_radius=15
+)
+frame.pack(pady=20, padx=20)
+```
+
+### Nested Frames
+
+```python
+# Outer frame
+outer_frame = ctk.CTkFrame(
+    root,
+    width=400,
+    height=300
+)
+outer_frame.pack(pady=20, padx=20)
+
+# Inner frame (automatically gets different shade)
+inner_frame = ctk.CTkFrame(
+    outer_frame,
+    width=300,
+    height=200
+)
+inner_frame.pack(pady=20, padx=20)
+```
+
+### Transparent Frame
+
+```python
+frame = ctk.CTkFrame(
+    root,
+    fg_color="transparent",
+    border_width=0
+)
+frame.pack(pady=20, padx=20)
+```
+
+### Frame with Grid Layout
+
+```python
+frame = ctk.CTkFrame(root)
+frame.pack(pady=20, padx=20)
+
+# Configure grid
+frame.grid_columnconfigure((0, 1), weight=1)
+frame.grid_rowconfigure((0, 1), weight=1)
+
+# Add widgets using grid
+ctk.CTkButton(frame, text="Button 1").grid(row=0, column=0, pady=10, padx=10)
+ctk.CTkButton(frame, text="Button 2").grid(row=0, column=1, pady=10, padx=10)
+ctk.CTkButton(frame, text="Button 3").grid(row=1, column=0, pady=10, padx=10)
+ctk.CTkButton(frame, text="Button 4").grid(row=1, column=1, pady=10, padx=10)
+```
+
+### Scrollable Container Pattern
+
+```python
+# Create main frame
+main_frame = ctk.CTkFrame(root)
+main_frame.pack(fill="both", expand=True, pady=10, padx=10)
+
+# Add multiple widgets
+for i in range(10):
+    widget_frame = ctk.CTkFrame(main_frame)
+    widget_frame.pack(pady=5, padx=5, fill="x")
+    
+    label = ctk.CTkLabel(widget_frame, text=f"Item {i+1}")
+    label.pack(side="left", padx=10)
+    
+    button = ctk.CTkButton(widget_frame, text="Action", width=80)
+    button.pack(side="right", padx=10)
+```
+
+### Sidebar Frame
+
+```python
+# Sidebar frame
+sidebar = ctk.CTkFrame(
+    root,
+    width=200,
+    corner_radius=0
+)
+sidebar.pack(side="left", fill="y")
+
+# Sidebar title
+title = ctk.CTkLabel(
+    sidebar,
+    text="Navigation",
+    font=("Arial", 16, "bold")
+)
+title.pack(pady=20, padx=20)
+
+# Navigation buttons
+for item in ["Home", "Settings", "Profile", "Logout"]:
+    btn = ctk.CTkButton(sidebar, text=item, width=160)
+    btn.pack(pady=5, padx=20)
+```
+
+### Dynamic Color Update
+
+```python
+frame = ctk.CTkFrame(root)
+frame.pack(pady=20, padx=20)
+
+# Add some child widgets
+label = ctk.CTkLabel(frame, text="Child Label")
+label.pack(pady=10)
+
+button = ctk.CTkButton(frame, text="Child Button")
+button.pack(pady=10)
+
+# Change frame color - child widgets automatically update their bg_color
+def change_color():
+    frame.configure(fg_color="#1f538d")
+
+color_button = ctk.CTkButton(root, text="Change Frame Color", command=change_color)
+color_button.pack(pady=10)
+```

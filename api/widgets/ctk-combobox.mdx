@@ -1,0 +1,402 @@
+---
+title: CTkComboBox
+description: Combo box widget combining dropdown selection with text entry
+---
+
+## Overview
+
+CTkComboBox combines a text entry field with a dropdown menu. Users can either type a value directly or select from the dropdown list. It provides more flexibility than CTkOptionMenu.
+
+## Constructor
+
+```python
+CTkComboBox(
+    master,
+    width=140,
+    height=28,
+    corner_radius=None,
+    border_width=None,
+    bg_color="transparent",
+    fg_color=None,
+    border_color=None,
+    button_color=None,
+    button_hover_color=None,
+    dropdown_fg_color=None,
+    dropdown_hover_color=None,
+    dropdown_text_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    font=None,
+    dropdown_font=None,
+    values=None,
+    state=tkinter.NORMAL,
+    hover=True,
+    variable=None,
+    command=None,
+    justify="left",
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="140">
+  Width of the combobox in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="28">
+  Height of the combobox in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius in pixels. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width" type="Optional[int]" default="None">
+  Border width in pixels. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the entry field. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Border color. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the dropdown arrow button. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Button color when hovering. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the dropdown menu. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Hover color for dropdown items. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color for dropdown items. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the text in the entry field. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the entry field text
+</ParamField>
+
+<ParamField path="dropdown_font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the dropdown menu items
+</ParamField>
+
+<ParamField path="values" type="Optional[List[str]]" default="None">
+  List of values to display in the dropdown. If None, defaults to ["CTkComboBox"]
+</ParamField>
+
+<ParamField path="state" type="str" default="tkinter.NORMAL">
+  State of the widget: tkinter.NORMAL, tkinter.DISABLED, or "readonly"
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect on the dropdown button
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable (StringVar) to link with the entry field value
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[str], Any], None]" default="None">
+  Callback function called when a dropdown item is selected. Receives the selected value as argument
+</ParamField>
+
+<ParamField path="justify" type="str" default="'left'">
+  Text justification: "left", "center", or "right"
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the current text in the entry field.
+
+```python
+value = combobox.get()
+```
+
+**Returns:** `str` - The current text value
+
+### set()
+
+Sets the text in the entry field.
+
+```python
+combobox.set("New value")
+```
+
+**Parameters:**
+- `value` (str): Text to set in the entry field
+
+### configure()
+
+Configures widget parameters.
+
+```python
+combobox.configure(values=["New1", "New2"], state="readonly")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+state = combobox.cget("state")
+```
+
+## Usage Examples
+
+### Basic ComboBox
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Option 1", "Option 2", "Option 3"]
+)
+combobox.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### ComboBox with Command
+
+```python
+def on_selection(choice):
+    print(f"Dropdown selected: {choice}")
+
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Apple", "Banana", "Orange", "Grape"],
+    command=on_selection
+)
+combobox.pack(pady=20)
+combobox.set("Apple")  # Set initial value
+```
+
+### Getting and Setting Values
+
+```python
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Item 1", "Item 2", "Item 3"]
+)
+combobox.pack(pady=20, padx=20)
+
+# Set value
+combobox.set("Item 2")
+
+# Get value (works for both typed and selected)
+def get_value():
+    value = combobox.get()
+    print(f"Current value: {value}")
+
+btn = ctk.CTkButton(root, text="Get Value", command=get_value)
+btn.pack()
+```
+
+### Readonly ComboBox
+
+```python
+# User can only select from dropdown, not type
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Read", "Only", "Mode"],
+    state="readonly"
+)
+combobox.pack(pady=20, padx=20)
+combobox.set("Read")
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+city_var = tk.StringVar(value="New York")
+
+combobox = ctk.CTkComboBox(
+    root,
+    values=["New York", "Los Angeles", "Chicago", "Houston"],
+    variable=city_var
+)
+combobox.pack(pady=20)
+
+# Access through variable
+def show_city():
+    print(f"Selected city: {city_var.get()}")
+
+btn = ctk.CTkButton(root, text="Show City", command=show_city)
+btn.pack()
+```
+
+### Custom Styled ComboBox
+
+```python
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Option 1", "Option 2", "Option 3"],
+    width=250,
+    height=35,
+    corner_radius=10,
+    border_width=2,
+    fg_color="#2c3e50",
+    border_color="#3498db",
+    button_color="#3498db",
+    button_hover_color="#2980b9",
+    text_color="white",
+    dropdown_fg_color="#34495e",
+    dropdown_hover_color="#3498db",
+    dropdown_text_color="white",
+    font=("Helvetica", 14),
+    dropdown_font=("Helvetica", 12)
+)
+combobox.pack(pady=20, padx=20)
+```
+
+### Search Box with Suggestions
+
+```python
+search_suggestions = [
+    "Python programming",
+    "JavaScript tutorial",
+    "Java basics",
+    "C++ guide",
+    "Web development"
+]
+
+def on_search(query):
+    print(f"Searching for: {query}")
+
+search_box = ctk.CTkComboBox(
+    root,
+    values=search_suggestions,
+    command=on_search,
+    width=300
+)
+search_box.pack(pady=20, padx=20)
+search_box.set("Enter search term...")
+```
+
+### Country/State Selector
+
+```python
+countries = [
+    "United States",
+    "United Kingdom",
+    "Canada",
+    "Australia",
+    "Germany",
+    "France",
+    "Japan",
+    "China"
+]
+
+def on_country_select(country):
+    print(f"Selected: {country}")
+
+combobox = ctk.CTkComboBox(
+    root,
+    values=countries,
+    command=on_country_select,
+    width=200
+)
+combobox.pack(pady=20)
+combobox.set("United States")
+```
+
+### Email Domain Autocomplete
+
+```python
+domains = [
+    "@gmail.com",
+    "@yahoo.com",
+    "@outlook.com",
+    "@hotmail.com",
+    "@icloud.com"
+]
+
+combobox = ctk.CTkComboBox(
+    root,
+    values=domains,
+    width=250
+)
+combobox.pack(pady=20)
+combobox.set("username")
+```
+
+### Dynamically Update Values
+
+```python
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Item 1", "Item 2"],
+    width=200
+)
+combobox.pack(pady=20)
+
+def add_item():
+    current_values = list(combobox.cget("values"))
+    new_item = f"Item {len(current_values) + 1}"
+    current_values.append(new_item)
+    combobox.configure(values=current_values)
+    combobox.set(new_item)
+
+add_btn = ctk.CTkButton(root, text="Add Item", command=add_item)
+add_btn.pack(pady=10)
+```
+
+### Center-aligned ComboBox
+
+```python
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Left", "Center", "Right"],
+    justify="center",
+    width=150
+)
+combobox.pack(pady=20)
+combobox.set("Center")
+```
+
+### Disabled ComboBox
+
+```python
+combobox = ctk.CTkComboBox(
+    root,
+    values=["Option 1", "Option 2"],
+    state=ctk.DISABLED
+)
+combobox.set("Option 1")
+combobox.pack(pady=20)
+```

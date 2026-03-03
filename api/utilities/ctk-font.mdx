@@ -1,0 +1,113 @@
+---
+title: CTkFont
+description: Font object with size in pixels, independent of scaling
+---
+
+The `CTkFont` class provides a font object with pixel-based sizing that remains independent of UI scaling. It extends tkinter's Font class with additional CustomTkinter-specific features.
+
+## Usage
+
+```python
+import customtkinter as ctk
+
+# Create a custom font
+font = ctk.CTkFont(family="Arial", size=14, weight="bold")
+
+# Use it with a widget
+label = ctk.CTkLabel(root, text="Hello World", font=font)
+```
+
+## Constructor
+
+```python
+CTkFont(
+    family=None,
+    size=None,
+    weight=None,
+    slant="roman",
+    underline=False,
+    overstrike=False
+)
+```
+
+### Parameters
+
+<ParamField path="family" type="str" default="theme default">
+  The font family name as a string (e.g., "Arial", "Helvetica", "Times New Roman"). If not specified, uses the default family from the theme.
+</ParamField>
+
+<ParamField path="size" type="int" default="theme default">
+  The font height in pixels as an integer. If not specified, uses the default size from the theme.
+</ParamField>
+
+<ParamField path="weight" type="Literal['normal', 'bold']" default="theme default">
+  Font weight. Options:
+  - `"normal"` - Regular weight
+  - `"bold"` - Boldface
+  
+  If not specified, uses the default weight from the theme.
+</ParamField>
+
+<ParamField path="slant" type="Literal['roman', 'italic']" default="roman">
+  Font slant style. Options:
+  - `"roman"` - Normal, unslanted text
+  - `"italic"` - Italic text
+</ParamField>
+
+<ParamField path="underline" type="bool" default={false}>
+  Whether the text should be underlined. Set to `True` for underlined text, `False` for normal.
+</ParamField>
+
+<ParamField path="overstrike" type="bool" default={false}>
+  Whether the text should have a line through it. Set to `True` for overstruck text, `False` for normal.
+</ParamField>
+
+## Methods
+
+### configure()
+
+Update font properties after creation.
+
+```python
+font = ctk.CTkFont(size=12)
+font.configure(size=16, weight="bold")
+```
+
+**Parameters:**
+- `family` (str, optional) - Change the font family
+- `size` (int, optional) - Change the font size
+- `weight` (str, optional) - Change the font weight
+- `slant` (str, optional) - Change the font slant
+- `underline` (bool, optional) - Change underline setting
+- `overstrike` (bool, optional) - Change overstrike setting
+
+### cget()
+
+Retrieve current font property values.
+
+```python
+current_size = font.cget("size")
+current_family = font.cget("family")
+```
+
+**Parameters:**
+- `attribute_name` (str) - Name of the attribute to retrieve (e.g., "size", "family", "weight")
+
+**Returns:** The current value of the specified attribute
+
+### copy()
+
+Create a deep copy of the font object.
+
+```python
+font_copy = font.copy()
+```
+
+**Returns:** A new `CTkFont` instance with identical properties
+
+## Notes
+
+- CTkFont uses pixel-based sizing that remains consistent regardless of DPI scaling
+- The `config()` method is not available for CTkFont. Always use `configure()` instead
+- Font objects can be shared across multiple widgets and will update all widgets when configured
+- For more information on tkinter fonts, see the [tkinter font documentation](https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/fonts.html)

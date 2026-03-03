@@ -1,0 +1,239 @@
+---
+title: Layout Widgets
+description: Advanced container widgets for organizing complex user interfaces
+---
+
+Layout widgets provide sophisticated containers for organizing multiple widgets into structured, scrollable, and tabbed interfaces.
+
+## Available Widgets
+
+<CardGroup cols={2}>
+  <Card title="CTkScrollableFrame" icon="scroll" href="/api/widgets/ctk-scrollable-frame">
+    Scrollable container for large content areas
+  </Card>
+  
+  <Card title="CTkTabview" icon="folder-open" href="/api/widgets/ctk-tabview">
+    Tabbed interface for organizing content into sections
+  </Card>
+</CardGroup>
+
+## CTkScrollableFrame
+
+A frame that automatically adds scrolling capabilities when content exceeds the visible area.
+
+```python
+scrollable_frame = ctk.CTkScrollableFrame(
+    app,
+    width=400,
+    height=300,
+    corner_radius=10
+)
+scrollable_frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Add many widgets
+for i in range(50):
+    label = ctk.CTkLabel(scrollable_frame, text=f"Item {i + 1}")
+    label.pack(pady=5, padx=10)
+```
+
+**Key Features:**
+- Automatic scrollbar management
+- Vertical and horizontal scrolling
+- Mouse wheel support
+- Customizable scrollbar appearance
+- Works with all geometry managers inside
+
+**Example: Settings Panel**
+
+```python
+settings = ctk.CTkScrollableFrame(app, width=500, height=400)
+settings.pack(pady=10, padx=10, fill="both", expand=True)
+
+# General Settings
+ctk.CTkLabel(settings, text="General Settings", font=("Arial", 16, "bold")).pack(pady=(10, 5), anchor="w")
+
+theme_var = ctk.StringVar(value="dark")
+ctk.CTkLabel(settings, text="Theme:").pack(pady=5, anchor="w")
+ctk.CTkSegmentedButton(settings, values=["light", "dark", "auto"], variable=theme_var).pack(pady=5, fill="x")
+
+# Notification Settings
+ctk.CTkLabel(settings, text="Notifications", font=("Arial", 16, "bold")).pack(pady=(20, 5), anchor="w")
+
+notif_var = ctk.BooleanVar(value=True)
+ctk.CTkSwitch(settings, text="Enable notifications", variable=notif_var).pack(pady=5, anchor="w")
+
+email_var = ctk.BooleanVar(value=False)
+ctk.CTkSwitch(settings, text="Email notifications", variable=email_var).pack(pady=5, anchor="w")
+
+# Privacy Settings
+ctk.CTkLabel(settings, text="Privacy", font=("Arial", 16, "bold")).pack(pady=(20, 5), anchor="w")
+
+tracking_var = ctk.BooleanVar(value=False)
+ctk.CTkSwitch(settings, text="Allow tracking", variable=tracking_var).pack(pady=5, anchor="w")
+```
+
+**Example: List with Actions**
+
+```python
+list_frame = ctk.CTkScrollableFrame(app, width=400, height=300)
+list_frame.pack(pady=10, padx=10)
+
+items = ["Task 1", "Task 2", "Task 3", "Task 4", "Task 5"]
+
+for item in items:
+    item_frame = ctk.CTkFrame(list_frame, fg_color="transparent")
+    item_frame.pack(fill="x", pady=2, padx=5)
+    
+    ctk.CTkLabel(item_frame, text=item).pack(side="left", padx=10)
+    ctk.CTkButton(item_frame, text="Edit", width=60).pack(side="right", padx=2)
+    ctk.CTkButton(item_frame, text="Delete", width=60).pack(side="right", padx=2)
+```
+
+[View Full API Reference →](/api/widgets/ctk-scrollable-frame)
+
+## CTkTabview
+
+Organizes content into multiple tabs for better space utilization and navigation.
+
+```python
+tabview = ctk.CTkTabview(app, width=500, height=400)
+tabview.pack(pady=20, padx=20, fill="both", expand=True)
+
+# Add tabs
+tab1 = tabview.add("Home")
+tab2 = tabview.add("Profile")
+tab3 = tabview.add("Settings")
+
+# Add content to tabs
+ctk.CTkLabel(tab1, text="Welcome to the Home tab!").pack(pady=20)
+ctk.CTkLabel(tab2, text="User Profile").pack(pady=20)
+ctk.CTkLabel(tab3, text="Application Settings").pack(pady=20)
+
+# Set active tab
+tabview.set("Home")
+```
+
+**Key Features:**
+- Multiple named tabs
+- Programmatic tab selection
+- Customizable tab colors and appearance
+- Each tab acts as an independent frame
+- Supports all widget types in tabs
+
+**Example: Dashboard Application**
+
+```python
+dashboard = ctk.CTkTabview(app, width=700, height=500)
+dashboard.pack(pady=10, padx=10, fill="both", expand=True)
+
+# Overview Tab
+overview = dashboard.add("Overview")
+
+ctk.CTkLabel(overview, text="Dashboard Overview", font=("Arial", 20, "bold")).pack(pady=20)
+
+stats_frame = ctk.CTkFrame(overview)
+stats_frame.pack(fill="x", padx=20, pady=10)
+
+ctk.CTkLabel(stats_frame, text="Total Users: 1,234").pack(pady=5)
+ctk.CTkLabel(stats_frame, text="Active Sessions: 45").pack(pady=5)
+ctk.CTkLabel(stats_frame, text="Revenue: $12,345").pack(pady=5)
+
+# Analytics Tab
+analytics = dashboard.add("Analytics")
+
+ctk.CTkLabel(analytics, text="Analytics", font=("Arial", 20, "bold")).pack(pady=20)
+ctk.CTkLabel(analytics, text="Charts and graphs would go here").pack(pady=10)
+
+# Reports Tab
+reports = dashboard.add("Reports")
+
+ctk.CTkLabel(reports, text="Reports", font=("Arial", 20, "bold")).pack(pady=20)
+
+report_list = ctk.CTkScrollableFrame(reports, width=600, height=300)
+report_list.pack(pady=10, padx=20)
+
+for i in range(10):
+    report_item = ctk.CTkFrame(report_list)
+    report_item.pack(fill="x", pady=5, padx=5)
+    
+    ctk.CTkLabel(report_item, text=f"Report {i + 1}").pack(side="left", padx=10)
+    ctk.CTkButton(report_item, text="Download", width=80).pack(side="right", padx=5)
+
+# Settings Tab
+settings = dashboard.add("Settings")
+
+ctk.CTkLabel(settings, text="Settings", font=("Arial", 20, "bold")).pack(pady=20)
+
+notif_switch = ctk.CTkSwitch(settings, text="Enable Notifications")
+notif_switch.pack(pady=10)
+
+auto_refresh = ctk.CTkSwitch(settings, text="Auto-refresh Dashboard")
+auto_refresh.pack(pady=10)
+```
+
+**Example: Form with Tabs**
+
+```python
+form_tabs = ctk.CTkTabview(app, width=600, height=400)
+form_tabs.pack(pady=10, padx=10)
+
+# Personal Info Tab
+personal = form_tabs.add("Personal Info")
+
+ctk.CTkLabel(personal, text="First Name:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(personal, width=300).pack(pady=5, padx=20)
+
+ctk.CTkLabel(personal, text="Last Name:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(personal, width=300).pack(pady=5, padx=20)
+
+ctk.CTkLabel(personal, text="Email:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(personal, width=300).pack(pady=5, padx=20)
+
+# Address Tab
+address = form_tabs.add("Address")
+
+ctk.CTkLabel(address, text="Street:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(address, width=300).pack(pady=5, padx=20)
+
+ctk.CTkLabel(address, text="City:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(address, width=300).pack(pady=5, padx=20)
+
+ctk.CTkLabel(address, text="ZIP Code:").pack(pady=5, anchor="w", padx=20)
+ctk.CTkEntry(address, width=300).pack(pady=5, padx=20)
+
+# Preferences Tab
+prefs = form_tabs.add("Preferences")
+
+ctk.CTkCheckBox(prefs, text="Subscribe to newsletter").pack(pady=10, anchor="w", padx=20)
+ctk.CTkCheckBox(prefs, text="Receive promotional emails").pack(pady=5, anchor="w", padx=20)
+ctk.CTkCheckBox(prefs, text="Enable two-factor authentication").pack(pady=5, anchor="w", padx=20)
+```
+
+[View Full API Reference →](/api/widgets/ctk-tabview)
+
+## Combining Layout Widgets
+
+You can nest layout widgets for complex interfaces:
+
+```python
+# Main tabview
+main_tabs = ctk.CTkTabview(app, width=800, height=600)
+main_tabs.pack(fill="both", expand=True, padx=10, pady=10)
+
+# Tab 1 with scrollable content
+tab1 = main_tabs.add("Content")
+scrollable = ctk.CTkScrollableFrame(tab1, width=750, height=500)
+scrollable.pack(fill="both", expand=True, padx=10, pady=10)
+
+# Add content to scrollable frame
+for i in range(30):
+    ctk.CTkButton(scrollable, text=f"Button {i + 1}").pack(pady=5)
+
+# Tab 2 with nested tabs
+tab2 = main_tabs.add("More Options")
+nested_tabs = ctk.CTkTabview(tab2)
+nested_tabs.pack(fill="both", expand=True, padx=10, pady=10)
+
+nested_tabs.add("Option A")
+nested_tabs.add("Option B")
+```

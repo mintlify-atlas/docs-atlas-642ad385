@@ -1,0 +1,252 @@
+---
+title: CTkProgressBar
+description: Progressbar widget with rounded corners, border, variable support, and indeterminate mode
+---
+
+Progressbar widget with rounded corners, border, variable support, indeterminate mode, and vertical orientation support.
+
+## Constructor
+
+```python
+CTkProgressBar(master, width, height, corner_radius, border_width, bg_color,
+               fg_color, border_color, progress_color, variable, orientation,
+               mode, determinate_speed, indeterminate_speed)
+```
+
+<ParamField path="master" type="widget" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="200 (horizontal) / 8 (vertical)">
+  Width of the progressbar in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="8 (horizontal) / 200 (vertical)">
+  Height of the progressbar in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="int" default="theme">
+  Corner radius in pixels
+</ParamField>
+
+<ParamField path="border_width" type="int" default="theme">
+  Border width in pixels
+</ParamField>
+
+<ParamField path="bg_color" type="str | tuple[str, str]" default="transparent">
+  Background color, accepts single color or tuple for light/dark mode
+</ParamField>
+
+<ParamField path="fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color for the progressbar track
+</ParamField>
+
+<ParamField path="border_color" type="str | tuple[str, str]" default="theme">
+  Border color
+</ParamField>
+
+<ParamField path="progress_color" type="str | tuple[str, str]" default="theme">
+  Color of the progress indicator
+</ParamField>
+
+<ParamField path="variable" type="tkinter.Variable" default="None">
+  Tkinter variable to automatically control the progress value
+</ParamField>
+
+<ParamField path="orientation" type="str" default="horizontal">
+  Orientation of the progressbar: "horizontal" or "vertical"
+</ParamField>
+
+<ParamField path="mode" type="Literal['determinate', 'indeterminate']" default="determinate">
+  Mode of the progressbar. "determinate" for fixed progress, "indeterminate" for animated loading indicator
+</ParamField>
+
+<ParamField path="determinate_speed" type="float" default="1">
+  Speed multiplier for determinate mode animation when using `.start()`
+</ParamField>
+
+<ParamField path="indeterminate_speed" type="float" default="1">
+  Speed multiplier for indeterminate mode animation
+</ParamField>
+
+## Methods
+
+### set
+
+```python
+.set(value)
+```
+
+Set the progress value for determinate mode.
+
+<ParamField path="value" type="float" required>
+  Progress value between 0.0 and 1.0
+</ParamField>
+
+### get
+
+```python
+.get() -> float
+```
+
+Get the current progress value (0.0 to 1.0).
+
+### start
+
+```python
+.start()
+```
+
+Start automatic animation mode. In determinate mode, the progress bar will loop continuously. In indeterminate mode, creates an animated loading indicator.
+
+### stop
+
+```python
+.stop()
+```
+
+Stop the automatic animation mode.
+
+### step
+
+```python
+.step()
+```
+
+Manually increment the progress by one step (based on speed settings).
+
+### configure
+
+```python
+.configure(**kwargs)
+```
+
+Configure widget parameters. Accepts all constructor parameters.
+
+### cget
+
+```python
+.cget(attribute_name) -> any
+```
+
+Get the value of a widget attribute.
+
+## Usage Examples
+
+### Basic Determinate Progress
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+# Create a progress bar
+progressbar = ctk.CTkProgressBar(app, width=300)
+progressbar.pack(pady=20)
+
+# Set progress to 50%
+progressbar.set(0.5)
+
+app.mainloop()
+```
+
+### Indeterminate Mode (Loading Animation)
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+# Create indeterminate progress bar
+progressbar = ctk.CTkProgressBar(
+    app,
+    width=300,
+    mode="indeterminate",
+    indeterminate_speed=1
+)
+progressbar.pack(pady=20)
+
+# Start the loading animation
+progressbar.start()
+
+app.mainloop()
+```
+
+### Vertical Progress Bar
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+progressbar = ctk.CTkProgressBar(
+    app,
+    orientation="vertical",
+    height=300
+)
+progressbar.pack(pady=20)
+progressbar.set(0.7)
+
+app.mainloop()
+```
+
+### With Variable Binding
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+# Create a variable
+progress_var = tkinter.DoubleVar(value=0.3)
+
+# Bind to progressbar
+progressbar = ctk.CTkProgressBar(
+    app,
+    width=300,
+    variable=progress_var
+)
+progressbar.pack(pady=20)
+
+# Update progress by changing the variable
+def update_progress():
+    current = progress_var.get()
+    if current < 1.0:
+        progress_var.set(current + 0.1)
+        app.after(500, update_progress)
+
+update_progress()
+app.mainloop()
+```
+
+### Automatic Animation with Start/Stop
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+progressbar = ctk.CTkProgressBar(
+    app,
+    width=300,
+    determinate_speed=2  # Faster animation
+)
+progressbar.pack(pady=20)
+
+start_button = ctk.CTkButton(
+    app,
+    text="Start",
+    command=progressbar.start
+)
+start_button.pack(pady=5)
+
+stop_button = ctk.CTkButton(
+    app,
+    text="Stop",
+    command=progressbar.stop
+)
+stop_button.pack(pady=5)
+
+app.mainloop()
+```

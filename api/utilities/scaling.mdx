@@ -1,0 +1,188 @@
+---
+title: Scaling Functions
+description: Functions to control widget and window scaling behavior
+---
+
+CustomTkinter provides functions to control UI scaling, allowing you to adjust the size of widgets and windows independently or disable automatic DPI awareness.
+
+## set_widget_scaling()
+
+Set a global scaling factor for all widget dimensions.
+
+```python
+import customtkinter as ctk
+
+# Make all widgets 50% larger
+ctk.set_widget_scaling(1.5)
+
+# Make all widgets smaller
+ctk.set_widget_scaling(0.8)
+```
+
+### Parameters
+
+<ParamField path="scaling_value" type="float" required>
+  The scaling factor to apply to widget dimensions. 
+  
+  - Values greater than `1.0` make widgets larger
+  - Values less than `1.0` make widgets smaller
+  - Default is `1.0` (no scaling)
+  - Minimum accepted value is `0.4`
+  
+  This value multiplies with the automatic DPI scaling factor detected by the system.
+</ParamField>
+
+### Behavior
+
+- Affects all CustomTkinter widgets globally
+- Changes apply immediately to all existing and new widgets
+- Multiplies with automatic DPI scaling (if enabled)
+- Does not affect window dimensions (use `set_window_scaling()` for that)
+
+## set_window_scaling()
+
+Set a global scaling factor for all window dimensions.
+
+```python
+import customtkinter as ctk
+
+# Make all windows 25% larger
+ctk.set_window_scaling(1.25)
+
+# Make all windows smaller
+ctk.set_window_scaling(0.9)
+```
+
+### Parameters
+
+<ParamField path="scaling_value" type="float" required>
+  The scaling factor to apply to window dimensions.
+  
+  - Values greater than `1.0` make windows larger
+  - Values less than `1.0` make windows smaller
+  - Default is `1.0` (no scaling)
+  - Minimum accepted value is `0.4`
+  
+  This value multiplies with the automatic DPI scaling factor detected by the system.
+</ParamField>
+
+### Behavior
+
+- Affects all CustomTkinter windows (CTk, CTkToplevel) globally
+- Changes apply immediately to all existing and new windows
+- Multiplies with automatic DPI scaling (if enabled)
+- Does not affect widget dimensions (use `set_widget_scaling()` for that)
+
+## deactivate_automatic_dpi_awareness()
+
+Disable automatic DPI awareness for the application.
+
+```python
+import customtkinter as ctk
+
+# Must be called before creating any windows
+ctk.deactivate_automatic_dpi_awareness()
+
+root = ctk.CTk()
+```
+
+### Parameters
+
+This function takes no parameters.
+
+### Behavior
+
+- **Must be called before creating any CTk or CTkToplevel windows**
+- Disables automatic DPI scaling detection on Windows
+- On Windows, prevents the call to `SetProcessDpiAwareness(2)`
+- After calling this, only the manual scaling factors from `set_widget_scaling()` and `set_window_scaling()` are applied
+- On macOS, DPI scaling works automatically and cannot be disabled
+- On Linux, DPI awareness is not implemented
+
+### Use Cases
+
+- When you need full manual control over scaling
+- If automatic DPI detection causes issues with your application
+- When developing cross-platform applications that need consistent sizing
+
+## Example: Combined Usage
+
+```python
+import customtkinter as ctk
+
+# Disable automatic DPI scaling
+ctk.deactivate_automatic_dpi_awareness()
+
+# Set custom scaling factors
+ctk.set_widget_scaling(1.2)  # Widgets 20% larger
+ctk.set_window_scaling(1.0)  # Windows at normal size
+
+root = ctk.CTk()
+root.geometry("400x300")
+
+# Create some widgets
+button = ctk.CTkButton(root, text="Large Button")
+button.pack(pady=20)
+
+label = ctk.CTkLabel(root, text="Large Label")
+label.pack(pady=20)
+
+root.mainloop()
+```
+
+## Example: Dynamic Scaling
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+def increase_scale():
+    # Get current scale and increase it
+    ctk.set_widget_scaling(1.5)
+
+def decrease_scale():
+    ctk.set_widget_scaling(0.8)
+
+def reset_scale():
+    ctk.set_widget_scaling(1.0)
+
+frame = ctk.CTkFrame(root)
+frame.pack(pady=20, padx=20, fill="both", expand=True)
+
+ctk.CTkButton(frame, text="Increase Scale", command=increase_scale).pack(pady=10)
+ctk.CTkButton(frame, text="Decrease Scale", command=decrease_scale).pack(pady=10)
+ctk.CTkButton(frame, text="Reset Scale", command=reset_scale).pack(pady=10)
+
+root.mainloop()
+```
+
+## Notes
+
+### Platform Differences
+
+- **Windows**: Full DPI awareness support. CustomTkinter calls `SetProcessDpiAwareness(2)` for per-monitor DPI awareness
+- **macOS**: DPI scaling works automatically at the OS level
+- **Linux**: DPI awareness not currently implemented
+
+### Scaling Calculation
+
+The final scaling factor is calculated as:
+```
+final_widget_scaling = system_dpi_scaling × widget_scaling_value
+final_window_scaling = system_dpi_scaling × window_scaling_value
+```
+
+If `deactivate_automatic_dpi_awareness()` is called:
+```
+final_widget_scaling = widget_scaling_value
+final_window_scaling = window_scaling_value
+```
+
+### Best Practices
+
+- Call scaling functions before creating widgets for consistent appearance
+- Use `deactivate_automatic_dpi_awareness()` only when necessary
+- Test your application on different DPI settings and displays
+- Keep widget and window scaling separate for fine-grained control
+- Values below `0.4` are clamped to `0.4` to maintain usability

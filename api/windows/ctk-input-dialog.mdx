@@ -1,0 +1,280 @@
+---
+title: CTkInputDialog
+description: Pre-built dialog window with text input, OK and Cancel buttons
+---
+
+## Overview
+
+`CTkInputDialog` is a pre-built dialog window class that provides a simple way to get text input from users. It extends `CTkToplevel` and includes a message label, text entry field, and OK/Cancel buttons.
+
+## Inheritance
+
+```python
+CTkInputDialog(CTkToplevel)
+```
+
+Inherits from:
+- `CTkToplevel` - CustomTkinter toplevel window class
+
+## Constructor
+
+```python
+CTkInputDialog(
+    fg_color=None,
+    text_color=None,
+    button_fg_color=None,
+    button_hover_color=None,
+    button_text_color=None,
+    entry_fg_color=None,
+    entry_border_color=None,
+    entry_text_color=None,
+    title="CTkDialog",
+    font=None,
+    text="CTkDialog"
+)
+```
+
+### Color Parameters
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the dialog window. Can be a single color string or a tuple of (light_mode_color, dark_mode_color). If None, uses the theme default from CTkToplevel.
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the message text. If None, uses the theme default from CTkLabel.
+</ParamField>
+
+<ParamField path="button_fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the OK and Cancel buttons. If None, uses the theme default from CTkButton.
+</ParamField>
+
+<ParamField path="button_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Hover color of the OK and Cancel buttons. If None, uses the theme default from CTkButton.
+</ParamField>
+
+<ParamField path="button_text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color of the OK and Cancel buttons. If None, uses the theme default from CTkButton.
+</ParamField>
+
+<ParamField path="entry_fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the text entry field. If None, uses the theme default from CTkEntry.
+</ParamField>
+
+<ParamField path="entry_border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Border color of the text entry field. If None, uses the theme default from CTkEntry.
+</ParamField>
+
+<ParamField path="entry_text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color of the text entry field. If None, uses the theme default from CTkEntry.
+</ParamField>
+
+### Content Parameters
+
+<ParamField path="title" type="str" default="CTkDialog">
+  Title of the dialog window displayed in the window titlebar.
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font used for the message text, entry field, and buttons. Can be a tuple (family, size) or a CTkFont object.
+</ParamField>
+
+<ParamField path="text" type="str" default="CTkDialog">
+  Message text displayed above the input field. This is the prompt shown to the user.
+</ParamField>
+
+## Methods
+
+### get_input
+
+```python
+get_input() -> Union[str, None]
+```
+
+Display the dialog and wait for user input. This method blocks until the user clicks OK or Cancel, or closes the dialog.
+
+**Returns:** 
+- The text entered by the user if OK was clicked
+- `None` if Cancel was clicked or the dialog was closed
+
+## Usage Example
+
+```python
+import customtkinter as ctk
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Input Dialog Example")
+        self.geometry("400x200")
+        
+        self.label = ctk.CTkLabel(self, text="Click button to open dialog")
+        self.label.pack(pady=20)
+        
+        self.button = ctk.CTkButton(
+            self,
+            text="Get User Input",
+            command=self.open_input_dialog
+        )
+        self.button.pack(pady=10)
+        
+        self.result_label = ctk.CTkLabel(self, text="")
+        self.result_label.pack(pady=20)
+    
+    def open_input_dialog(self):
+        dialog = ctk.CTkInputDialog(
+            text="Please enter your name:",
+            title="Name Input"
+        )
+        user_input = dialog.get_input()
+        
+        if user_input:
+            self.result_label.configure(text=f"Hello, {user_input}!")
+        else:
+            self.result_label.configure(text="Input cancelled")
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Advanced Example with Custom Styling
+
+```python
+import customtkinter as ctk
+
+class StyledInputDialog(ctk.CTkInputDialog):
+    def __init__(self, **kwargs):
+        super().__init__(
+            fg_color=("#f0f0f0", "#1a1a1a"),
+            text_color=("#000000", "#ffffff"),
+            button_fg_color=("#3b8ed0", "#1f6aa5"),
+            button_hover_color=("#36719f", "#144870"),
+            button_text_color=("#ffffff", "#ffffff"),
+            entry_fg_color=("#ffffff", "#2b2b2b"),
+            entry_border_color=("#3b8ed0", "#1f6aa5"),
+            entry_text_color=("#000000", "#ffffff"),
+            font=ctk.CTkFont(family="Arial", size=14),
+            **kwargs
+        )
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Custom Input Dialog")
+        self.geometry("500x300")
+        
+        self.button = ctk.CTkButton(
+            self,
+            text="Enter Email",
+            command=self.get_email
+        )
+        self.button.pack(pady=20)
+        
+        self.email_label = ctk.CTkLabel(self, text="")
+        self.email_label.pack(pady=10)
+    
+    def get_email(self):
+        dialog = StyledInputDialog(
+            text="Please enter your email address:",
+            title="Email Registration"
+        )
+        email = dialog.get_input()
+        
+        if email:
+            if "@" in email:
+                self.email_label.configure(
+                    text=f"Email registered: {email}",
+                    text_color="green"
+                )
+            else:
+                self.email_label.configure(
+                    text="Invalid email format",
+                    text_color="red"
+                )
+        else:
+            self.email_label.configure(
+                text="Registration cancelled",
+                text_color="gray"
+            )
+
+if __name__ == "__main__":
+    ctk.set_appearance_mode("dark")
+    app = App()
+    app.mainloop()
+```
+
+## Multiple Input Dialog Example
+
+```python
+import customtkinter as ctk
+
+class App(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Registration Form")
+        self.geometry("500x400")
+        
+        self.button = ctk.CTkButton(
+            self,
+            text="Register User",
+            command=self.register_user
+        )
+        self.button.pack(pady=20)
+        
+        self.info_text = ctk.CTkTextbox(self, width=400, height=250)
+        self.info_text.pack(pady=10, padx=20)
+    
+    def register_user(self):
+        # Get name
+        name_dialog = ctk.CTkInputDialog(
+            text="Enter your full name:",
+            title="Registration - Step 1/3"
+        )
+        name = name_dialog.get_input()
+        if not name:
+            return
+        
+        # Get email
+        email_dialog = ctk.CTkInputDialog(
+            text="Enter your email address:",
+            title="Registration - Step 2/3"
+        )
+        email = email_dialog.get_input()
+        if not email:
+            return
+        
+        # Get username
+        username_dialog = ctk.CTkInputDialog(
+            text="Choose a username:",
+            title="Registration - Step 3/3"
+        )
+        username = username_dialog.get_input()
+        if not username:
+            return
+        
+        # Display results
+        self.info_text.delete("1.0", "end")
+        self.info_text.insert("1.0", 
+            f"Registration Complete!\n\n"
+            f"Name: {name}\n"
+            f"Email: {email}\n"
+            f"Username: {username}"
+        )
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
+```
+
+## Notes
+
+- The dialog is modal by default (uses `grab_set()`) - the parent window is not clickable while the dialog is open
+- The dialog stays on top of other windows (uses `attributes("-topmost", True)`)
+- The dialog is not resizable
+- Pressing Enter in the entry field is equivalent to clicking OK
+- The entry field automatically receives focus after 150ms
+- The dialog is centered on screen by default
+- Widgets are created with a 10ms delay to avoid white flickering on some systems
+- The label has a fixed width of 300 pixels with text wrapping enabled
+- Both OK and Cancel buttons are 100 pixels wide
+- All color parameters support both single colors and (light, dark) tuples for appearance mode support

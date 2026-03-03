@@ -1,0 +1,294 @@
+---
+title: Scaling
+description: Handle DPI scaling and adjust widget and window sizes
+---
+
+CustomTkinter provides automatic DPI awareness and manual scaling controls to ensure your application looks crisp on high-resolution displays and can be resized according to user preferences.
+
+## Scaling Types
+
+CustomTkinter supports two independent scaling factors:
+
+- **Widget Scaling**: Scales the size of all widgets (buttons, labels, frames, etc.)
+- **Window Scaling**: Scales window dimensions and geometry
+
+Both scaling types multiply with automatic DPI scaling detected from the operating system.
+
+## Widget Scaling
+
+Control the size of all widgets with `set_widget_scaling()`:
+
+```python
+import customtkinter as ctk
+
+# Make widgets 50% larger
+ctk.set_widget_scaling(1.5)
+
+# Make widgets 25% smaller
+ctk.set_widget_scaling(0.75)
+
+# Reset to normal size
+ctk.set_widget_scaling(1.0)
+```
+
+<Info>
+Widget scaling affects all widget dimensions including padding, border widths, corner radius, and font sizes.
+</Info>
+
+## Window Scaling
+
+Control window dimensions with `set_window_scaling()`:
+
+```python
+import customtkinter as ctk
+
+# Make windows 25% larger
+ctk.set_window_scaling(1.25)
+
+# Reset to normal size
+ctk.set_window_scaling(1.0)
+```
+
+<Note>
+Window scaling affects window geometry (width/height) but does not affect widget sizes. Use both together for proportional scaling.
+</Note>
+
+## Complete Example
+
+```python
+import customtkinter as ctk
+
+class ScalingDemo(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        
+        self.title("Scaling Demo")
+        self.geometry("600x450")
+        
+        # Title
+        self.label = ctk.CTkLabel(
+            self,
+            text="Adjust Scaling",
+            font=("Roboto", 24)
+        )
+        self.label.pack(pady=20)
+        
+        # Widget scaling controls
+        self.widget_frame = ctk.CTkFrame(self)
+        self.widget_frame.pack(pady=10, padx=20, fill="x")
+        
+        ctk.CTkLabel(
+            self.widget_frame,
+            text="Widget Scaling:"
+        ).pack(side="left", padx=10)
+        
+        self.widget_slider = ctk.CTkSlider(
+            self.widget_frame,
+            from_=0.5,
+            to=2.0,
+            number_of_steps=15,
+            command=self.change_widget_scaling
+        )
+        self.widget_slider.pack(side="left", padx=10, fill="x", expand=True)
+        self.widget_slider.set(1.0)
+        
+        self.widget_value = ctk.CTkLabel(self.widget_frame, text="1.0")
+        self.widget_value.pack(side="left", padx=10)
+        
+        # Window scaling controls
+        self.window_frame = ctk.CTkFrame(self)
+        self.window_frame.pack(pady=10, padx=20, fill="x")
+        
+        ctk.CTkLabel(
+            self.window_frame,
+            text="Window Scaling:"
+        ).pack(side="left", padx=10)
+        
+        self.window_slider = ctk.CTkSlider(
+            self.window_frame,
+            from_=0.5,
+            to=2.0,
+            number_of_steps=15,
+            command=self.change_window_scaling
+        )
+        self.window_slider.pack(side="left", padx=10, fill="x", expand=True)
+        self.window_slider.set(1.0)
+        
+        self.window_value = ctk.CTkLabel(self.window_frame, text="1.0")
+        self.window_value.pack(side="left", padx=10)
+        
+        # Sample widgets to demonstrate scaling
+        self.sample_frame = ctk.CTkFrame(self)
+        self.sample_frame.pack(pady=20, padx=20, fill="both", expand=True)
+        
+        ctk.CTkButton(
+            self.sample_frame,
+            text="Sample Button"
+        ).pack(pady=10)
+        
+        ctk.CTkEntry(
+            self.sample_frame,
+            placeholder_text="Sample Entry"
+        ).pack(pady=10)
+        
+    def change_widget_scaling(self, value: float):
+        ctk.set_widget_scaling(value)
+        self.widget_value.configure(text=f"{value:.2f}")
+        
+    def change_window_scaling(self, value: float):
+        ctk.set_window_scaling(value)
+        self.window_value.configure(text=f"{value:.2f}")
+
+if __name__ == "__main__":
+    app = ScalingDemo()
+    app.mainloop()
+```
+
+## Automatic DPI Awareness
+
+CustomTkinter automatically detects and handles DPI scaling on Windows and macOS:
+
+<Tabs>
+  <Tab title="Windows">
+    CustomTkinter calls `SetProcessDpiAwareness(2)` to enable per-monitor DPI awareness. The application detects DPI changes when moved between monitors with different scaling factors.
+    
+    DPI is checked every 100ms and widgets are automatically redrawn when the scaling changes.
+  </Tab>
+  <Tab title="macOS">
+    High DPI scaling works automatically on macOS without additional configuration. Retina displays are handled natively by the system.
+  </Tab>
+  <Tab title="Linux">
+    DPI awareness is not implemented on Linux. Manual scaling can still be used via `set_widget_scaling()` and `set_window_scaling()`.
+  </Tab>
+</Tabs>
+
+<Warning>
+Automatic DPI detection requires the window to be visible. If DPI changes are detected, widgets briefly flash during the update.
+</Warning>
+
+## Disabling Automatic DPI Awareness
+
+If you want to handle DPI scaling yourself, disable automatic detection:
+
+```python
+import customtkinter as ctk
+
+# Disable automatic DPI awareness
+ctk.deactivate_automatic_dpi_awareness()
+
+app = ctk.CTk()
+app.mainloop()
+```
+
+<Note>
+You must call `deactivate_automatic_dpi_awareness()` **before** creating any windows. This sets a flag that prevents DPI detection from being activated.
+</Note>
+
+## Scaling Limits
+
+Both widget and window scaling have minimum values:
+
+```python
+import customtkinter as ctk
+
+# Minimum scaling value is 0.4
+ctk.set_widget_scaling(0.2)  # Actually sets to 0.4
+ctk.set_window_scaling(0.3)  # Actually sets to 0.4
+```
+
+<Info>
+The minimum scaling value of 0.4 prevents widgets from becoming too small to be usable.
+</Info>
+
+## How Scaling Works
+
+<Accordion title="Internal Implementation">
+
+The `ScalingTracker` class manages all scaling operations:
+
+1. **Widget Registration**: Each widget registers a callback when created
+2. **DPI Detection**: On Windows, uses `GetDpiForMonitor()` to detect monitor DPI
+3. **Scaling Calculation**: Final scaling = `detected_dpi_scaling × user_scaling`
+4. **Update Loop**: Checks for DPI changes every 100ms on active windows
+5. **Callback Execution**: When scaling changes, all registered callbacks are triggered
+6. **Widget Redraw**: Each widget recalculates its dimensions and redraws
+
+**Key Properties:**
+- `widget_scaling`: User-set widget scaling factor (default: 1.0)
+- `window_scaling`: User-set window scaling factor (default: 1.0)
+- `window_dpi_scaling_dict`: Detected DPI scaling per window
+
+**Calculation Example:**
+- Monitor DPI: 144 (150% scaling in Windows)
+- Detected DPI factor: 144 / 96 = 1.5
+- User widget scaling: 1.2
+- Final widget scaling: 1.5 × 1.2 = 1.8
+
+</Accordion>
+
+## Best Practices
+
+1. **Set scaling early**: Call scaling functions before creating windows for consistent initial rendering
+2. **Test on different DPIs**: Test your application on monitors with different scaling factors (100%, 125%, 150%, 200%)
+3. **Provide user controls**: Allow users to adjust scaling if the automatic detection doesn't match their preferences
+4. **Use relative layouts**: Use `pack()`, `grid()`, and `place()` with relative positioning for better scaling behavior
+5. **Avoid fixed sizes**: Prefer `fill="both"` and `expand=True` over fixed pixel dimensions
+
+## Common Use Cases
+
+### Accessibility - Larger UI
+
+```python
+import customtkinter as ctk
+
+# Make everything 40% larger for better readability
+ctk.set_widget_scaling(1.4)
+ctk.set_window_scaling(1.4)
+
+app = ctk.CTk()
+app.mainloop()
+```
+
+### Compact UI
+
+```python
+import customtkinter as ctk
+
+# Make everything 20% smaller for compact displays
+ctk.set_widget_scaling(0.8)
+ctk.set_window_scaling(0.8)
+
+app = ctk.CTk()
+app.mainloop()
+```
+
+### User Preference
+
+```python
+import customtkinter as ctk
+import json
+import os
+
+def load_scaling_preferences():
+    try:
+        with open("preferences.json", "r") as f:
+            prefs = json.load(f)
+            return prefs.get("ui_scaling", 1.0)
+    except:
+        return 1.0
+
+scaling = load_scaling_preferences()
+ctk.set_widget_scaling(scaling)
+ctk.set_window_scaling(scaling)
+
+app = ctk.CTk()
+app.mainloop()
+```
+
+## Related Functions
+
+- `set_widget_scaling(scaling_value)` - Set widget scaling factor
+- `set_window_scaling(scaling_value)` - Set window scaling factor  
+- `deactivate_automatic_dpi_awareness()` - Disable automatic DPI detection
+- `CTkFont` - Fonts scale automatically with widget scaling (see [Fonts and Images](/concepts/fonts-and-images))
+- `CTkImage` - Images scale automatically (see [Fonts and Images](/concepts/fonts-and-images))

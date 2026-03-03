@@ -1,0 +1,368 @@
+---
+title: CTkOptionMenu
+description: Dropdown menu widget for selecting one option from a list
+---
+
+## Overview
+
+CTkOptionMenu is a dropdown menu widget that displays a selected value and opens a menu of options when clicked. It's similar to a combobox but does not allow text input.
+
+## Constructor
+
+```python
+CTkOptionMenu(
+    master,
+    width=140,
+    height=28,
+    corner_radius=None,
+    bg_color="transparent",
+    fg_color=None,
+    button_color=None,
+    button_hover_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    dropdown_fg_color=None,
+    dropdown_hover_color=None,
+    dropdown_text_color=None,
+    font=None,
+    dropdown_font=None,
+    values=None,
+    variable=None,
+    state=tkinter.NORMAL,
+    hover=True,
+    command=None,
+    dynamic_resizing=True,
+    anchor="w",
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="140">
+  Width of the option menu in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="28">
+  Height of the option menu in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius in pixels. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the main button area. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the dropdown arrow button area. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Button color when hovering. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the displayed text. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Background color of the dropdown menu. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Hover color for dropdown menu items. If None, uses theme default
+</ParamField>
+
+<ParamField path="dropdown_text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color for dropdown menu items. If None, uses theme default
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the displayed text
+</ParamField>
+
+<ParamField path="dropdown_font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the dropdown menu items
+</ParamField>
+
+<ParamField path="values" type="Optional[list]" default="None">
+  List of string values to display in the dropdown. If None, defaults to ["CTkOptionMenu"]
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable (StringVar) to link with the selected value
+</ParamField>
+
+<ParamField path="state" type="str" default="tkinter.NORMAL">
+  State of the widget: tkinter.NORMAL or tkinter.DISABLED
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[str], Any], None]" default="None">
+  Callback function called when an option is selected. Receives the selected value as argument
+</ParamField>
+
+<ParamField path="dynamic_resizing" type="bool" default="True">
+  If True, widget resizes to fit content. If False, uses fixed width
+</ParamField>
+
+<ParamField path="anchor" type="str" default="'w'">
+  Text anchor position: "w" (left), "center", or "e" (right)
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the currently selected value.
+
+```python
+selected = optionmenu.get()
+```
+
+**Returns:** `str` - The currently selected value
+
+### set()
+
+Sets the displayed value.
+
+```python
+optionmenu.set("Option 2")
+```
+
+**Parameters:**
+- `value` (str): Value to display and set
+
+### configure()
+
+Configures widget parameters.
+
+```python
+optionmenu.configure(values=["New1", "New2"], fg_color="blue")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+values = optionmenu.cget("values")
+```
+
+## Usage Examples
+
+### Basic OptionMenu
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Option 1", "Option 2", "Option 3"]
+)
+optionmenu.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### OptionMenu with Command
+
+```python
+def on_option_selected(choice):
+    print(f"Selected: {choice}")
+    label.configure(text=f"You selected: {choice}")
+
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Python", "JavaScript", "Java", "C++"],
+    command=on_option_selected
+)
+optionmenu.pack(pady=20)
+optionmenu.set("Python")  # Set initial value
+
+label = ctk.CTkLabel(root, text="You selected: Python")
+label.pack()
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+language_var = tk.StringVar(value="Python")
+
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Python", "JavaScript", "Java", "C++"],
+    variable=language_var
+)
+optionmenu.pack(pady=20)
+
+# Access value through variable
+def get_selection():
+    print(f"Selected language: {language_var.get()}")
+
+btn = ctk.CTkButton(root, text="Get Selection", command=get_selection)
+btn.pack()
+```
+
+### Getting and Setting Values
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Small", "Medium", "Large"]
+)
+optionmenu.pack(pady=20)
+
+# Set to specific value
+optionmenu.set("Large")
+
+# Get current value
+def show_current():
+    current = optionmenu.get()
+    print(f"Current selection: {current}")
+
+show_btn = ctk.CTkButton(root, text="Show Current", command=show_current)
+show_btn.pack()
+```
+
+### Dynamically Updating Values
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Item 1", "Item 2"]
+)
+optionmenu.pack(pady=20)
+
+def add_option():
+    current_values = optionmenu.cget("values")
+    new_values = current_values + [f"Item {len(current_values) + 1}"]
+    optionmenu.configure(values=new_values)
+
+add_btn = ctk.CTkButton(root, text="Add Option", command=add_option)
+add_btn.pack()
+```
+
+### Custom Styled OptionMenu
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Option 1", "Option 2", "Option 3"],
+    width=200,
+    height=35,
+    corner_radius=10,
+    fg_color="#2c3e50",
+    button_color="#3498db",
+    button_hover_color="#2980b9",
+    text_color="white",
+    dropdown_fg_color="#34495e",
+    dropdown_hover_color="#3498db",
+    dropdown_text_color="white",
+    font=("Helvetica", 14),
+    dropdown_font=("Helvetica", 12)
+)
+optionmenu.pack(pady=20, padx=20)
+```
+
+### Theme Selector
+
+```python
+def change_theme(theme):
+    print(f"Changing theme to: {theme}")
+    if theme == "Dark":
+        ctk.set_appearance_mode("dark")
+    elif theme == "Light":
+        ctk.set_appearance_mode("light")
+    else:
+        ctk.set_appearance_mode("system")
+
+theme_menu = ctk.CTkOptionMenu(
+    root,
+    values=["System", "Light", "Dark"],
+    command=change_theme
+)
+theme_menu.pack(pady=20)
+theme_menu.set("System")
+```
+
+### Fixed Width OptionMenu
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Short", "Medium Length", "Very Long Option Name"],
+    width=250,
+    dynamic_resizing=False  # Fixed width
+)
+optionmenu.pack(pady=20, padx=20)
+```
+
+### Center-aligned OptionMenu
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Left", "Center", "Right"],
+    anchor="center"
+)
+optionmenu.pack(pady=20, padx=20)
+```
+
+### Country Selector
+
+```python
+countries = [
+    "United States",
+    "United Kingdom",
+    "Canada",
+    "Australia",
+    "Germany",
+    "France"
+]
+
+def on_country_selected(country):
+    print(f"Selected country: {country}")
+
+country_menu = ctk.CTkOptionMenu(
+    root,
+    values=countries,
+    command=on_country_selected,
+    width=200
+)
+country_menu.pack(pady=20)
+country_menu.set("United States")
+```
+
+### Disabled OptionMenu
+
+```python
+optionmenu = ctk.CTkOptionMenu(
+    root,
+    values=["Option 1", "Option 2"],
+    state=ctk.DISABLED
+)
+optionmenu.set("Option 1")
+optionmenu.pack(pady=20)
+```

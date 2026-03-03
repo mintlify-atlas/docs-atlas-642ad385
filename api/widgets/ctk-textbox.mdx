@@ -1,0 +1,316 @@
+---
+title: CTkTextbox
+description: Multiline textbox widget with scrollbars and all features of tkinter.Text
+---
+
+Textbox widget with automatic x and y scrollbars, rounded corners, and all text features of the tkinter.Text widget. Scrollbars only appear when needed. Text wraps at line end by default.
+
+## Constructor
+
+```python
+CTkTextbox(master, width, height, corner_radius, border_width, border_spacing,
+           bg_color, fg_color, border_color, text_color, scrollbar_button_color,
+           scrollbar_button_hover_color, font, activate_scrollbars, **kwargs)
+```
+
+<ParamField path="master" type="widget" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="200">
+  Width of the textbox in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="200">
+  Height of the textbox in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="int" default="theme">
+  Corner radius in pixels
+</ParamField>
+
+<ParamField path="border_width" type="int" default="theme">
+  Border width in pixels
+</ParamField>
+
+<ParamField path="border_spacing" type="int" default="3">
+  Spacing between border and inner text widget
+</ParamField>
+
+<ParamField path="bg_color" type="str | tuple[str, str]" default="transparent">
+  Background color
+</ParamField>
+
+<ParamField path="fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the textbox area
+</ParamField>
+
+<ParamField path="border_color" type="str | tuple[str, str]" default="theme">
+  Border color
+</ParamField>
+
+<ParamField path="text_color" type="str | tuple[str, str]" default="theme">
+  Color of the text
+</ParamField>
+
+<ParamField path="scrollbar_button_color" type="str | tuple[str, str]" default="theme">
+  Color of the scrollbar button
+</ParamField>
+
+<ParamField path="scrollbar_button_hover_color" type="str | tuple[str, str]" default="theme">
+  Hover color of the scrollbar button
+</ParamField>
+
+<ParamField path="font" type="tuple | CTkFont" default="default font">
+  Font of the text
+</ParamField>
+
+<ParamField path="activate_scrollbars" type="bool" default="True">
+  Enable automatic scrollbars when content overflows
+</ParamField>
+
+<ParamField path="**kwargs" type="various">
+  Additional tkinter.Text arguments: `autoseparators`, `cursor`, `exportselection`, `insertborderwidth`, `insertofftime`, `insertontime`, `insertwidth`, `maxundo`, `padx`, `pady`, `selectborderwidth`, `spacing1`, `spacing2`, `spacing3`, `state`, `tabs`, `takefocus`, `undo`, `wrap`, `xscrollcommand`, `yscrollcommand`
+</ParamField>
+
+## Methods
+
+CTkTextbox inherits all methods from tkinter.Text. Below are the most commonly used methods:
+
+### insert
+
+```python
+.insert(index, text, tags=None)
+```
+
+Insert text at the specified index.
+
+<ParamField path="index" type="str" required>
+  Position to insert text (e.g., "1.0" for beginning, "end" for end)
+</ParamField>
+
+<ParamField path="text" type="str" required>
+  Text to insert
+</ParamField>
+
+<ParamField path="tags" type="str | tuple" default="None">
+  Optional tags to apply to the inserted text
+</ParamField>
+
+### get
+
+```python
+.get(index1, index2=None) -> str
+```
+
+Get text between two indices.
+
+<ParamField path="index1" type="str" required>
+  Starting position (e.g., "1.0")
+</ParamField>
+
+<ParamField path="index2" type="str" default="None">
+  Ending position (defaults to one character after index1)
+</ParamField>
+
+### delete
+
+```python
+.delete(index1, index2=None)
+```
+
+Delete text between two indices.
+
+### configure
+
+```python
+.configure(**kwargs)
+```
+
+Configure widget parameters. Accepts all constructor parameters plus tkinter.Text parameters.
+
+### Tag Methods
+
+The following tag methods are inherited from tkinter.Text:
+
+- `.tag_add(tagName, index1, index2)` - Add a tag to text range
+- `.tag_config(tagName, **kwargs)` - Configure tag appearance (note: font option is forbidden)
+- `.tag_delete(*tagName)` - Delete tags
+- `.tag_remove(tagName, index1, index2)` - Remove tag from text range
+- `.tag_bind(tagName, sequence, func, add=None)` - Bind event to tagged text
+- `.tag_names(index=None)` - Get tag names
+
+### Search and Navigation
+
+- `.search(pattern, index, **kwargs)` - Search for text pattern
+- `.see(index)` - Scroll to make index visible
+- `.index(i)` - Get canonical index
+
+### Edit Methods
+
+- `.edit_undo()` - Undo last change
+- `.edit_redo()` - Redo last undone change
+- `.edit_modified(arg=None)` - Get/set modified flag
+- `.edit_separator()` - Insert undo separator
+
+### View Methods
+
+- `.xview(*args)` - Query/modify horizontal view
+- `.yview(*args)` - Query/modify vertical view
+
+## Scrollbars
+
+CTkTextbox automatically manages two CTkScrollbar widgets:
+
+- **Vertical scrollbar**: Appears when content height exceeds widget height
+- **Horizontal scrollbar**: Appears when content width exceeds widget width (requires `wrap="none"`)
+
+Scrollbars are automatically hidden when not needed and update every 200ms.
+
+## Usage Examples
+
+### Basic Text Input
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(app, width=400, height=200)
+textbox.pack(pady=20, padx=20)
+
+# Insert some text
+textbox.insert("1.0", "This is a textbox\nwith multiple lines")
+
+app.mainloop()
+```
+
+### Get Text Content
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(app, width=400, height=200)
+textbox.pack(pady=20, padx=20)
+
+def get_text():
+    # Get all text from beginning to end
+    content = textbox.get("1.0", "end")
+    print(content)
+
+button = ctk.CTkButton(app, text="Get Text", command=get_text)
+button.pack(pady=10)
+
+app.mainloop()
+```
+
+### Disable Text Wrapping
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+# Set wrap="none" to enable horizontal scrollbar
+textbox = ctk.CTkTextbox(app, width=400, height=200, wrap="none")
+textbox.pack(pady=20, padx=20)
+
+textbox.insert("1.0", "This is a very long line that will require horizontal scrolling when wrap is disabled")
+
+app.mainloop()
+```
+
+### Using Text Tags for Styling
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(app, width=400, height=200)
+textbox.pack(pady=20, padx=20)
+
+# Insert text
+textbox.insert("1.0", "Normal text\n")
+textbox.insert("end", "Bold text\n", "bold")
+textbox.insert("end", "Red text\n", "red")
+
+# Configure tags
+textbox.tag_config("bold", foreground="white", background="blue")
+textbox.tag_config("red", foreground="red")
+
+app.mainloop()
+```
+
+### Read-Only Textbox
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(app, width=400, height=200, state="disabled")
+textbox.pack(pady=20, padx=20)
+
+# To insert text in disabled state:
+textbox.configure(state="normal")
+textbox.insert("1.0", "This text cannot be edited")
+textbox.configure(state="disabled")
+
+app.mainloop()
+```
+
+### Custom Scrollbar Colors
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(
+    app,
+    width=400,
+    height=200,
+    scrollbar_button_color="#0066cc",
+    scrollbar_button_hover_color="#0052a3"
+)
+textbox.pack(pady=20, padx=20)
+
+# Add enough text to trigger scrollbar
+for i in range(30):
+    textbox.insert("end", f"Line {i+1}\n")
+
+app.mainloop()
+```
+
+### Undo/Redo Support
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+
+textbox = ctk.CTkTextbox(app, width=400, height=200, undo=True)
+textbox.pack(pady=20, padx=20)
+
+undo_btn = ctk.CTkButton(app, text="Undo", command=textbox.edit_undo)
+undo_btn.pack(side="left", padx=5)
+
+redo_btn = ctk.CTkButton(app, text="Redo", command=textbox.edit_redo)
+redo_btn.pack(side="left", padx=5)
+
+app.mainloop()
+```
+
+## Text Widget Indices
+
+When working with text methods, indices use the format `"line.column"`:
+
+- `"1.0"` - Beginning of the first line
+- `"end"` - End of all text
+- `"insert"` - Current cursor position
+- `"2.5"` - Line 2, column 5
+
+For detailed tkinter.Text documentation, see: https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/text.html

@@ -1,0 +1,370 @@
+---
+title: CTkSlider
+description: Slider widget for selecting numeric values from a range
+---
+
+## Overview
+
+CTkSlider is a slider widget for selecting numeric values from a continuous or stepped range. Supports both horizontal and vertical orientations with customizable styling.
+
+## Constructor
+
+```python
+CTkSlider(
+    master,
+    width=None,
+    height=None,
+    corner_radius=None,
+    button_corner_radius=None,
+    border_width=None,
+    button_length=None,
+    bg_color="transparent",
+    fg_color=None,
+    border_color="transparent",
+    progress_color=None,
+    button_color=None,
+    button_hover_color=None,
+    from_=0,
+    to=1,
+    state="normal",
+    number_of_steps=None,
+    hover=True,
+    command=None,
+    variable=None,
+    orientation="horizontal",
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="Optional[int]" default="None">
+  Width in pixels. Default is 200 for horizontal, 16 for vertical
+</ParamField>
+
+<ParamField path="height" type="Optional[int]" default="None">
+  Height in pixels. Default is 16 for horizontal, 200 for vertical
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius of the slider track. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_corner_radius" type="Optional[int]" default="None">
+  Corner radius of the slider button. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width" type="Optional[int]" default="None">
+  Border width of the slider. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_length" type="Optional[int]" default="None">
+  Length of the slider button. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the slider track. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Border color of the slider
+</ParamField>
+
+<ParamField path="progress_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the progress/filled part of the slider. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the slider button. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Button color when hovering. If None, uses theme default
+</ParamField>
+
+<ParamField path="from_" type="int" default="0">
+  Minimum value of the slider range
+</ParamField>
+
+<ParamField path="to" type="int" default="1">
+  Maximum value of the slider range
+</ParamField>
+
+<ParamField path="state" type="str" default="'normal'">
+  State of the widget: "normal" or "disabled"
+</ParamField>
+
+<ParamField path="number_of_steps" type="Union[int, None]" default="None">
+  Number of discrete steps. If None, slider is continuous
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect
+</ParamField>
+
+<ParamField path="command" type="Union[Callable[[float], Any], None]" default="None">
+  Callback function called when slider value changes. Receives the new value as argument
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable (IntVar or DoubleVar) to link with the slider value
+</ParamField>
+
+<ParamField path="orientation" type="str" default="'horizontal'">
+  Orientation of the slider: "horizontal" or "vertical"
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the current slider value.
+
+```python
+value = slider.get()
+```
+
+**Returns:** `float` - The current value
+
+### set()
+
+Sets the slider to a specific value.
+
+```python
+slider.set(0.75)
+```
+
+**Parameters:**
+- `output_value` (float): Value to set (will be clamped to the slider's range)
+
+### configure()
+
+Configures widget parameters.
+
+```python
+slider.configure(from_=0, to=100, number_of_steps=10)
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+max_value = slider.cget("to")
+```
+
+## Usage Examples
+
+### Basic Horizontal Slider
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+slider = ctk.CTkSlider(root, from_=0, to=100)
+slider.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### Slider with Command Callback
+
+```python
+def on_slider_change(value):
+    print(f"Slider value: {value:.2f}")
+    label.configure(text=f"Volume: {int(value)}%")
+
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    command=on_slider_change
+)
+slider.pack(pady=20)
+slider.set(50)  # Set initial value
+
+label = ctk.CTkLabel(root, text="Volume: 50%")
+label.pack()
+```
+
+### Slider with Steps
+
+```python
+# Create slider with 10 discrete steps
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    number_of_steps=10  # Only allows values: 0, 10, 20, 30...100
+)
+slider.pack(pady=20, padx=40)
+```
+
+### Vertical Slider
+
+```python
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    orientation="vertical",
+    height=200,
+    width=20
+)
+slider.pack(pady=20, padx=20)
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+# Create variable to track value
+volume_var = tk.DoubleVar(value=50)
+
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    variable=volume_var
+)
+slider.pack(pady=20)
+
+# Access value through variable
+def get_volume():
+    print(f"Current volume: {volume_var.get()}")
+
+btn = ctk.CTkButton(root, text="Get Volume", command=get_volume)
+btn.pack()
+```
+
+### Slider with Live Value Display
+
+```python
+import tkinter as tk
+
+value_var = tk.DoubleVar(value=0)
+
+def update_label(value):
+    value_var.set(value)
+
+slider = ctk.CTkSlider(
+    root,
+    from_=-50,
+    to=50,
+    command=update_label
+)
+slider.pack(pady=20, padx=40)
+slider.set(0)
+
+label = ctk.CTkLabel(root, textvariable=value_var)
+label.pack()
+```
+
+### Custom Styled Slider
+
+```python
+slider = ctk.CTkSlider(
+    root,
+    width=300,
+    height=20,
+    corner_radius=10,
+    button_corner_radius=10,
+    border_width=3,
+    button_length=30,
+    fg_color="#34495e",
+    progress_color="#3498db",
+    button_color="#2ecc71",
+    button_hover_color="#27ae60",
+    from_=0,
+    to=100
+)
+slider.pack(pady=20, padx=20)
+```
+
+### Temperature Control Slider
+
+```python
+import tkinter as tk
+
+temp_var = tk.IntVar(value=20)
+
+def update_temperature(value):
+    temp_var.set(int(value))
+
+temp_label = ctk.CTkLabel(root, text="Temperature Control")
+temp_label.pack(pady=(20, 5))
+
+slider = ctk.CTkSlider(
+    root,
+    from_=16,
+    to=30,
+    number_of_steps=14,
+    command=update_temperature
+)
+slider.pack(padx=40)
+slider.set(20)
+
+value_label = ctk.CTkLabel(root, textvariable=temp_var)
+value_label.pack(pady=(5, 20))
+```
+
+### Brightness Control with Percentage
+
+```python
+def update_brightness(value):
+    percentage = int(value)
+    label.configure(text=f"Brightness: {percentage}%")
+    # Apply brightness value to your application
+
+ctk.CTkLabel(root, text="Screen Brightness").pack(pady=(20, 5))
+
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    command=update_brightness,
+    width=300
+)
+slider.pack(padx=20)
+slider.set(80)
+
+label = ctk.CTkLabel(root, text="Brightness: 80%")
+label.pack(pady=(5, 20))
+```
+
+### Programmatically Set Value
+
+```python
+slider = ctk.CTkSlider(root, from_=0, to=100)
+slider.pack(pady=20, padx=40)
+
+# Set to specific value
+slider.set(75)
+
+# Get current value
+current = slider.get()
+print(f"Current value: {current}")
+```
+
+### Disabled Slider
+
+```python
+slider = ctk.CTkSlider(
+    root,
+    from_=0,
+    to=100,
+    state="disabled"
+)
+slider.set(50)
+slider.pack(pady=20, padx=40)
+```

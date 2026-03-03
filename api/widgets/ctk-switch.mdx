@@ -1,0 +1,369 @@
+---
+title: CTkSwitch
+description: Toggle switch widget with on/off states and variable support
+---
+
+## Overview
+
+CTkSwitch is a toggle switch widget with modern iOS-style styling. It provides an intuitive on/off control with smooth visual feedback and support for variable binding.
+
+## Constructor
+
+```python
+CTkSwitch(
+    master,
+    width=100,
+    height=24,
+    switch_width=36,
+    switch_height=18,
+    corner_radius=None,
+    border_width=None,
+    button_length=None,
+    bg_color="transparent",
+    fg_color=None,
+    border_color="transparent",
+    progress_color=None,
+    button_color=None,
+    button_hover_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    text="CTkSwitch",
+    font=None,
+    textvariable=None,
+    onvalue=1,
+    offvalue=0,
+    variable=None,
+    hover=True,
+    command=None,
+    state=tkinter.NORMAL,
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="100">
+  Total width of the switch widget including label
+</ParamField>
+
+<ParamField path="height" type="int" default="24">
+  Height of the switch widget
+</ParamField>
+
+<ParamField path="switch_width" type="int" default="36">
+  Width of the switch button
+</ParamField>
+
+<ParamField path="switch_height" type="int" default="18">
+  Height of the switch button
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius of the switch. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width" type="Optional[int]" default="None">
+  Border width of the switch. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_length" type="Optional[int]" default="None">
+  Length of the sliding button. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Foreground color of the switch track. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Border color of the switch
+</ParamField>
+
+<ParamField path="progress_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the progress/filled part when switch is on. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the sliding button. If None, uses theme default
+</ParamField>
+
+<ParamField path="button_hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Button color when hovering. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the label text. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="text" type="str" default="'CTkSwitch'">
+  Label text displayed next to the switch
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the label text
+</ParamField>
+
+<ParamField path="textvariable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable to link with the label text
+</ParamField>
+
+<ParamField path="onvalue" type="Union[int, str]" default="1">
+  Value when switch is on
+</ParamField>
+
+<ParamField path="offvalue" type="Union[int, str]" default="0">
+  Value when switch is off
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable to track switch state
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect
+</ParamField>
+
+<ParamField path="command" type="Union[Callable, Any]" default="None">
+  Callback function called when switch is toggled. Takes no arguments
+</ParamField>
+
+<ParamField path="state" type="str" default="tkinter.NORMAL">
+  State of the widget: tkinter.NORMAL or tkinter.DISABLED
+</ParamField>
+
+## Methods
+
+### get()
+
+Returns the current value (onvalue if on, offvalue if off).
+
+```python
+value = switch.get()
+```
+
+**Returns:** `Union[int, str]` - The onvalue or offvalue
+
+### select()
+
+Turns the switch on (sets to onvalue).
+
+```python
+switch.select()
+```
+
+### deselect()
+
+Turns the switch off (sets to offvalue).
+
+```python
+switch.deselect()
+```
+
+### toggle()
+
+Toggles the switch state and calls the command callback.
+
+```python
+switch.toggle()
+```
+
+### configure()
+
+Configures widget parameters.
+
+```python
+switch.configure(text="New label", fg_color="blue")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+current_state = switch.cget("state")
+```
+
+## Usage Examples
+
+### Basic Switch
+
+```python
+import customtkinter as ctk
+
+root = ctk.CTk()
+
+switch = ctk.CTkSwitch(root, text="Dark Mode")
+switch.pack(pady=20, padx=20)
+
+root.mainloop()
+```
+
+### Switch with Command
+
+```python
+def on_switch_toggle():
+    if switch.get() == 1:
+        print("Switch is ON")
+    else:
+        print("Switch is OFF")
+
+switch = ctk.CTkSwitch(
+    root,
+    text="Enable Notifications",
+    command=on_switch_toggle
+)
+switch.pack(pady=20)
+```
+
+### Using with Variable
+
+```python
+import tkinter as tk
+
+# Create variable to track state
+notifications_var = tk.IntVar(value=1)
+
+switch = ctk.CTkSwitch(
+    root,
+    text="Notifications",
+    variable=notifications_var,
+    onvalue=1,
+    offvalue=0
+)
+switch.pack(pady=20)
+
+# Access state through variable
+def save_settings():
+    if notifications_var.get() == 1:
+        print("Notifications enabled")
+    else:
+        print("Notifications disabled")
+
+save_btn = ctk.CTkButton(root, text="Save", command=save_settings)
+save_btn.pack()
+```
+
+### Programmatically Control Switch
+
+```python
+switch = ctk.CTkSwitch(root, text="Auto-save")
+switch.pack(pady=20)
+
+# Turn switch on
+switch.select()
+
+# Turn switch off
+switch.deselect()
+
+# Toggle switch
+switch.toggle()
+
+# Check current state
+if switch.get() == 1:
+    print("Switch is on")
+```
+
+### Custom Styled Switch
+
+```python
+switch = ctk.CTkSwitch(
+    root,
+    text="Premium Feature",
+    switch_width=48,
+    switch_height=24,
+    corner_radius=12,
+    button_length=20,
+    fg_color="#95a5a6",
+    progress_color="#2ecc71",
+    button_color="white",
+    button_hover_color="#ecf0f1",
+    text_color="#2c3e50",
+    font=("Helvetica", 14, "bold")
+)
+switch.pack(pady=20, padx=20)
+```
+
+### Multiple Switches for Settings
+
+```python
+import tkinter as tk
+
+settings = {
+    "Auto-save": tk.IntVar(value=1),
+    "Dark mode": tk.IntVar(value=0),
+    "Show notifications": tk.IntVar(value=1),
+    "Enable sounds": tk.IntVar(value=0)
+}
+
+for setting, var in settings.items():
+    switch = ctk.CTkSwitch(
+        root,
+        text=setting,
+        variable=var
+    )
+    switch.pack(pady=10, padx=20, anchor="w")
+
+def apply_settings():
+    for setting, var in settings.items():
+        status = "enabled" if var.get() == 1 else "disabled"
+        print(f"{setting}: {status}")
+
+apply_btn = ctk.CTkButton(root, text="Apply Settings", command=apply_settings)
+apply_btn.pack(pady=20)
+```
+
+### Switch with String Values
+
+```python
+import tkinter as tk
+
+mode_var = tk.StringVar(value="light")
+
+switch = ctk.CTkSwitch(
+    root,
+    text="Theme",
+    variable=mode_var,
+    onvalue="dark",
+    offvalue="light"
+)
+switch.pack(pady=20)
+
+def apply_theme():
+    theme = mode_var.get()
+    print(f"Applying {theme} theme")
+
+apply_btn = ctk.CTkButton(root, text="Apply", command=apply_theme)
+apply_btn.pack()
+```
+
+### Pre-selected Switch
+
+```python
+# Create switch in ON state
+switch = ctk.CTkSwitch(root, text="Feature enabled")
+switch.select()  # Turn it on
+switch.pack(pady=20)
+```
+
+### Disabled Switch
+
+```python
+switch = ctk.CTkSwitch(
+    root,
+    text="Premium Only (Disabled)",
+    state=ctk.DISABLED
+)
+switch.select()  # Can pre-select even when disabled
+switch.pack(pady=20)
+```

@@ -1,0 +1,367 @@
+---
+title: CTkRadioButton
+description: Radio button widget for mutually exclusive selections with variable support
+---
+
+## Overview
+
+CTkRadioButton is a radio button widget with modern styling. Radio buttons are typically used in groups where only one option can be selected at a time. Each radio button has a unique value that is set to a shared variable when selected.
+
+## Constructor
+
+```python
+CTkRadioButton(
+    master,
+    width=100,
+    height=22,
+    radiobutton_width=22,
+    radiobutton_height=22,
+    corner_radius=None,
+    border_width_unchecked=None,
+    border_width_checked=None,
+    bg_color="transparent",
+    fg_color=None,
+    hover_color=None,
+    border_color=None,
+    text_color=None,
+    text_color_disabled=None,
+    text="CTkRadioButton",
+    font=None,
+    textvariable=None,
+    variable=None,
+    value=0,
+    state=tkinter.NORMAL,
+    hover=True,
+    command=None,
+    **kwargs
+)
+```
+
+## Parameters
+
+<ParamField path="master" type="Any" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="100">
+  Total width of the radio button widget including label
+</ParamField>
+
+<ParamField path="height" type="int" default="22">
+  Height of the radio button widget
+</ParamField>
+
+<ParamField path="radiobutton_width" type="int" default="22">
+  Width of the radio button circle
+</ParamField>
+
+<ParamField path="radiobutton_height" type="int" default="22">
+  Height of the radio button circle
+</ParamField>
+
+<ParamField path="corner_radius" type="Optional[int]" default="None">
+  Corner radius (higher values make it more circular). If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width_unchecked" type="Optional[int]" default="None">
+  Border width when not selected. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_width_checked" type="Optional[int]" default="None">
+  Border width when selected. If None, uses theme default
+</ParamField>
+
+<ParamField path="bg_color" type="Union[str, Tuple[str, str]]" default="'transparent'">
+  Background color behind the widget
+</ParamField>
+
+<ParamField path="fg_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the radio button when selected. If None, uses theme default
+</ParamField>
+
+<ParamField path="hover_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color when hovering. If None, uses theme default
+</ParamField>
+
+<ParamField path="border_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Border color when not selected. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Color of the label text. If None, uses theme default
+</ParamField>
+
+<ParamField path="text_color_disabled" type="Optional[Union[str, Tuple[str, str]]]" default="None">
+  Text color when disabled. If None, uses theme default
+</ParamField>
+
+<ParamField path="text" type="str" default="'CTkRadioButton'">
+  Label text displayed next to the radio button
+</ParamField>
+
+<ParamField path="font" type="Optional[Union[tuple, CTkFont]]" default="None">
+  Font for the label text
+</ParamField>
+
+<ParamField path="textvariable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable to link with the label text
+</ParamField>
+
+<ParamField path="variable" type="Union[tkinter.Variable, None]" default="None">
+  Tkinter variable shared among radio buttons in the same group. When this radio button is selected, the variable is set to this button's value
+</ParamField>
+
+<ParamField path="value" type="Union[int, str]" default="0">
+  Unique value for this radio button. When selected, the shared variable is set to this value
+</ParamField>
+
+<ParamField path="state" type="str" default="tkinter.NORMAL">
+  State of the widget: tkinter.NORMAL or tkinter.DISABLED
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable/disable hover effect
+</ParamField>
+
+<ParamField path="command" type="Union[Callable, Any]" default="None">
+  Callback function called when radio button is clicked. Takes no arguments
+</ParamField>
+
+## Methods
+
+### select()
+
+Selects this radio button and sets the variable to this button's value.
+
+```python
+radiobutton.select()
+```
+
+### deselect()
+
+Deselects this radio button.
+
+```python
+radiobutton.deselect()
+```
+
+### invoke()
+
+Selects this radio button and calls the command callback.
+
+```python
+radiobutton.invoke()
+```
+
+### configure()
+
+Configures widget parameters.
+
+```python
+radiobutton.configure(text="New label", fg_color="blue")
+```
+
+### cget()
+
+Returns the value of a configuration parameter.
+
+```python
+current_value = radiobutton.cget("value")
+```
+
+## Usage Examples
+
+### Basic Radio Button Group
+
+```python
+import customtkinter as ctk
+import tkinter as tk
+
+root = ctk.CTk()
+
+# Shared variable for the radio button group
+radio_var = tk.IntVar(value=0)
+
+radio1 = ctk.CTkRadioButton(
+    root,
+    text="Option 1",
+    variable=radio_var,
+    value=1
+)
+radio1.pack(pady=10, padx=20)
+
+radio2 = ctk.CTkRadioButton(
+    root,
+    text="Option 2",
+    variable=radio_var,
+    value=2
+)
+radio2.pack(pady=10, padx=20)
+
+radio3 = ctk.CTkRadioButton(
+    root,
+    text="Option 3",
+    variable=radio_var,
+    value=3
+)
+radio3.pack(pady=10, padx=20)
+
+root.mainloop()
+```
+
+### Radio Buttons with Command
+
+```python
+import tkinter as tk
+
+radio_var = tk.StringVar(value="small")
+
+def on_radio_change():
+    print(f"Selected size: {radio_var.get()}")
+
+sizes = [("Small", "small"), ("Medium", "medium"), ("Large", "large")]
+
+for text, value in sizes:
+    radio = ctk.CTkRadioButton(
+        root,
+        text=text,
+        variable=radio_var,
+        value=value,
+        command=on_radio_change
+    )
+    radio.pack(pady=5, padx=20, anchor="w")
+```
+
+### Getting Selected Value
+
+```python
+import tkinter as tk
+
+radio_var = tk.StringVar(value="python")
+
+languages = [
+    ("Python", "python"),
+    ("JavaScript", "javascript"),
+    ("Java", "java"),
+    ("C++", "cpp")
+]
+
+for text, value in languages:
+    radio = ctk.CTkRadioButton(
+        root,
+        text=text,
+        variable=radio_var,
+        value=value
+    )
+    radio.pack(pady=5, padx=20, anchor="w")
+
+def get_selection():
+    selected = radio_var.get()
+    print(f"Selected language: {selected}")
+
+btn = ctk.CTkButton(root, text="Get Selection", command=get_selection)
+btn.pack(pady=20)
+```
+
+### Programmatically Select Radio Button
+
+```python
+import tkinter as tk
+
+radio_var = tk.IntVar()
+
+radio1 = ctk.CTkRadioButton(root, text="Option 1", variable=radio_var, value=1)
+radio1.pack(pady=10)
+
+radio2 = ctk.CTkRadioButton(root, text="Option 2", variable=radio_var, value=2)
+radio2.pack(pady=10)
+
+# Select option 2 programmatically
+radio_var.set(2)
+# or
+radio2.select()
+```
+
+### Custom Styled Radio Buttons
+
+```python
+import tkinter as tk
+
+radio_var = tk.StringVar(value="option1")
+
+options = [
+    ("Premium Plan", "premium"),
+    ("Standard Plan", "standard"),
+    ("Basic Plan", "basic")
+]
+
+for text, value in options:
+    radio = ctk.CTkRadioButton(
+        root,
+        text=text,
+        variable=radio_var,
+        value=value,
+        radiobutton_width=24,
+        radiobutton_height=24,
+        corner_radius=12,
+        border_width_checked=6,
+        border_width_unchecked=3,
+        fg_color="#2ecc71",
+        hover_color="#27ae60",
+        border_color="#3498db",
+        text_color="#2c3e50",
+        font=("Helvetica", 14)
+    )
+    radio.pack(pady=10, padx=20, anchor="w")
+```
+
+### Radio Buttons with Integer Values
+
+```python
+import tkinter as tk
+
+difficulty_var = tk.IntVar(value=1)
+
+difficulties = [
+    ("Easy", 1),
+    ("Medium", 2),
+    ("Hard", 3),
+    ("Expert", 4)
+]
+
+for text, value in difficulties:
+    radio = ctk.CTkRadioButton(
+        root,
+        text=text,
+        variable=difficulty_var,
+        value=value
+    )
+    radio.pack(pady=5, padx=20, anchor="w")
+
+def start_game():
+    level = difficulty_var.get()
+    print(f"Starting game at difficulty level: {level}")
+
+start_btn = ctk.CTkButton(root, text="Start Game", command=start_game)
+start_btn.pack(pady=20)
+```
+
+### Disabled Radio Button
+
+```python
+import tkinter as tk
+
+radio_var = tk.IntVar(value=1)
+
+radio1 = ctk.CTkRadioButton(root, text="Available", variable=radio_var, value=1)
+radio1.pack(pady=10)
+
+radio2 = ctk.CTkRadioButton(
+    root,
+    text="Coming Soon",
+    variable=radio_var,
+    value=2,
+    state=ctk.DISABLED
+)
+radio2.pack(pady=10)
+```

@@ -1,0 +1,300 @@
+---
+title: CTkScrollbar
+description: Scrollbar widget with rounded corners and configurable spacing
+---
+
+Scrollbar widget with rounded corners and configurable spacing. Connects to scrollable widgets through the `.set()` method and the `command` parameter.
+
+## Constructor
+
+```python
+CTkScrollbar(master, width, height, corner_radius, border_spacing,
+             minimum_pixel_length, bg_color, fg_color, button_color,
+             button_hover_color, hover, command, orientation)
+```
+
+<ParamField path="master" type="widget" required>
+  Parent widget
+</ParamField>
+
+<ParamField path="width" type="int" default="16 (vertical) / 200 (horizontal)">
+  Width of the scrollbar in pixels
+</ParamField>
+
+<ParamField path="height" type="int" default="200 (vertical) / 16 (horizontal)">
+  Height of the scrollbar in pixels
+</ParamField>
+
+<ParamField path="corner_radius" type="int" default="theme">
+  Corner radius in pixels
+</ParamField>
+
+<ParamField path="border_spacing" type="int" default="theme">
+  Spacing between scrollbar button and border
+</ParamField>
+
+<ParamField path="minimum_pixel_length" type="int" default="20">
+  Minimum pixel length of the scrollbar button
+</ParamField>
+
+<ParamField path="bg_color" type="str | tuple[str, str]" default="transparent">
+  Background color
+</ParamField>
+
+<ParamField path="fg_color" type="str | tuple[str, str]" default="theme">
+  Foreground color of the scrollbar track
+</ParamField>
+
+<ParamField path="button_color" type="str | tuple[str, str]" default="theme">
+  Color of the scrollbar button
+</ParamField>
+
+<ParamField path="button_hover_color" type="str | tuple[str, str]" default="theme">
+  Hover color of the scrollbar button
+</ParamField>
+
+<ParamField path="hover" type="bool" default="True">
+  Enable hover effect on the scrollbar button
+</ParamField>
+
+<ParamField path="command" type="callable" default="None">
+  Callback function for scrolling commands. Typically set to the scrollable widget's `.xview` or `.yview` method
+</ParamField>
+
+<ParamField path="orientation" type="str" default="vertical">
+  Orientation of the scrollbar: "vertical" or "horizontal"
+</ParamField>
+
+## Methods
+
+### set
+
+```python
+.set(start_value, end_value)
+```
+
+Update the scrollbar position. Typically called by the scrollable widget's scroll command.
+
+<ParamField path="start_value" type="float" required>
+  Starting position of the scrollbar button (0.0 to 1.0)
+</ParamField>
+
+<ParamField path="end_value" type="float" required>
+  Ending position of the scrollbar button (0.0 to 1.0)
+</ParamField>
+
+### get
+
+```python
+.get() -> tuple[float, float]
+```
+
+Get the current scrollbar position as a tuple of (start_value, end_value).
+
+### configure
+
+```python
+.configure(**kwargs)
+```
+
+Configure widget parameters. Accepts all constructor parameters.
+
+### cget
+
+```python
+.cget(attribute_name) -> any
+```
+
+Get the value of a widget attribute.
+
+## Usage Examples
+
+### Basic Vertical Scrollbar with Canvas
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+# Create a canvas
+canvas = tkinter.Canvas(app, width=300, height=400)
+canvas.pack(side="left", fill="both", expand=True)
+
+# Create vertical scrollbar
+scrollbar = ctk.CTkScrollbar(
+    app,
+    orientation="vertical",
+    command=canvas.yview
+)
+scrollbar.pack(side="right", fill="y")
+
+# Connect canvas to scrollbar
+canvas.configure(yscrollcommand=scrollbar.set)
+
+# Add content to canvas
+for i in range(50):
+    canvas.create_text(150, i * 30, text=f"Item {i+1}")
+
+canvas.configure(scrollregion=canvas.bbox("all"))
+
+app.mainloop()
+```
+
+### Horizontal Scrollbar
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+frame = ctk.CTkFrame(app)
+frame.pack(fill="both", expand=True)
+
+canvas = tkinter.Canvas(frame, width=400, height=200)
+canvas.pack(side="top", fill="both", expand=True)
+
+# Create horizontal scrollbar
+scrollbar = ctk.CTkScrollbar(
+    frame,
+    orientation="horizontal",
+    command=canvas.xview
+)
+scrollbar.pack(side="bottom", fill="x")
+
+canvas.configure(xscrollcommand=scrollbar.set)
+
+# Add wide content
+for i in range(20):
+    canvas.create_text(i * 100, 100, text=f"Column {i+1}")
+
+canvas.configure(scrollregion=canvas.bbox("all"))
+
+app.mainloop()
+```
+
+### Custom Colors
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+canvas = tkinter.Canvas(app, width=300, height=400)
+canvas.pack(side="left", fill="both", expand=True)
+
+scrollbar = ctk.CTkScrollbar(
+    app,
+    orientation="vertical",
+    command=canvas.yview,
+    fg_color="#2b2b2b",
+    button_color="#0066cc",
+    button_hover_color="#0052a3"
+)
+scrollbar.pack(side="right", fill="y")
+
+canvas.configure(yscrollcommand=scrollbar.set)
+
+for i in range(50):
+    canvas.create_text(150, i * 30, text=f"Item {i+1}")
+
+canvas.configure(scrollregion=canvas.bbox("all"))
+
+app.mainloop()
+```
+
+### Both Scrollbars (Vertical and Horizontal)
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+frame = ctk.CTkFrame(app)
+frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+canvas = tkinter.Canvas(frame, width=400, height=300, bg="#2b2b2b")
+canvas.grid(row=0, column=0, sticky="nsew")
+
+# Vertical scrollbar
+v_scrollbar = ctk.CTkScrollbar(
+    frame,
+    orientation="vertical",
+    command=canvas.yview
+)
+v_scrollbar.grid(row=0, column=1, sticky="ns")
+
+# Horizontal scrollbar
+h_scrollbar = ctk.CTkScrollbar(
+    frame,
+    orientation="horizontal",
+    command=canvas.xview
+)
+h_scrollbar.grid(row=1, column=0, sticky="ew")
+
+canvas.configure(
+    yscrollcommand=v_scrollbar.set,
+    xscrollcommand=h_scrollbar.set
+)
+
+frame.grid_rowconfigure(0, weight=1)
+frame.grid_columnconfigure(0, weight=1)
+
+# Add content that requires both scrollbars
+for i in range(30):
+    for j in range(30):
+        canvas.create_text(j * 100, i * 50, text=f"({i},{j})")
+
+canvas.configure(scrollregion=canvas.bbox("all"))
+
+app.mainloop()
+```
+
+### Disable Hover Effect
+
+```python
+import customtkinter as ctk
+import tkinter
+
+app = ctk.CTk()
+
+canvas = tkinter.Canvas(app, width=300, height=400)
+canvas.pack(side="left", fill="both", expand=True)
+
+scrollbar = ctk.CTkScrollbar(
+    app,
+    orientation="vertical",
+    command=canvas.yview,
+    hover=False  # Disable hover effect
+)
+scrollbar.pack(side="right", fill="y")
+
+canvas.configure(yscrollcommand=scrollbar.set)
+
+for i in range(50):
+    canvas.create_text(150, i * 30, text=f"Item {i+1}")
+
+canvas.configure(scrollregion=canvas.bbox("all"))
+
+app.mainloop()
+```
+
+## Connection Pattern
+
+To properly connect a scrollbar to a scrollable widget:
+
+1. Set the scrollbar's `command` parameter to the widget's view method (`.xview` or `.yview`)
+2. Set the widget's scroll command to the scrollbar's `.set()` method
+
+```python
+# For vertical scrolling:
+scrollbar = CTkScrollbar(parent, command=widget.yview)
+widget.configure(yscrollcommand=scrollbar.set)
+
+# For horizontal scrolling:
+scrollbar = CTkScrollbar(parent, orientation="horizontal", command=widget.xview)
+widget.configure(xscrollcommand=scrollbar.set)
+```

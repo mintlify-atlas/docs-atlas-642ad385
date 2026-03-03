@@ -1,0 +1,124 @@
+---
+title: Windows
+description: Main application windows and dialog components for CustomTkinter
+---
+
+Window widgets form the foundation of your CustomTkinter application. They provide the top-level containers for all other widgets.
+
+## Available Windows
+
+<CardGroup cols={2}>
+  <Card title="CTk" icon="window-maximize" href="/api/windows/ctk">
+    Main application window - the root container for your app
+  </Card>
+  
+  <Card title="CTkToplevel" icon="window-restore" href="/api/windows/ctk-toplevel">
+    Secondary windows for dialogs and additional screens
+  </Card>
+  
+  <Card title="CTkInputDialog" icon="message-question" href="/api/windows/ctk-input-dialog">
+    Pre-built dialog for collecting simple user input
+  </Card>
+</CardGroup>
+
+## CTk
+
+The main application window that serves as the root container.
+
+```python
+import customtkinter as ctk
+
+app = ctk.CTk()
+app.title("My Application")
+app.geometry("800x600")
+
+# Add your widgets here
+
+app.mainloop()
+```
+
+**Key Features:**
+- Root window for your application
+- Supports appearance mode and theming
+- Compatible with all Tkinter geometry managers
+- Automatic DPI scaling
+
+[View Full API Reference →](/api/windows/ctk)
+
+## CTkToplevel
+
+Creates additional windows for dialogs, settings panels, or multi-window applications.
+
+```python
+def open_settings():
+    settings_window = ctk.CTkToplevel(app)
+    settings_window.title("Settings")
+    settings_window.geometry("400x300")
+    
+    label = ctk.CTkLabel(settings_window, text="Settings Panel")
+    label.pack(pady=20)
+
+button = ctk.CTkButton(app, text="Open Settings", command=open_settings)
+button.pack()
+```
+
+**Key Features:**
+- Independent secondary windows
+- Inherits appearance mode from parent
+- Can be modal or non-modal
+- Supports all standard window operations
+
+[View Full API Reference →](/api/windows/ctk-toplevel)
+
+## CTkInputDialog
+
+A pre-configured dialog window for quickly collecting text input from users.
+
+```python
+def get_user_name():
+    dialog = ctk.CTkInputDialog(
+        text="Enter your name:",
+        title="User Information"
+    )
+    name = dialog.get_input()
+    if name:
+        print(f"Hello, {name}!")
+
+button = ctk.CTkButton(app, text="Enter Name", command=get_user_name)
+button.pack()
+```
+
+**Key Features:**
+- Simple text input collection
+- Built-in OK/Cancel buttons
+- Returns user input or None if cancelled
+- Automatically themed
+
+[View Full API Reference →](/api/windows/ctk-input-dialog)
+
+## Window Management
+
+### Appearance Mode
+
+Set the appearance mode for all windows:
+
+```python
+ctk.set_appearance_mode("dark")  # "light", "dark", or "system"
+```
+
+### Color Theme
+
+Customize the color scheme:
+
+```python
+ctk.set_default_color_theme("blue")  # "blue", "green", "dark-blue"
+```
+
+### Scaling
+
+Adjust DPI scaling:
+
+```python
+ctk.set_widget_scaling(1.5)  # Scale all widgets by 1.5x
+ctk.set_window_scaling(1.5)  # Scale window dimensions by 1.5x
+```

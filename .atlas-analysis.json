@@ -1,0 +1,152 @@
+{
+  "projectType": "sdk-library",
+  "projectName": "CustomTkinter",
+  "projectDescription": "A modern and customizable Python UI library based on Tkinter with dark mode support and HighDPI scaling.",
+  "theme": "palm",
+  "primaryColor": "#3B8ED0",
+  "lightColor": "#36719F",
+  "darkColor": "#1F6AA5",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart"
+            ]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": [
+              "concepts/appearance-modes",
+              "concepts/themes",
+              "concepts/scaling",
+              "concepts/fonts-and-images"
+            ]
+          },
+          {
+            "group": "Widgets Overview",
+            "pages": [
+              "widgets/overview",
+              "widgets/windows",
+              "widgets/basic-widgets",
+              "widgets/input-widgets",
+              "widgets/display-widgets",
+              "widgets/layout-widgets"
+            ]
+          },
+          {
+            "group": "Examples & Guides",
+            "pages": [
+              "guides/common-patterns",
+              "guides/advanced-usage",
+              "guides/migration-guide"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Windows",
+            "pages": [
+              "api/windows/ctk",
+              "api/windows/ctk-toplevel",
+              "api/windows/ctk-input-dialog"
+            ]
+          },
+          {
+            "group": "Basic Widgets",
+            "pages": [
+              "api/widgets/ctk-button",
+              "api/widgets/ctk-label",
+              "api/widgets/ctk-frame"
+            ]
+          },
+          {
+            "group": "Input Widgets",
+            "pages": [
+              "api/widgets/ctk-entry",
+              "api/widgets/ctk-checkbox",
+              "api/widgets/ctk-radiobutton",
+              "api/widgets/ctk-switch",
+              "api/widgets/ctk-slider",
+              "api/widgets/ctk-optionmenu",
+              "api/widgets/ctk-combobox",
+              "api/widgets/ctk-segmented-button"
+            ]
+          },
+          {
+            "group": "Display Widgets",
+            "pages": [
+              "api/widgets/ctk-progressbar",
+              "api/widgets/ctk-textbox",
+              "api/widgets/ctk-scrollbar"
+            ]
+          },
+          {
+            "group": "Layout Widgets",
+            "pages": [
+              "api/widgets/ctk-scrollable-frame",
+              "api/widgets/ctk-tabview"
+            ]
+          },
+          {
+            "group": "Utilities",
+            "pages": [
+              "api/utilities/ctk-font",
+              "api/utilities/ctk-image",
+              "api/utilities/appearance-mode",
+              "api/utilities/theme-manager",
+              "api/utilities/scaling"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Modern, fully customizable widgets with rounded corners and hover effects",
+    "Automatic dark mode and light mode support with system integration",
+    "HighDPI scaling support across Windows, macOS, and Linux",
+    "Built-in theming system with customizable color themes",
+    "Drop-in replacement for standard Tkinter widgets",
+    "Support for images with automatic scaling and appearance mode variants",
+    "Scrollable frames and advanced layout widgets",
+    "Cross-platform consistent appearance"
+  ],
+  "publicApiSurface": [
+    "customtkinter.CTk",
+    "customtkinter.CTkToplevel",
+    "customtkinter.CTkInputDialog",
+    "customtkinter.CTkButton",
+    "customtkinter.CTkLabel",
+    "customtkinter.CTkEntry",
+    "customtkinter.CTkCheckBox",
+    "customtkinter.CTkRadioButton",
+    "customtkinter.CTkSwitch",
+    "customtkinter.CTkSlider",
+    "customtkinter.CTkProgressBar",
+    "customtkinter.CTkOptionMenu",
+    "customtkinter.CTkComboBox",
+    "customtkinter.CTkSegmentedButton",
+    "customtkinter.CTkTextbox",
+    "customtkinter.CTkScrollbar",
+    "customtkinter.CTkFrame",
+    "customtkinter.CTkScrollableFrame",
+    "customtkinter.CTkTabview",
+    "customtkinter.CTkFont",
+    "customtkinter.CTkImage",
+    "customtkinter.set_appearance_mode()",
+    "customtkinter.get_appearance_mode()",
+    "customtkinter.set_default_color_theme()",
+    "customtkinter.set_widget_scaling()",
+    "customtkinter.set_window_scaling()",
+    "customtkinter.deactivate_automatic_dpi_awareness()"
+  ]
+}
